@@ -59,3 +59,31 @@ git push origin feature/your-feature-name
 ---
 
 **Keep this cheat sheet handy for consistent Git workflow-la *.md* í³‹
+
+## í·¹ Branch Cleanup
+
+### Automatic Cleanup (Recommended)
+Enable in GitHub Settings â†’ General â†’ Pull Requests:
+âœ… **"Automatically delete head branches"**
+
+### Manual Cleanup Script
+Use the provided cleanup script:
+```bash
+# Run cleanup script
+./cleanup-branches.sh
+
+# Or manually clean up
+git checkout main
+git pull origin main
+git remote prune origin
+git branch --merged main | grep -v "main" | xargs -n 1 git branch -d
+```
+
+### After Each Merge
+```bash
+# Clean up your local environment
+git checkout main
+git pull origin main
+git branch -d feature/your-merged-branch
+git remote prune origin
+```
