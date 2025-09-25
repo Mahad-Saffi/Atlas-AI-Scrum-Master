@@ -1,6 +1,6 @@
 # Git Workflow Cheat Sheet
 
-## íº€ Quick Commands for Atlas AI Scrum Master
+## ðŸš€ Quick Commands for Atlas AI Scrum Master
 
 ### Starting New Work
 ```bash
@@ -40,7 +40,7 @@ Closes #34"
 git push origin feature/your-feature-name
 ```
 
-## í¾¯ Golden Rules
+## ðŸ“‹ Golden Rules
 
 ### DO âœ…
 - Always work in feature branches
@@ -56,11 +56,7 @@ git push origin feature/your-feature-name
 - Commit multiple unrelated changes together
 - Merge your own PRs
 
----
-
-**Keep this cheat sheet handy for consistent Git workflow-la *.md* í³‹
-
-## í·¹ Branch Cleanup
+## ðŸ§¹ Branch Cleanup
 
 ### Automatic Cleanup (Recommended)
 Enable in GitHub Settings â†’ General â†’ Pull Requests:
@@ -87,3 +83,7 @@ git pull origin main
 git branch -d feature/your-merged-branch
 git remote prune origin
 ```
+
+---
+
+**Keep this cheat sheet handy for consistent Git workflow!** ðŸ“–
