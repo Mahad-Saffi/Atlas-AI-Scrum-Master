@@ -31,17 +31,42 @@ The Atlas AI Scrum Master is a comprehensive project management solution that au
 
 ## 📚 Documentation
 
-Comprehensive architecture documentation is available in the [`docs/`](./docs/) directory:
+Comprehensive project documentation is organized by role and development phase in the [`docs/`](./docs/) directory.
 
-- [🏗️ Architecture Overview](./docs/architecture.md) - System design and component overview
-- [🛠️ Technology Stack](./docs/tech-stack.md) - Detailed technical specifications
-- [🗄️ Database Schema](./docs/database-schema.md) - PostgreSQL design and optimization
-- [🌐 API Design](./docs/api-design.md) - REST endpoints and WebSocket protocols
-- [🔐 Security Architecture](./docs/security.md) - Authentication, authorization, and compliance
-- [⚛️ Frontend Architecture](./docs/frontend-architecture.md) - React component design and patterns
-- [🚀 Deployment Guide](./docs/deployment.md) - Docker setup and infrastructure
-- [🧪 Testing Strategy](./docs/testing-strategy.md) - Comprehensive testing approach
-- [🗓️ Implementation Roadmap](./docs/implementation-roadmap.md) - 4-phase development plan
+### 🚀 **Quick Start for Team Members**
+- **📋 [Team Member Guide](./docs/README.md)** - Personalized guidance for Omer, Hassaan, Salman, and Mahad
+- **🗺️ [Reading Guide](./docs/READING_GUIDE.md)** - Role-based documentation navigation
+- **🏗️ [Project Structure](./docs/PROJECT_STRUCTURE.md)** - Repository organization and folder structure
+
+### 📁 **Documentation by Role**
+
+#### 🏛️ **Architecture & Planning**
+- [🏗️ System Architecture](./docs/architecture/architecture.md) - Complete system design overview
+- [🛠️ Technology Stack](./docs/architecture/tech-stack.md) - Technical specifications and tool choices
+
+#### 🐍 **Backend Development** (Omer)
+- [🌐 API Design](./docs/backend/api-design.md) - REST endpoints and WebSocket protocols
+- [�️ Database Schema](./docs/backend/database-schema.md) - PostgreSQL design and optimization
+- [🔐 Security Implementation](./docs/backend/security.md) - Authentication, authorization, and compliance
+
+#### ⚛️ **Frontend Development** (Hassaan)
+- [⚛️ Frontend Architecture](./docs/frontend/frontend-architecture.md) - React component design and patterns
+
+#### 🚀 **DevOps & Deployment** (Mahad)
+- [🚀 Deployment Guide](./docs/devops/deployment.md) - Docker setup and infrastructure management
+
+#### 🧪 **Testing & QA** (Salman)
+- [🧪 Testing Strategy](./docs/testing/testing-strategy.md) - Comprehensive testing approach
+
+#### 📋 **Project Management**
+- [🗓️ Implementation Roadmap](./docs/project-management/implementation-roadmap.md) - 4-phase development plan
+- [📋 Product Requirements](./docs/project-management/prd.md) - Detailed project specifications
+
+### 📅 **Development Phases**
+- [📋 Phase 1](./docs/phases/phase-1/) - Foundation & Architecture (Weeks 1-4)
+- [🏗️ Phase 2](./docs/phases/phase-2/) - Core Development (Weeks 5-8)
+- [🚀 Phase 3](./docs/phases/phase-3/) - Integration & Testing (Weeks 9-10)
+- [📦 Phase 4](./docs/phases/phase-4/) - Deployment & Launch (Weeks 11-12)
 
 ## 🚀 Quick Start
 
@@ -73,27 +98,50 @@ Access the application at: http://localhost:3000
 
 ## 📊 Project Status
 
+- **Project Phase**: Phase 1 - Foundation & Architecture (Week 1 of 12)
 - **Architecture**: ✅ Complete (92% compliance)
-- **Documentation**: ✅ Complete (11/11 documents)
+- **Documentation**: ✅ Complete (11 documents across 6 role-based folders)
+- **Team Onboarding**: ✅ Ready (personalized guidance for all 4 team members)
 - **Development Status**: 🚀 Ready for Implementation
 - **Target Go-Live**: January 2026
 
+### 👥 **Team Readiness**
+- **Omer (Backend Developer)**: ✅ Ready - [Backend documentation](./docs/backend/) complete
+- **Hassaan (Frontend Developer)**: ✅ Ready - [Frontend documentation](./docs/frontend/) complete  
+- **Salman (QA Engineer)**: ✅ Ready - [Testing strategy](./docs/testing/) complete
+- **Mahad (DevOps/Project Lead)**: ✅ Ready - [Infrastructure docs](./docs/devops/) complete
+
+### 📅 **Next Milestones**
+- **Week 2-4**: Core architecture implementation
+- **Week 5-8**: Feature development and integration
+- **Week 9-10**: System testing and optimization
+- **Week 11-12**: Deployment and launch preparation
+
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these guidelines:
+We welcome contributions from all team members! Please follow these guidelines:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to your branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+### 👥 **Team Member Workflow**
+**For Omer (Backend), Hassaan (Frontend), Salman (QA), and Mahad (DevOps):**
 
-### Development Guidelines
-- **Backend**: Python Black formatting, 90% test coverage
-- **Frontend**: ESLint + Prettier, TypeScript strict mode, 85% test coverage
-- **Documentation**: Update docs for new features
-- **Testing**: All new code must include tests
+1. **Start with Documentation**: Check [docs/README.md](./docs/README.md) for your personalized guidance
+2. **Create Feature Branch**: `git checkout -b feature/your-amazing-feature`
+3. **Follow Role Guidelines**: Reference your role-specific documentation
+4. **Write Tests**: Maintain our quality standards
+5. **Update Documentation**: Keep docs current with changes
+6. **Submit PR**: Include detailed description and testing notes
+
+### 📋 **Development Standards**
+- **Backend (Omer)**: Python Black formatting, 90% test coverage, FastAPI best practices
+- **Frontend (Hassaan)**: ESLint + Prettier, TypeScript strict mode, 85% test coverage  
+- **QA (Salman)**: Comprehensive test plans, automated testing, quality gates
+- **DevOps (Mahad)**: Infrastructure as code, security compliance, deployment automation
+
+### 🔄 **Collaboration Process**
+1. **Phase-Based Development**: Follow our 4-phase timeline in [Implementation Roadmap](./docs/project-management/implementation-roadmap.md)
+2. **Role Coordination**: Use role-specific documentation for integration points
+3. **Quality Gates**: All PRs reviewed by relevant team members
+4. **Documentation First**: Update docs before code changes
 
 ## 📄 License
 

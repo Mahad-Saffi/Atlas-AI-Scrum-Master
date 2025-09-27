@@ -2,9 +2,12 @@
 
 ## Document Information
 - **Version:** 1.0
-- **Date:** September 25, 2025
-- **Author:** Winston (Architect)
+- **Date:** September 27, 2025
+- **Author:** Mahad Saffi (Project Lead/Author)
 - **Related:** [Architecture Overview](architecture.md), [Tech Stack](tech-stack.md)
+- **Target Audience:** DevOps Engineers (Primary), Backend Developers (Setup)
+- **Phase Relevance:** Phase 1 (Setup), Phase 3 (Production readiness), Phase 4 (Deployment)
+- **Reading Time:** 15 minutes
 
 ## Deployment Overview
 
@@ -839,4 +842,4 @@ echo "Check logs if issues persist: docker-compose logs"
 
 ---
 
-Ready for production deployment! íº€
+Ready for production deployment! ï¿½ï¿½ï¿½

@@ -1,5 +1,13 @@
 # Project Brief: AI Scrum Master
 
+## Document Information
+- **Version:** 1.0
+- **Date:** September 27, 2025
+- **Author:** Mahad Saffi (Project Lead/Author)
+- **Target Audience:** All team members (Project context), Project Managers (Primary), QA Engineers (Test requirements)
+- **Phase Relevance:** Phase 1 (Project understanding), Phase 4 (Success validation)
+- **Reading Time:** 5 minutes
+
 ## Executive Summary
 
 The AI Scrum Master is an intelligent agent designed to automate project and team management for software development projects. It addresses the significant overhead and complexity associated with manual project tracking, task assignment, and team coordination. By intelligently managing backlogs, assigning tasks, and optimizing resource allocation based on a predefined project pipeline, the AI ensures projects remain on track.
