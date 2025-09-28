@@ -3,6 +3,7 @@ from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 import jwt
 from datetime import datetime, timedelta
 
@@ -10,6 +11,15 @@ app = FastAPI(root_path="/api/v1")
 
 config = Config(".env")
 app.add_middleware(SessionMiddleware, secret_key=config('SESSION_SECRET_KEY'))
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 oauth = OAuth(config)
 oauth.register(
@@ -19,7 +29,7 @@ oauth.register(
     authorize_url='https://github.com/login/oauth/authorize',
     access_token_url='https://github.com/login/oauth/access_token',
     api_base_url='https://api.github.com/',
-    client_kwargs={'scope': 'user repo'}
+    client_kwargs={'scope': 'user:email'}
 )
 
 @app.get("/")
@@ -28,18 +38,30 @@ async def read_root():
 
 @app.get("/auth/github")
 async def github_login(request: Request):
-    redirect_uri = "http://localhost:8000/api/v1/auth/callback"
+    redirect_uri = config('GITHUB_REDIRECT_URI', default='http://localhost:8000/api/v1/auth/callback')
     return await oauth.github.authorize_redirect(request, redirect_uri) # type: ignore
 
-@app.post("/auth/callback")
+@app.get("/auth/callback")
 async def github_callback(request: Request):
     token = await oauth.github.authorize_access_token(request) # type: ignore
     user = await oauth.github.get('user', token=token)# type: ignore
     user_data = user.json()
+    
+    # Get user email
+    emails = await oauth.github.get('user/emails', token=token) # type: ignore
+    emails_data = emails.json()
+    primary_email = next((email['email'] for email in emails_data if email['primary']), user_data.get('email', ''))
+    
+    # Assign role based on user (can be enhanced with database lookup later)
+    # For now, default to developer role - enhance with proper role mapping
+    user_role = "developer"  # TODO: Implement proper role assignment based on team members
+    
     # Create JWT
     jwt_payload = {
         "id": user_data["id"],
         "username": user_data["login"],
+        "email": primary_email,
+        "role": user_role,
         "avatar_url": user_data["avatar_url"],
         "exp": datetime.utcnow() + timedelta(minutes=15)
     }
@@ -51,6 +73,7 @@ async def github_callback(request: Request):
         "user": {
             "id": user_data["id"],
             "username": user_data["login"],
+            "email": primary_email,
             "avatar_url": user_data["avatar_url"]
         }
     }
