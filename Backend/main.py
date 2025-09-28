@@ -3,6 +3,7 @@ from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 import jwt
 from datetime import datetime, timedelta
 
@@ -10,6 +11,15 @@ app = FastAPI(root_path="/api/v1")
 
 config = Config(".env")
 app.add_middleware(SessionMiddleware, secret_key=config('SESSION_SECRET_KEY'))
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 oauth = OAuth(config)
 oauth.register(
