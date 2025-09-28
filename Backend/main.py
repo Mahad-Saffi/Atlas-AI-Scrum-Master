@@ -38,7 +38,7 @@ async def read_root():
 
 @app.get("/auth/github")
 async def github_login(request: Request):
-    redirect_uri = "http://localhost:8000/api/v1/auth/callback"
+    redirect_uri = config('GITHUB_REDIRECT_URI', default='http://localhost:8000/api/v1/auth/callback')
     return await oauth.github.authorize_redirect(request, redirect_uri) # type: ignore
 
 @app.get("/auth/callback")
@@ -52,11 +52,16 @@ async def github_callback(request: Request):
     emails_data = emails.json()
     primary_email = next((email['email'] for email in emails_data if email['primary']), user_data.get('email', ''))
     
+    # Assign role based on user (can be enhanced with database lookup later)
+    # For now, default to developer role - enhance with proper role mapping
+    user_role = "developer"  # TODO: Implement proper role assignment based on team members
+    
     # Create JWT
     jwt_payload = {
         "id": user_data["id"],
         "username": user_data["login"],
         "email": primary_email,
+        "role": user_role,
         "avatar_url": user_data["avatar_url"],
         "exp": datetime.utcnow() + timedelta(minutes=15)
     }
