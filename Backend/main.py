@@ -31,7 +31,7 @@ async def github_login(request: Request):
     redirect_uri = "http://localhost:8000/api/v1/auth/callback"
     return await oauth.github.authorize_redirect(request, redirect_uri) # type: ignore
 
-@app.post("/auth/callback")
+@app.get("/auth/callback")
 async def github_callback(request: Request):
     token = await oauth.github.authorize_access_token(request) # type: ignore
     user = await oauth.github.get('user', token=token)# type: ignore
