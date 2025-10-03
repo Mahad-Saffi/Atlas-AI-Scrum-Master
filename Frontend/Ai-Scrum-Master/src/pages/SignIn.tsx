@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { authService } from "../services/auth";
 
-import { GradientBars } from "../components/ui/GradientBars";
-
 const SignIn: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -48,10 +46,14 @@ const SignIn: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      {/* Enhanced Background Effects */}
-      <GradientBars
-        bars={25}
-        colors={["#778da9E6", "#415a77CC", "#1b263b99", "transparent"]}
+      {/* Simple Background */}
+      <div
+        style={{
+          position: "absolute",
+          inset: "0",
+          background: "linear-gradient(135deg, #0d1b2a 0%, #1b263b 40%, #415a77 100%)",
+          zIndex: "1",
+        }}
       />
 
       {/* Additional Background Glow Effects */}
