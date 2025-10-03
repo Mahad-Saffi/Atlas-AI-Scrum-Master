@@ -6,7 +6,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  picture?: string;
+  avatar_url?: string;
   username?: string;
 }
 
@@ -17,30 +17,19 @@ export interface AuthService {
   isAuthenticated(): boolean;
 }
 
-// Mock implementation for development
-class MockAuthService implements AuthService {
+class ApiAuthService implements AuthService {
   private currentUser: User | null = null;
 
   async signInWithGitHub(): Promise<User> {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const mockUser: User = {
-      id: "1",
-      email: "developer@example.com",
-      name: "Development User",
-      username: "dev-user",
-      picture: "https://github.com/github.png",
-    };
-
-    this.currentUser = mockUser;
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    return mockUser;
+    window.location.href = "http://localhost:8000/api/v1/auth/github";
+    // This will redirect, so the promise won't resolve in the current context.
+    return new Promise(() => {});
   }
 
   async signOut(): Promise<void> {
     this.currentUser = null;
     localStorage.removeItem("user");
+    localStorage.removeItem("jwt");
   }
 
   getCurrentUser(): User | null {
@@ -56,12 +45,11 @@ class MockAuthService implements AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.getCurrentUser() !== null;
+    return this.getCurrentUser() !== null && !!localStorage.getItem("jwt");
   }
 }
 
-// Export singleton instance
-export const authService = new MockAuthService();
+export const authService = new ApiAuthService();
 
 // TODO: Replace with actual GitHub OAuth implementation
 // Example using GitHub OAuth:

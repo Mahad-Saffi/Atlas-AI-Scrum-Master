@@ -15,7 +15,7 @@ app.add_middleware(SessionMiddleware, secret_key=config('SESSION_SECRET_KEY'))
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_origins=["http://localhost:5173"],  # Frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,17 +66,20 @@ async def github_callback(request: Request):
         "exp": datetime.utcnow() + timedelta(minutes=15)
     }
     jwt_token = jwt.encode(jwt_payload, config('JWT_SECRET_KEY'), algorithm="HS256")
-    return {
-        "access_token": jwt_token,
-        "token_type": "bearer",
-        "expires_in": 900,
-        "user": {
-            "id": user_data["id"],
-            "username": user_data["login"],
-            "email": primary_email,
-            "avatar_url": user_data["avatar_url"]
-        }
+    from starlette.responses import RedirectResponse
+    import json
+
+    user_info = {
+        "id": user_data["id"],
+        "username": user_data["login"],
+        "email": primary_email,
+        "avatar_url": user_data["avatar_url"]
     }
+
+    # Redirect to frontend with token and user data
+    return RedirectResponse(
+        url=f"http://localhost:5173/auth/callback?token={jwt_token}&user={json.dumps(user_info)}"
+    )
 
 @app.post("/auth/refresh")
 async def refresh_token(request: Request):
