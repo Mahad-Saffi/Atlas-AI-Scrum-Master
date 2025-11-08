@@ -6,16 +6,46 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 import jwt
 from datetime import datetime, timedelta
+from sqlalchemy.orm import Session
+from app.config.database import SessionLocal, engine
+from app.models import user as user_model
+from app.api.v1 import ai as ai_router
 
-app = FastAPI(root_path="/api/v1")
+
+
+app = FastAPI()
+
+from app.models import Base
+from app.config.database import engine
+
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "atlas-backend"}
+
+from app.api.v1 import projects as projects_router
+
+app.include_router(ai_router.router, prefix="/api/v1/ai", tags=["ai"])
+app.include_router(projects_router.router, prefix="/api/v1/projects", tags=["projects"])
 
 config = Config(".env")
 app.add_middleware(SessionMiddleware, secret_key=config('SESSION_SECRET_KEY'))
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+async def get_db():
+    async with SessionLocal() as session:
+        yield session
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend URL
+    allow_origins=["http://localhost:8080", "http://localhost:8000", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -38,31 +68,43 @@ async def read_root():
 
 @app.get("/auth/github")
 async def github_login(request: Request):
-    redirect_uri = config('GITHUB_REDIRECT_URI', default='http://localhost:8000/api/v1/auth/callback')
-    return await oauth.github.authorize_redirect(request, redirect_uri) # type: ignore
+    redirect_uri = config('GITHUB_REDIRECT_URI')
+    return await oauth.github.authorize_redirect(request, redirect_uri)
 
 @app.get("/auth/callback")
-async def github_callback(request: Request):
-    token = await oauth.github.authorize_access_token(request) # type: ignore
-    user = await oauth.github.get('user', token=token)# type: ignore
+async def github_callback(request: Request, db: AsyncSession = Depends(get_db)):
+    token = await oauth.github.authorize_access_token(request)
+    user = await oauth.github.get('user', token=token)
     user_data = user.json()
     
     # Get user email
-    emails = await oauth.github.get('user/emails', token=token) # type: ignore
+    emails = await oauth.github.get('user/emails', token=token)
     emails_data = emails.json()
     primary_email = next((email['email'] for email in emails_data if email['primary']), user_data.get('email', ''))
     
-    # Assign role based on user (can be enhanced with database lookup later)
-    # For now, default to developer role - enhance with proper role mapping
-    user_role = "developer"  # TODO: Implement proper role assignment based on team members
+    result = await db.execute(select(user_model.User).filter(user_model.User.github_id == str(user_data['id'])))
+    db_user = result.scalars().first()
+
+    if not db_user:
+        db_user = user_model.User(
+            github_id=str(user_data['id']),
+            username=user_data['login'],
+            email=primary_email,
+            avatar_url=user_data['avatar_url'],
+        )
+        db.add(db_user)
+        await db.commit()
+        await db.refresh(db_user)
+
+    user_role = db_user.role
     
     # Create JWT
     jwt_payload = {
-        "id": user_data["id"],
-        "username": user_data["login"],
-        "email": primary_email,
+        "id": db_user.id,
+        "username": db_user.username,
+        "email": db_user.email,
         "role": user_role,
-        "avatar_url": user_data["avatar_url"],
+        "avatar_url": db_user.avatar_url,
         "exp": datetime.utcnow() + timedelta(minutes=15)
     }
     jwt_token = jwt.encode(jwt_payload, config('JWT_SECRET_KEY'), algorithm="HS256")
@@ -70,10 +112,10 @@ async def github_callback(request: Request):
     import json
 
     user_info = {
-        "id": user_data["id"],
-        "username": user_data["login"],
-        "email": primary_email,
-        "avatar_url": user_data["avatar_url"]
+        "id": db_user.id,
+        "username": db_user.username,
+        "email": db_user.email,
+        "avatar_url": db_user.avatar_url
     }
 
     # Redirect to frontend with token and user data
@@ -95,18 +137,7 @@ async def refresh_token(request: Request):
         raise HTTPException(status_code=401, detail="Invalid token")
     
 
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-security = HTTPBearer()
-
-def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    try:
-        payload = jwt.decode(credentials.credentials, config('JWT_SECRET_KEY'), algorithms=["HS256"])
-        return payload
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+from app.core.security import get_current_user
 
 @app.get("/users/me")
 async def get_user(current_user: dict = Depends(get_current_user)):

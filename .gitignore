@@ -16,10 +16,13 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
+*.pyc
 
 # Virtual Environment
 venv/
@@ -27,15 +30,25 @@ env/
 ENV/
 .venv/
 .env
+env.bak/
+venv.bak/
 
-# IDE
-.vscode/
+# IDE & Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
 *~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# OS
+# OS Files
 .DS_Store
 .DS_Store?
 ._*
@@ -43,32 +56,42 @@ ENV/
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Node.js
+# Node.js & NPM
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 .npm
 .yarn-integrity
 *.tgz
 *.tar.gz
+.pnp
+.pnp.js
 
 # Build outputs
 dist/
+dist-ssr/
 build/
 out/
+*.local
 
 # Environment variables
 .env
 .env.local
+.env.*.local
 .env.production
 .env.development
+.env.test
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
+test.db
 
 # Logs
 logs/
@@ -76,8 +99,9 @@ logs/
 
 # Docker
 .docker/
+docker-compose.override.yml
 
-# Coverage reports
+# Coverage & Testing
 htmlcov/
 .coverage
 .coverage.*
@@ -85,9 +109,40 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.nyc_output
+coverage/
+*.lcov
 
-# Security
+# Security & Secrets
 *.pem
 *.key
 *.crt
 .secrets/
+secrets.yml
+credentials.json
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+.parcel-cache
+
+# Alembic
+alembic/versions/*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/

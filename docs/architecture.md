@@ -93,35 +93,9 @@ graph TD
 
 ## 3. Tech Stack
 
-This table represents the single source of truth for the project's technology stack. All development must adhere to these choices and versions to ensure consistency.
+The complete list of technologies, frameworks, and versions chosen for this project is defined in the following document:
 
-### Revised Technology Stack Table
-
-| Category | Technology | Version | Purpose | Rationale |
-| :--- | :--- | :--- | :--- | :--- |
-| Frontend Language | TypeScript | 5.x | Type safety for JS | Reduces bugs and improves developer experience. |
-| Frontend Framework | React | 18.x | UI development | Industry standard with a vast ecosystem and component model. |
-| **UI Component Library** | **MUI (Material-UI)** | **5.x** | **Pre-built UI components** | **(Simplified)** Provides ready-to-use components to accelerate UI development. |
-| State Management | React Context | 18.x | Global state | Built-in to React, sufficient for MVP without adding new libraries. |
-| Backend Language | Python | 3.11+ | Backend logic & AI | Excellent for AI/ML, and FastAPI provides high performance. |
-| Backend Framework | FastAPI | 0.110.x | API development | High-performance, async framework with automatic docs. |
-| **AI Framework** | **LangChain** | **0.1.x** | **Orchestration of AI logic** | **Provides a powerful framework for creating agents, managing prompts, and interacting with tools.** |
-| API Style | REST & WebSocket | N/A | Client-server communication | REST for standard data, WebSockets for real-time chat/notifications. |
-| Database | PostgreSQL | 16.x | Data persistence | Robust, open-source relational database that handles concurrent access well. |
-| **Cache** | **(Removed)** | **N/A** | **(Removed for simplicity)** | **(Removed)** Not essential for the MVP; adds infrastructure overhead. |
-| File Storage | Local File System | N/A | Storing user uploads | Sufficient for a localhost deployment. |
-| Authentication | OAuth 2.0 | N/A | User login | Securely authenticates users via trusted providers like GitHub/Google. |
-| Frontend Testing | Jest & RTL | 29.x | Component testing | Standard for testing React components and user interactions. |
-| Backend Testing | Pytest | 8.x | API & unit testing | Powerful and flexible testing framework for Python. |
-| **E2E Testing** | **(Post-MVP)** | **N/A** | **(Post-MVP)** | **(Simplified)** Focus on unit/integration tests first to maximize velocity. |
-| Build Tool | Vite | 5.x | Frontend dev & build | Extremely fast development server and optimized build process. |
-| Bundler | Rollup | 4.x | JS bundling | Used by Vite under the hood to produce optimized production bundles. |
-| IaC Tool | Docker Compose | 2.2x | Local infrastructure | Defines and runs the multi-container local environment. |
-| CI/CD | GitHub Actions | N/A | Automation | Automates testing and builds directly from the repository. |
-| Monitoring | Health Endpoints | N/A | Service health checks | Simple endpoints (/health) for Docker to check service status. |
-| Logging | Python Logging | N/A | Application logging | Standard Python library for structured backend logging. |
-| CSS Framework | Tailwind CSS | 3.x | Styling | Utility-first CSS for rapid, consistent, and custom UI development. |
-
+**[➡️ View Detailed Tech Stack](./architecture/tech-stack.md)**
 ## 4. Data Models
 
 ### User
@@ -232,186 +206,9 @@ interface Notification {
 
 ## 5. API Specification
 
-This API is designed to be RESTful and consistent. All endpoints require JWT Bearer token authentication.
+The detailed API specification, including all REST endpoints and the WebSocket API, is defined in the following document:
 
-### REST API (OpenAPI 3.0)
-
-```yaml
-openapi: 3.0.3
-info:
-  title: "Atlas API"
-  version: "1.0.0"
-  description: "The REST API for the Atlas AI-driven project management tool."
-servers:
-  - url: "http://localhost/api/v1"
-    description: "Local Development Server"
-
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-  schemas:
-    User:
-      type: object
-      properties:
-        id: { type: string }
-        username: { type: string }
-        email: { type: string }
-        avatarUrl: { type: string }
-    Project:
-      type: object
-      properties:
-        id: { type: string }
-        name: { type: string }
-        description: { type: string }
-        ownerId: { type: string }
-    Task:
-      type: object
-      properties:
-        id: { type: string }
-        projectId: { type: string }
-        title: { type: string }
-        status: { type: string, enum: ['To Do', 'In Progress', 'Done'] }
-        assigneeId: { type: string }
-    Issue:
-      type: object
-      properties:
-        id: { type: string }
-        title: { type: string }
-        status: { type: string, enum: ['Open', 'In Progress', 'Resolved'] }
-    ChatMessage:
-      type: object
-      properties:
-        id: { type: string }
-        senderId: { type: string }
-        content: { type: string }
-    ApiError:
-      type: object
-      properties:
-        error: { type: string }
-        details: { type: string }
-
-security:
-  - BearerAuth: []
-
-paths:
-  # Authentication
-  /auth/github:
-    get:
-      summary: "Start GitHub Login"
-  /auth/callback/github:
-    get:
-      summary: "GitHub OAuth Callback"
-
-  # Current User
-  /users/me:
-    get:
-      summary: "Get Current User"
-      responses:
-        '200':
-          description: "Current user data"
-          content:
-            application/json:
-              schema: { '$ref': '#/components/schemas/User' }
-
-  # Project & AI Discovery
-  /projects:
-    get:
-      summary: "List User's Projects"
-    post:
-      summary: "Create a new project (initiates AI discovery)"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name: { type: string }
-                initial_prompt: { type: string }
-      responses:
-        '201':
-          description: "Project created and discovery started"
-
-  /projects/discover:
-    post:
-      summary: "Continue conversational project discovery with the AI"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                project_id: { type: string }
-                message: { type: string }
-      responses:
-        '200':
-          description: "AI's response in the conversation"
-
-  # Tasks
-  /projects/{projectId}/tasks:
-    get:
-      summary: "List Tasks for a Project"
-  /tasks/{taskId}/complete:
-    post:
-      summary: "Mark Task as Complete"
-
-  # Issues (Triage)
-  /projects/{projectId}/issues:
-    get:
-      summary: "List issues for a project"
-    post:
-      summary: "Report a new issue for a project"
-
-  # Notifications
-  /notifications:
-    get:
-      summary: "Get current user's notifications"
-  /notifications/mark-all-read:
-    post:
-      summary: "Mark all user notifications as read"
-
-  # Chat
-  /chat/messages:
-    get:
-      summary: "Get chat messages for a conversation (DM or channel)"
-    post:
-      summary: "Send a chat message"
-```
-
-### WebSocket API
-
-The WebSocket provides real-time, bidirectional communication for notifications and chat.
-
-- **Connection:** `ws://localhost/ws` (Authentication is handled via a token in the connection URL).
-- **Message Format:** All messages are JSON with a `type` and `data` field.
-
-**Example Message Types:**
-
-- **Real-time Notifications:**
-  ```json
-  {
-    "type": "notification",
-    "data": { "id": 5, "title": "New Task Assigned", ... }
-  }
-  ```
-- **Chat Messages:**
-  ```json
-  {
-    "type": "chat_message",
-    "data": { "id": 10, "senderId": "user1", "content": "The fix is ready for testing.", ... }
-  }
-  ```
-- **System Alerts (e.g., Task Delays):**
-  ```json
-  {
-    "type": "system_alert",
-    "data": { "severity": "warning", "title": "Task Delay Detected", ... }
-  }
-  ```
+**[➡️ View Detailed API Specification](./backend/api-design.md)**
 
 ## 6. Components
 
@@ -477,20 +274,21 @@ graph TD
 
 ## 9. Database Schema
 
-The schema includes tables for `users`, `projects`, `project_members`, `tasks`, `issues`, `chat_messages`, and `notifications`. It uses UUIDs for primary keys, foreign keys for relationships, and indexes for performance.
+The detailed physical data model, including all `CREATE TABLE` statements, indexes, and an Entity-Relationship Diagram (ERD), is defined in the following document:
+
+**[➡️ View Detailed Database Schema](./backend/database-schema.md)**
 
 ## 10. Frontend Architecture
 
-*   **Component Architecture:** Components are organized by feature (e.g., `chat`, `tasks`) with a `common` directory for reusable elements.
-*   **State Management:** Uses React's built-in Context API with the `useReducer` pattern for complex state.
-*   **Routing Architecture:** Uses `react-router-dom` with a `ProtectedRoute` component to separate public and private routes.
-*   **Frontend Services Layer:** A dedicated service layer using a centralized `axios` client abstracts all API communication.
+The detailed frontend architecture, including directory structure, state management, and data fetching patterns, is defined in the following document:
+
+**[➡️ View Detailed Frontend Architecture](./frontend/frontend-architecture.md)**
 
 ## 11. Backend Architecture
 
-*   **Service Architecture:** A feature-based routing structure in FastAPI, delegating business logic to services or the AI agent.
-*   **Database Architecture:** Implements the Repository Pattern to decouple business logic from data access.
-*   **Authentication and Authorization:** Uses FastAPI's `Depends` system with an `OAuth2PasswordBearer` scheme to protect endpoints.
+The detailed backend architecture, including its modular service design, database patterns, and authentication mechanisms, is defined in the following document:
+
+**[➡️ View Detailed Backend Architecture](./backend/backend-architecture.md)**
 
 ## 12. Unified Project Structure
 

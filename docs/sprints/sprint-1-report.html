@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sprint 1 Report</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2em; color: #333; }
+  h1, h2 { color: #2c3e50; border-bottom: 2px solid #4682B4; padding-bottom: 5px; }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; margin-top: 1.5em;}
+  table { border-collapse: collapse; width: 100%; margin-bottom: 2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+  th { background-color: #4682B4; color: white; font-weight: bold; }
+  tr:nth-child(even) { background-color: #f9f9f9; }
+  td { vertical-align: top; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <h1>Sprint 1 Report</h1>
+
+  <h2>Sprint Schedule</h2>
+  <table>
+    <tr>
+      <th>Day</th>
+      <th>Activity</th>
+      <th>Who</th>
+      <th>Details</th>
+    </tr>
+    <tr>
+      <td><b>Monday</b></td>
+      <td><b>Sprint Planning</b></td>
+      <td>All Team</td>
+      <td><b>Goal:</b> Establish core infrastructure & user authentication. <br/> <b>Assignments:</b> Mahad: Docker & CI/CD setup. Omer: Backend auth endpoints & DB schema. Hassaan: Frontend login UI. Salman: Auth test plan.</td>
+    </tr>
+    <tr>
+      <td><b>Tuesday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Mahad: Docker networking configured. Omer: `users` table schema defined. Hassaan: Login page components built. Salman: Test cases for OAuth drafted. <b>No blockers.</b></td>
+    </tr>
+    <tr>
+      <td><b>Wednesday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Omer: `/auth/github` endpoint started. Mahad: Health checks in progress. <br/> <b>Blocker:</b> Hassaan is blocked waiting for the backend auth callback endpoint to be deployed.</td>
+    </tr>
+    <tr>
+      <td><b>Thursday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Omer has deployed the auth endpoints to the dev environment. Hassaan is unblocked and integrating the login flow. Salman is writing automated test scripts. <b>Blocker resolved.</b></td>
+    </tr>
+    <tr>
+      <td><b>Friday</b></td>
+      <td><b>Sprint Review</b></td>
+      <td>All Team</td>
+      <td>Demonstrate the full, end-to-end GitHub login flow and the creation of a user record in the database. Prepare to discuss test results and partially completed items.</td>
+    </tr>
+  </table>
+
+  <h2>Sprint Review</h2>
+  <table>
+    <tr>
+      <th>Time</th>
+      <th>Duration</th>
+      <th>Activity</th>
+      <th>Description</th>
+      <th>Presenter</th>
+    </tr>
+    <tr>
+      <td>8:00</td>
+      <td>5 min</td>
+      <td><b>Introduction</b></td>
+      <td>Overview of the Atlas AI vision. This sprint's goal was to build the foundational authentication layer upon which all future features will depend.</td>
+      <td>Mahad Saffi</td>
+    </tr>
+    <tr>
+      <td>8:05</td>
+      <td>5 min</td>
+      <td><b>Sprint Goals</b></td>
+      <td><b>Goal 1:</b> Establish the core technical architecture with Docker. <br/> <b>Goal 2:</b> Integrate GitHub OAuth for secure user authentication. <br/> <b>Impact:</b> Enables all future user-specific features by providing a reliable authentication and session management system.</td>
+      <td>Mahad Saffi</td>
+    </tr>
+    <tr>
+      <td>8:10</td>
+      <td>15 min</td>
+      <td><b>Status & Demo</b></td>
+      <td><b>Completed:</b> Docker Compose setup, backend user schema, full GitHub OAuth flow, frontend login/callback pages. <br/> <b>Live Demo:</b> Walkthrough of a user clicking "Login with GitHub", authorizing the app, being redirected, and seeing their user info on the frontend, with the corresponding user record shown in the database. <br/> <b>Value:</b> A secure, working authentication system is now in place.</td>
+      <td>Omer & Hassaan</td>
+    </tr>
+    <tr>
+      <td>8:25</td>
+      <td>5 min</td>
+      <td><b>Metrics</b></td>
+      <td><b>Velocity:</b> Planned 13 story points, Completed 12 (92.3%). <br/> <b>Reason:</b> One backend unit test for handling OAuth error states failed, preventing the testing story from being marked as 'Done'.</td>
+      <td>Salman</td>
+    </tr>
+    <tr>
+      <td>8:30</td>
+      <td>5 min</td>
+      <td><b>Blockers</b></td>
+      <td><b>Exact Blocker:</b> The unit test for the GitHub OAuth callback consistently fails to mock the timeout error from the GitHub API, leading to an incomplete test suite. <br/> <b>Impact:</b> Delayed full CI/CD pipeline activation.</td>
+      <td>Salman</td>
+    </tr>
+  </table>
+
+  <h2>Sprint Retrospective</h2>
+  <table>
+    <tr>
+      <th>Topic</th>
+      <th>Details</th>
+    </tr>
+    <tr>
+      <td><b>What worked well this sprint?</b></td>
+      <td>- Communication: Our daily standups were effective, especially on Wednesday when we quickly identified Hassaan's blocker. The communication between Omer and Hassaan to resolve it was fast and clear.<br>- Collaboration: Omer and Hassaan paired up for a short session on Thursday to integrate the final authentication flow, which was much more efficient than working in silos.<br>- Process: The team did a great job of following the Git workflow for branching and pull requests, which made code reviews smooth and easy to track.</td>
+    </tr>
+    <tr>
+      <td><b>What didn’t work so well this sprint?</b></td>
+      <td>- Estimation Process: Our team's estimation for the testing task didn't fully account for the difficulty of mocking the external GitHub API. This put unexpected pressure on Salman and Omer near the end of the sprint.<br>- Knowledge Sharing: The expertise for mocking external services was concentrated with one person. When that approach hit a roadblock, it was difficult for other team members to offer effective help.<br>- Tooling Friction: We lost about half a day debugging a Docker networking issue between the frontend and backend containers that could have been avoided with better initial documentation for the setup.</td>
+    </tr>
+    <tr>
+      <td><b>What will we do to improve next sprint?</b></td>
+      <td>- Action Item (Process): In our next sprint planning, we will use a quick "complexity vote" (1-3 fingers) specifically for any task that involves external APIs to make our estimates more accurate.<br>- Action Item (Team): Omer will hold a 30-minute optional session on how to use the `respx` library for mocking APIs, so more of the team is familiar with it.<br>- Action Item (Documentation): Mahad will add a "Common Gotchas" section to the project's main `README.md` file with a note about the Docker container networking configuration.</td>
+    </tr>
+  </table>
+
+</body>
+</html>

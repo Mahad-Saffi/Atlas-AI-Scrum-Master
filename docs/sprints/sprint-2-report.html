@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sprint 2 Report</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2em; color: #333; }
+  h1, h2 { color: #2c3e50; border-bottom: 2px solid #4682B4; padding-bottom: 5px; }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; margin-top: 1.5em;}
+  table { border-collapse: collapse; width: 100%; margin-bottom: 2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+  th { background-color: #4682B4; color: white; font-weight: bold; }
+  tr:nth-child(even) { background-color: #f9f9f9; }
+  td { vertical-align: top; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <h1>Sprint 2 Report</h1>
+
+  <h2>Sprint Schedule</h2>
+  <table>
+    <tr>
+      <th>Day</th>
+      <th>Activity</th>
+      <th>Who</th>
+      <th>Details</th>
+    </tr>
+    <tr>
+      <td><b>Monday</b></td>
+      <td><b>Sprint Planning</b></td>
+      <td>All Team</td>
+      <td><b>Goal:</b> Implement the initial conversational AI for project creation. <br/> <b>Priority Task:</b> Omer to fix the flaky authentication test from Sprint 1. <br/> <b>Assignments:</b> Omer: `/discover` endpoint & LangChain integration. Hassaan: Chat UI on the "New Project" page. Salman: Test plan for the conversational AI.</td>
+    </tr>
+    <tr>
+      <td><b>Tuesday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Omer reports the Sprint 1 auth test is now fixed and all tests are passing. He is starting the `/discover` endpoint. Hassaan has the basic UI for the chat window. Salman is defining acceptance criteria for the AI conversation. <b>No blockers.</b></td>
+    </tr>
+    <tr>
+      <td><b>Wednesday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Omer has a basic `/discover` endpoint that can receive a message and respond. Hassaan is connecting the UI to the endpoint. Mahad has enabled the "fail on test failure" gate in the CI pipeline. <b>No blockers.</b></td>
+    </tr>
+    <tr>
+      <td><b>Thursday</b></td>
+      <td><b>Daily Standup</b></td>
+      <td>All Team</td>
+      <td><b>Progress:</b> Omer has integrated the first LangChain prompt, allowing the AI to ask a question. Hassaan is displaying the AI's response in the chat UI. They are collaborating to ensure the data format matches.</td>
+    </tr>
+    <tr>
+      <td><b>Friday</b></td>
+      <td><b>Sprint Review</b></td>
+      <td>All Team</td>
+      <td>Demonstrate the new "Create Project" page where a user can have a basic, two-step conversation with the AI. Show that the interaction is happening live and the AI's response is successfully displayed.</td>
+    </tr>
+  </table>
+
+  <h2>Sprint Review</h2>
+  <table>
+    <tr>
+      <th>Time</th>
+      <th>Duration</th>
+      <th>Activity</th>
+      <th>Description</th>
+      <th>Presenter</th>
+    </tr>
+    <tr>
+      <td>11:00</td>
+      <td>5 min</td>
+      <td><b>Introduction</b></td>
+      <td>Overview of Sprint 2's goal: To bring the AI to life by building its first user-facing conversational feature, the foundation of our project generation engine.</td>
+      <td>Mahad Saffi</td>
+    </tr>
+    <tr>
+      <td>11:05</td>
+      <td>5 min</td>
+      <td><b>Sprint Goals</b></td>
+      <td><b>Goal 1:</b> Implement the initial conversational AI interface for project creation. <br/> <b>Goal 2:</b> Ensure the AI can successfully receive a user's project goal and respond with a clarifying question. <br/> <b>Impact:</b> This is the first tangible AI feature and proves the core concept of conversational project management is viable.</td>
+      <td>Mahad Saffi</td>
+    </tr>
+    <tr>
+      <td>11:10</td>
+      <td>15 min</td>
+      <td><b>Status & Demo</b></td>
+      <td><b>Completed:</b> The flaky authentication test from Sprint 1 is fixed. A new "Create Project" page is live. The backend `/discover` endpoint is fully functional with a basic LangChain prompt chain integrated. <br/> <b>Live Demo:</b> Show a user navigating to the "Create Project" page, typing in a project goal (e.g., "Build a new mobile app"), and receiving a specific clarifying question back from the AI in the chat interface.</td>
+      <td>Omer & Hassaan</td>
+    </tr>
+    <tr>
+      <td>11:25</td>
+      <td>5 min</td>
+      <td><b>Metrics</b></td>
+      <td><b>Velocity:</b> Planned 8 story points, Completed 8 (100%). <br/> <b>Trend:</b> The team successfully addressed the technical debt from Sprint 1 and delivered the full sprint commitment. This shows an improvement in our estimation and execution process.</td>
+      <td>Salman</td>
+    </tr>
+    <tr>
+      <td>11:30</td>
+      <td>5 min</td>
+      <td><b>Blockers</b></td>
+      <td>No blockers occurred this sprint. The main challenge was designing the initial LangChain prompt, but this was resolved within the planned time.</td>
+      <td>Salman</td>
+    </tr>
+  </table>
+
+  <h2>Sprint Retrospective</h2>
+  <table>
+    <tr>
+      <th>Topic</th>
+      <th>Details</th>
+    </tr>
+    <tr>
+      <td><b>What worked well this sprint?</b></td>
+      <td>- Process Improvement: Prioritizing and fixing the leftover testing issue from Sprint 1 at the very beginning of this sprint was a great success. It unblocked our CI/CD pipeline and restored the team's confidence in our test suite.<br>- Collaboration: The focused design session between Omer (Backend) and Hassaan (Frontend) to define the JSON structure for the chat messages was highly effective. It took only 30 minutes and prevented any integration problems.<br>- Focus: The team did an excellent job of concentrating only on the two user stories for this sprint. We successfully avoided scope creep by tabling discussions about more advanced AI features for a future sprint.</td>
+    </tr>
+    <tr>
+      <td><b>What didn’t work so well this sprint?</b></td>
+      <td>- Initial Uncertainty: There was some initial confusion on Wednesday about how to manage the conversation state in LangChain. Omer spent a few hours researching different methods, which was valuable but not explicitly planned for.<br>- Communication Lag: On Thursday morning, Hassaan had to wait for a clarification from Omer on the final API response format. A quick, direct message would have been faster than waiting for the next daily standup and could have saved an hour of idle time.</td>
+    </tr>
+    <tr>
+      <td><b>What will we do to improve next sprint?</b></td>
+      <td>- Action Item (Planning): For future sprints involving new technologies (like the AI plan generation in Sprint 3), we will add a specific "Research/Spike" task to the backlog to formally allocate time for exploration and reduce uncertainty.<br>- Action Item (Communication): We will encourage more ad-hoc communication for small clarifications. If a question can be answered in 2 minutes via a direct message or call, we will do that instead of waiting for the next daily standup.</td>
+    </tr>
+  </table>
+
+</body>
+</html>

@@ -31,42 +31,24 @@ The Atlas AI Scrum Master is a comprehensive project management solution that au
 
 ## 📚 Documentation
 
-Comprehensive project documentation is organized by role and development phase in the [`docs/`](./docs/) directory.
+Comprehensive project documentation is organized in the [`docs/`](./docs/) directory.
 
-### 🚀 **Quick Start for Team Members**
-- **📋 [Team Member Guide](./docs/README.md)** - Personalized guidance for Omer, Hassaan, Salman, and Mahad
-- **🗺️ [Reading Guide](./docs/READING_GUIDE.md)** - Role-based documentation navigation
-- **🏗️ [Project Structure](./docs/PROJECT_STRUCTURE.md)** - Repository organization and folder structure
+### 🚀 **Quick Start**
+- **📖 [Documentation Hub](./docs/README.md)** - Central documentation overview
+- **🏗️ [Project Structure](./PROJECT_STRUCTURE.md)** - Repository organization
+- **⚡ [Quick Start Guide](./QUICK_START.md)** - Get up and running in 5 minutes
 
-### 📁 **Documentation by Role**
+### 📁 **Key Documents**
 
 #### 🏛️ **Architecture & Planning**
-- [🏗️ System Architecture](./docs/architecture/architecture.md) - Complete system design overview
-- [🛠️ Technology Stack](./docs/architecture/tech-stack.md) - Technical specifications and tool choices
+- [🏗️ System Architecture](./docs/architecture.md) - Complete system design
+- [📋 Product Requirements](./docs/project/prd.md) - Product vision and requirements
+- [📊 Implementation Status](./docs/IMPLEMENTATION_STATUS.md) - Current progress
 
-#### 🐍 **Backend Development** (Omer)
-- [🌐 API Design](./docs/backend/api-design.md) - REST endpoints and WebSocket protocols
-- [�️ Database Schema](./docs/backend/database-schema.md) - PostgreSQL design and optimization
-- [🔐 Security Implementation](./docs/backend/security.md) - Authentication, authorization, and compliance
-
-#### ⚛️ **Frontend Development** (Hassaan)
-- [⚛️ Frontend Architecture](./docs/frontend/frontend-architecture.md) - React component design and patterns
-
-#### 🚀 **DevOps & Deployment** (Mahad)
-- [🚀 Deployment Guide](./docs/devops/deployment.md) - Docker setup and infrastructure management
-
-#### 🧪 **Testing & QA** (Salman)
-- [🧪 Testing Strategy](./docs/testing/testing-strategy.md) - Comprehensive testing approach
-
-#### 📋 **Project Management**
-- [🗓️ Implementation Roadmap](./docs/project-management/implementation-roadmap.md) - 4-phase development plan
-- [📋 Product Requirements](./docs/project-management/prd.md) - Detailed project specifications
-
-### 📅 **Development Phases**
-- [📋 Phase 1](./docs/phases/phase-1/) - Foundation & Architecture (Weeks 1-4)
-- [🏗️ Phase 2](./docs/phases/phase-2/) - Core Development (Weeks 5-8)
-- [🚀 Phase 3](./docs/phases/phase-3/) - Integration & Testing (Weeks 9-10)
-- [📦 Phase 4](./docs/phases/phase-4/) - Deployment & Launch (Weeks 11-12)
+#### 📅 **Sprint Planning**
+- [🗓️ Sprint Plan](./docs/sprints/SPRINT_PLAN.md) - 10-sprint roadmap
+- [📝 Sprint Reports](./docs/sprints/) - Sprint retrospectives
+- [📚 Full Backlog](./docs/epics/full-backlog.md) - All user stories and tasks
 
 ## 🚀 Quick Start
 
@@ -96,26 +78,90 @@ docker-compose logs -f
 
 Access the application at: http://localhost:3000
 
+## Running with Docker
+
+To run the application using Docker, follow these steps:
+
+### Prerequisites
+
+*   Docker Desktop
+*   Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Mahad-Saffi/Atlas-AI-Scrum-Master.git
+cd Atlas-AI-Scrum-Master
+```
+
+### 2. Configure Environment Variables
+
+You need to create a `.env` file in the `Backend` directory. You can copy the example file and fill in your GitHub OAuth credentials.
+
+```bash
+cp Backend/.env.example Backend/.env
+```
+
+Open `Backend/.env` and add your GitHub Client ID and Client Secret:
+
+```
+GITHUB_CLIENT_ID=your_github_client_id_here
+GITHUB_CLIENT_SECRET=your_github_client_secret_here
+JWT_SECRET_KEY=your_256_bit_random_jwt_secret_key_here
+SESSION_SECRET_KEY=your_session_secret_key_here
+DATABASE_URL=postgresql://ai_scrum_user:dev_password_change_in_production@db:5432/ai_scrum_master
+```
+
+**Note:** You can generate a secure random string for `JWT_SECRET_KEY` and `SESSION_SECRET_KEY`.
+
+### 3. Run the Application
+
+```bash
+docker-compose up --build -d
+```
+
+This command will build the Docker images and start all the services in the background.
+
+### 4. Access the Application
+
+Once the services are running, you can access the application in your browser at:
+
+[http://localhost](http://localhost)
+
+You should see the login page. You can now log in with your GitHub account and test the application.
+
+### 5. Stopping the Application
+
+To stop the application, run:
+
+```bash
+docker-compose down
+```
+
 ## 📊 Project Status
 
-- **Project Phase**: Phase 1 - Foundation & Architecture (Week 1 of 12)
-- **Architecture**: ✅ Complete (92% compliance)
-- **Documentation**: ✅ Complete (11 documents across 6 role-based folders)
-- **Team Onboarding**: ✅ Ready (personalized guidance for all 4 team members)
-- **Development Status**: 🚀 Ready for Implementation
-- **Target Go-Live**: January 2026
+- **Current Sprint**: Sprint 4 of 10 (In Progress)
+- **Overall Progress**: ~45% Complete
+- **Timeline**: On track for Week 20 completion
+- **Story Points**: 47/122 completed
 
-### 👥 **Team Readiness**
-- **Omer (Backend Developer)**: ✅ Ready - [Backend documentation](./docs/backend/) complete
-- **Hassaan (Frontend Developer)**: ✅ Ready - [Frontend documentation](./docs/frontend/) complete  
-- **Salman (QA Engineer)**: ✅ Ready - [Testing strategy](./docs/testing/) complete
-- **Mahad (DevOps/Project Lead)**: ✅ Ready - [Infrastructure docs](./docs/devops/) complete
+### ✅ **Completed Sprints**
+- **Sprint 1**: Foundation & Authentication ✅
+- **Sprint 2**: Conversational AI & Project Creation ✅
+- **Sprint 3**: AI-Powered Plan Generation ✅
 
-### 📅 **Next Milestones**
-- **Week 2-4**: Core architecture implementation
-- **Week 5-8**: Feature development and integration
-- **Week 9-10**: System testing and optimization
-- **Week 11-12**: Deployment and launch preparation
+### 🔄 **Current Sprint (Sprint 4)**
+- **Goal**: Task Board & Basic Workflow
+- **Status**: 50% Complete
+- **Deliverables**: TaskBoard UI, Task completion, Task filtering
+
+### 📅 **Upcoming Sprints**
+- **Sprint 5**: Automated Task Assignment & Notifications
+- **Sprint 6**: Delay Detection & Risk Management
+- **Sprint 7**: Real-time Chat Foundation
+- **Sprint 8**: Advanced Chat & Direct Messaging
+- **Sprint 9**: Issue Tracking & Triage
+- **Sprint 10**: UI Polish, Responsiveness & Accessibility
 
 ## 🤝 Contributing
 

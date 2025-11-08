@@ -1,0 +1,123 @@
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15.4-alpine
+    container_name: ai_scrum_db
+    environment:
+      POSTGRES_DB: ai_scrum_master
+      POSTGRES_USER: ${DB_USER:-ai_scrum_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dev_password_change_in_production}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - ai_scrum_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ai_scrum_user} -d ai_scrum_master"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # Redis Cache (for sessions and real-time features)
+  redis:
+    image: redis:7.2-alpine
+    container_name: ai_scrum_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ai_scrum_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+      target: development
+    working_dir: /app/Backend
+    container_name: ai_scrum_backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${DB_USER:-ai_scrum_user}:${DB_PASSWORD:-dev_password_change_in_production}@db:5432/ai_scrum_master
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - ENVIRONMENT=development
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - backend_logs:/app/logs
+    networks:
+      - ai_scrum_network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ai_scrum_frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8000
+      - REACT_APP_ENVIRONMENT=development
+    ports:
+      - "8080:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    networks:
+      - ai_scrum_network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_logs:
+    driver: local
+  nginx_logs:
+    driver: local
+
+networks:
+  ai_scrum_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
