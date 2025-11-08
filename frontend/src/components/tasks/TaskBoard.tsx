@@ -33,131 +33,171 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
   };
 
   const columns = {
-    'To Do': tasks.filter(task => task.status === 'To Do'),
-    'In Progress': tasks.filter(task => task.status === 'In Progress'),
-    'Done': tasks.filter(task => task.status === 'Done'),
+    'To Do': { tasks: tasks.filter(task => task.status === 'To Do'), emoji: '📝' },
+    'In Progress': { tasks: tasks.filter(task => task.status === 'In Progress'), emoji: '⚡' },
+    'Done': { tasks: tasks.filter(task => task.status === 'Done'), emoji: '✅' },
   };
 
   return (
     <div style={{ 
-      display: 'flex', 
-      gap: '20px', 
-      padding: '20px',
-      backgroundColor: '#0d1b2a',
-      minHeight: '100vh'
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gap: '24px',
+      fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
     }}>
-      {Object.entries(columns).map(([status, tasksInStatus]) => (
+      {Object.entries(columns).map(([status, { tasks: tasksInStatus, emoji }]) => (
         <div 
           key={status} 
           style={{ 
-            flex: 1,
-            backgroundColor: 'rgba(27, 38, 59, 0.6)',
-            border: '1px solid rgba(119, 141, 169, 0.3)',
-            borderRadius: '12px',
-            padding: '16px',
-            minHeight: '400px'
+            backgroundColor: '#f5f5f5',
+            border: '3px solid #1a1a1a',
+            boxShadow: '6px 6px 0 #1a1a1a',
+            padding: '20px',
+            minHeight: '400px',
+            position: 'relative',
           }}
         >
-          <h2 style={{ 
+          {/* Column Header */}
+          <div style={{
             textAlign: 'center',
-            color: '#e0e1dd',
-            fontSize: '18px',
-            fontWeight: '600',
-            marginBottom: '16px',
-            paddingBottom: '12px',
-            borderBottom: '2px solid rgba(119, 141, 169, 0.3)'
+            marginBottom: '20px',
+            paddingBottom: '16px',
+            borderBottom: '2px dashed #1a1a1a',
           }}>
-            {status}
+            <div style={{
+              fontSize: '32px',
+              marginBottom: '8px',
+            }}>
+              {emoji}
+            </div>
+            <h2 style={{ 
+              color: '#1a1a1a',
+              fontSize: '22px',
+              fontWeight: 'bold',
+              margin: '0 0 4px 0',
+            }}>
+              {status}
+            </h2>
             <span style={{
-              marginLeft: '8px',
               fontSize: '14px',
-              color: '#778da9',
+              color: '#4a4a4a',
               fontWeight: '400'
             }}>
-              ({tasksInStatus.length})
+              {tasksInStatus.length} {tasksInStatus.length === 1 ? 'task' : 'tasks'}
             </span>
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          </div>
+
+          {/* Tasks */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {tasksInStatus.map(task => (
               <div 
                 key={task.id} 
                 style={{ 
-                  backgroundColor: 'rgba(224, 225, 221, 0.05)',
-                  border: '1px solid rgba(119, 141, 169, 0.2)',
-                  borderRadius: '8px',
-                  padding: '12px',
+                  backgroundColor: 'white',
+                  border: '2px solid #1a1a1a',
+                  boxShadow: '4px 4px 0 #1a1a1a',
+                  padding: '16px',
                   transition: 'all 0.2s ease',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  position: 'relative',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(224, 225, 221, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(119, 141, 169, 0.4)';
+                  e.currentTarget.style.transform = 'translate(2px, 2px)';
+                  e.currentTarget.style.boxShadow = '2px 2px 0 #1a1a1a';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(224, 225, 221, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(119, 141, 169, 0.2)';
+                  e.currentTarget.style.transform = 'translate(0, 0)';
+                  e.currentTarget.style.boxShadow = '4px 4px 0 #1a1a1a';
                 }}
               >
+                {/* Task Title */}
                 <div style={{ 
-                  color: '#e0e1dd',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  marginBottom: '8px'
+                  color: '#1a1a1a',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  marginBottom: '8px',
+                  lineHeight: '1.4',
                 }}>
                   {task.title}
                 </div>
+
+                {/* Task Description */}
                 {task.description && (
                   <div style={{ 
-                    color: '#778da9',
-                    fontSize: '12px',
-                    marginBottom: '8px'
+                    color: '#4a4a4a',
+                    fontSize: '14px',
+                    marginBottom: '12px',
+                    lineHeight: '1.5',
                   }}>
                     {task.description}
                   </div>
                 )}
+
+                {/* Complete Button */}
                 {status !== 'Done' && (
                   <button
                     onClick={() => handleCompleteTask(task.id)}
                     disabled={completingTaskId === task.id}
                     style={{
                       width: '100%',
-                      padding: '8px',
-                      backgroundColor: completingTaskId === task.id 
-                        ? 'rgba(119, 141, 169, 0.3)' 
-                        : 'rgba(119, 141, 169, 0.6)',
-                      color: '#e0e1dd',
-                      border: 'none',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: '500',
+                      padding: '10px',
+                      backgroundColor: 'white',
+                      color: '#1a1a1a',
+                      border: '2px solid #1a1a1a',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
                       cursor: completingTaskId === task.id ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      boxShadow: '2px 2px 0 #1a1a1a',
+                      fontFamily: 'inherit',
+                      opacity: completingTaskId === task.id ? 0.5 : 1,
                     }}
                     onMouseEnter={(e) => {
                       if (completingTaskId !== task.id) {
-                        e.currentTarget.style.backgroundColor = 'rgba(119, 141, 169, 0.8)';
+                        e.currentTarget.style.transform = 'translate(1px, 1px)';
+                        e.currentTarget.style.boxShadow = '1px 1px 0 #1a1a1a';
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (completingTaskId !== task.id) {
-                        e.currentTarget.style.backgroundColor = 'rgba(119, 141, 169, 0.6)';
+                        e.currentTarget.style.transform = 'translate(0, 0)';
+                        e.currentTarget.style.boxShadow = '2px 2px 0 #1a1a1a';
                       }
                     }}
                   >
-                    {completingTaskId === task.id ? 'Completing...' : 'Mark as Complete'}
+                    {completingTaskId === task.id ? '⏳ Completing...' : '✓ Mark as Complete'}
                   </button>
+                )}
+
+                {/* Done Badge */}
+                {status === 'Done' && (
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '8px',
+                    backgroundColor: '#f5f5f5',
+                    border: '2px dashed #1a1a1a',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    color: '#4a4a4a',
+                  }}>
+                    ✓ Completed
+                  </div>
                 )}
               </div>
             ))}
+
+            {/* Empty State */}
             {tasksInStatus.length === 0 && (
               <div style={{
-                color: '#778da9',
-                fontSize: '14px',
                 textAlign: 'center',
-                padding: '20px',
-                fontStyle: 'italic'
+                padding: '40px 20px',
+                color: '#4a4a4a',
+                fontSize: '16px',
+                border: '2px dashed #1a1a1a',
+                backgroundColor: 'white',
               }}>
-                No tasks
+                <div style={{ fontSize: '32px', marginBottom: '8px' }}>📭</div>
+                <div>No tasks here yet</div>
               </div>
             )}
           </div>

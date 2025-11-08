@@ -13,7 +13,7 @@ class Task(Base):
     title = Column(String(200), nullable=False)
     description = Column(Text)
     status = Column(String(20), nullable=False, default='To Do')
-    assignee_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=True)
+    assignee_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     due_date = Column(TIMESTAMP(timezone=True))
     priority = Column(Integer, default=0)
     order = Column(Integer, default=0)

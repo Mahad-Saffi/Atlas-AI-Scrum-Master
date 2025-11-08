@@ -1,8 +1,15 @@
 from fastapi import APIRouter, Depends
 from app.core.security import get_current_user
 from app.services.task_service import task_service
+from app.services.project_service import project_service
 
 router = APIRouter()
+
+@router.get("")
+async def get_user_projects(current_user: dict = Depends(get_current_user)):
+    """Get all projects for the current user"""
+    projects = await project_service.get_user_projects(current_user['id'])
+    return projects
 
 @router.get("/{project_id}/tasks")
 async def get_project_tasks(project_id: str, current_user: dict = Depends(get_current_user)):
