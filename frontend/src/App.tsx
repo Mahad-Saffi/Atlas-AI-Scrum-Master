@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn';
 import AuthCallback from './pages/AuthCallback';
 import ProjectCreation from './pages/ProjectCreation';
 import TaskBoardPage from './pages/TaskBoardPage';
+import DebugAuth from './pages/DebugAuth';
 import './App.css';
 import { authService, type User } from './services/auth';
 import UserProfile from './components/UserProfile';
@@ -32,6 +33,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/debug-auth" element={<DebugAuth />} />
         <Route path="/create-project" element={
           isAuthenticated ? <ProjectCreation /> : <SignIn />
         } />

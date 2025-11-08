@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from app.models.project import Project
 from app.models.epic import Epic
 from app.models.story import Story
@@ -7,6 +8,22 @@ from app.config.database import SessionLocal
 import uuid
 
 class ProjectService:
+    async def get_user_projects(self, user_id: int) -> list:
+        """Get all projects for a user"""
+        async with SessionLocal() as session:
+            result = await session.execute(
+                select(Project).where(Project.owner_id == user_id)
+            )
+            projects = result.scalars().all()
+            return [
+                {
+                    "id": str(project.id),
+                    "name": project.name,
+                    "description": project.description,
+                    "created_at": project.created_at.isoformat() if project.created_at else None,
+                }
+                for project in projects
+            ]
     async def create_project_from_plan(self, plan: dict, owner_id: str) -> Project:
         """
         Create a project with epics, stories, and tasks from AI-generated plan.
@@ -31,9 +48,8 @@ class ProjectService:
         """
         async with SessionLocal() as session:
             async with session.begin():
-                # Convert owner_id string to UUID if it's not already
-                if isinstance(owner_id, str):
-                    owner_id = uuid.UUID(owner_id)
+                # owner_id is an integer from the user table
+                # No conversion needed
                 
                 # Create project
                 project = Project(

@@ -1,12 +1,14 @@
 fastapi
-uvicorn
+uvicorn[standard]
 authlib
+itsdangerous
 sqlalchemy
+aiosqlite
 asyncpg
 psycopg2-binary
 pyjwt
 python-dotenv
 gunicorn
 alembic
-langchain
+httpx
 openai

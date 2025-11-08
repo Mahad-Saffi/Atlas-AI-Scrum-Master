@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS Variables for Color Scheme */
+/* Hand-drawn Style Variables */
 :root {
-  --rich-black: #0d1b2a;
-  --oxford-blue: #1b263b;
-  --yinmn-blue: #415a77;
-  --silver-lake-blue: #778da9;
-  --platinum: #e0e1dd;
+  --paper-white: #fefefe;
+  --ink-black: #1a1a1a;
+  --sketch-gray: #4a4a4a;
+  --accent-blue: #2563eb;
+  --light-gray: #f5f5f5;
 }
 
 /* Global Styles */
@@ -18,16 +18,74 @@
 
 body {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Segoe Print", "Comic Sans MS", "Bradley Hand", cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--rich-black);
-  color: var(--platinum);
+  background-color: var(--paper-white);
+  color: var(--ink-black);
 }
 
-/* Smooth transitions for all interactive elements */
+/* Hand-drawn button style */
+.hand-drawn-btn {
+  position: relative;
+  background: white;
+  border: 2px solid var(--ink-black);
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 3px 3px 0 var(--ink-black);
+}
+
+.hand-drawn-btn:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--ink-black);
+}
+
+.hand-drawn-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink-black);
+}
+
+/* Hand-drawn input style */
+.hand-drawn-input {
+  border: 2px solid var(--ink-black);
+  background: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0 var(--sketch-gray);
+}
+
+.hand-drawn-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 3px 3px 0 var(--accent-blue);
+}
+
+/* Chat bubble styles */
+.chat-bubble {
+  position: relative;
+  padding: 16px 20px;
+  margin: 12px 0;
+  border: 2px solid var(--ink-black);
+  background: white;
+  box-shadow: 3px 3px 0 var(--ink-black);
+  max-width: 80%;
+}
+
+.chat-bubble.user {
+  margin-left: auto;
+  background: var(--light-gray);
+}
+
+.chat-bubble.ai {
+  margin-right: auto;
+}
+
+/* Smooth transitions */
 button,
 input,
 select,
@@ -37,18 +95,19 @@ textarea {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--oxford-blue);
+  background: var(--light-gray);
+  border: 1px solid var(--sketch-gray);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--yinmn-blue);
-  border-radius: 4px;
+  background: var(--ink-black);
+  border: 1px solid var(--ink-black);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--silver-lake-blue);
+  background: var(--sketch-gray);
 }
