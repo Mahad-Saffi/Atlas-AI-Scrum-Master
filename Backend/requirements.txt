@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+authlib
+sqlalchemy
+asyncpg
+psycopg2-binary
+pyjwt
+python-dotenv
+gunicorn
+alembic
+langchain
+openai
