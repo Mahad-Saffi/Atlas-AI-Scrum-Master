@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn';
 import AuthCallback from './pages/AuthCallback';
 import ProjectCreation from './pages/ProjectCreation';
 import TaskBoardPage from './pages/TaskBoardPage';
+import ProjectDashboard from './pages/ProjectDashboard';
 import DebugAuth from './pages/DebugAuth';
 import './App.css';
 import { authService, type User } from './services/auth';
@@ -38,6 +39,9 @@ function App() {
           isAuthenticated ? <ProjectCreation /> : <SignIn />
         } />
         <Route path="/task-board" element={isAuthenticated ? <TaskBoardPage /> : <SignIn />} />
+        <Route path="/project/:projectId" element={
+          isAuthenticated ? <ProjectDashboard /> : <SignIn />
+        } />
         <Route path="/" element={
           isAuthenticated && user ? (
             <UserProfile user={user} onSignOut={handleSignOut} />
