@@ -1,14 +1,6 @@
-from fastapi import FastAPI, Depends, HTTPException
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
-from starlette.requests import Request
-from starlette.middleware.sessions import SessionMiddleware
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-import jwt
-from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
 from app.config.database import SessionLocal, engine
-from app.models import user as user_model
 from app.api.v1 import ai as ai_router
 
 
@@ -17,30 +9,74 @@ app = FastAPI()
 
 from app.models import Base
 from app.config.database import engine
+from app.core.startup import startup_checks
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 @app.on_event("startup")
 async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    """Run startup checks and initialize database"""
+    try:
+        # Run comprehensive startup checks
+        await startup_checks()
+    except Exception as e:
+        logging.error(f"❌ Startup failed: {e}")
+        raise
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "atlas-backend"}
+    """Comprehensive health check"""
+    from sqlalchemy import text
+    
+    health_status = {
+        "status": "healthy",
+        "service": "atlas-backend",
+        "database": "unknown",
+        "checks": {}
+    }
+    
+    # Check database connection
+    try:
+        async with SessionLocal() as session:
+            await session.execute(text("SELECT 1"))
+            health_status["database"] = "connected"
+            health_status["checks"]["database"] = "✅ OK"
+    except Exception as e:
+        health_status["status"] = "unhealthy"
+        health_status["database"] = "disconnected"
+        health_status["checks"]["database"] = f"❌ Error: {str(e)}"
+    
+    # Check if tables exist
+    try:
+        from sqlalchemy import inspect
+        async with engine.begin() as conn:
+            def get_tables(connection):
+                inspector = inspect(connection)
+                return inspector.get_table_names()
+            
+            tables = await conn.run_sync(get_tables)
+            health_status["checks"]["tables"] = f"✅ {len(tables)} tables"
+            health_status["tables_count"] = len(tables)
+    except Exception as e:
+        health_status["checks"]["tables"] = f"❌ Error: {str(e)}"
+    
+    return health_status
 
 from app.api.v1 import projects as projects_router
+from app.api.v1 import notifications as notifications_router
+from app.api.v1 import chat as chat_router
+from app.api.v1 import auth as auth_router
 
+app.include_router(auth_router.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(ai_router.router, prefix="/api/v1/ai", tags=["ai"])
 app.include_router(projects_router.router, prefix="/api/v1/projects", tags=["projects"])
-
-config = Config(".env")
-app.add_middleware(SessionMiddleware, secret_key=config('SESSION_SECRET_KEY'))
-
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
-async def get_db():
-    async with SessionLocal() as session:
-        yield session
+app.include_router(notifications_router.router, prefix="/api/v1/notifications", tags=["notifications"])
+app.include_router(chat_router.router, prefix="/api/v1/chat", tags=["chat"])
 
 # Add CORS middleware
 app.add_middleware(
@@ -51,94 +87,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-oauth = OAuth(config)
-oauth.register(
-    name='github',
-    client_id=config('GITHUB_CLIENT_ID'),
-    client_secret=config('GITHUB_CLIENT_SECRET'),
-    authorize_url='https://github.com/login/oauth/authorize',
-    access_token_url='https://github.com/login/oauth/access_token',
-    api_base_url='https://api.github.com/',
-    client_kwargs={'scope': 'user:email'}
-)
-
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
-
-@app.get("/auth/github")
-async def github_login(request: Request):
-    redirect_uri = config('GITHUB_REDIRECT_URI')
-    return await oauth.github.authorize_redirect(request, redirect_uri)
-
-@app.get("/auth/callback")
-async def github_callback(request: Request, db: AsyncSession = Depends(get_db)):
-    token = await oauth.github.authorize_access_token(request)
-    user = await oauth.github.get('user', token=token)
-    user_data = user.json()
-    
-    # Get user email
-    emails = await oauth.github.get('user/emails', token=token)
-    emails_data = emails.json()
-    primary_email = next((email['email'] for email in emails_data if email['primary']), user_data.get('email', ''))
-    
-    result = await db.execute(select(user_model.User).filter(user_model.User.github_id == str(user_data['id'])))
-    db_user = result.scalars().first()
-
-    if not db_user:
-        db_user = user_model.User(
-            github_id=str(user_data['id']),
-            username=user_data['login'],
-            email=primary_email,
-            avatar_url=user_data['avatar_url'],
-        )
-        db.add(db_user)
-        await db.commit()
-        await db.refresh(db_user)
-
-    user_role = db_user.role
-    
-    # Create JWT
-    jwt_payload = {
-        "id": db_user.id,
-        "username": db_user.username,
-        "email": db_user.email,
-        "role": user_role,
-        "avatar_url": db_user.avatar_url,
-        "exp": datetime.utcnow() + timedelta(minutes=15)
-    }
-    jwt_token = jwt.encode(jwt_payload, config('JWT_SECRET_KEY'), algorithm="HS256")
-    from starlette.responses import RedirectResponse
-    import json
-
-    user_info = {
-        "id": db_user.id,
-        "username": db_user.username,
-        "email": db_user.email,
-        "avatar_url": db_user.avatar_url
-    }
-
-    # Redirect to frontend with token and user data
-    return RedirectResponse(
-        url=f"http://localhost:5173/auth/callback?token={jwt_token}&user={json.dumps(user_info)}"
-    )
-
-@app.post("/auth/refresh")
-async def refresh_token(request: Request):
-    token = request.headers.get("Authorization").split(" ")[1] # type: ignore
-    try:
-        payload = jwt.decode(token, config('JWT_SECRET_KEY'), algorithms=["HS256"])
-        new_payload = {**payload, "exp": datetime.utcnow() + timedelta(minutes=15)}
-        new_token = jwt.encode(new_payload, config('JWT_SECRET_KEY'), algorithm="HS256")
-        return {"access_token": new_token, "expires_in": 900}
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+    return {"message": "Atlas AI Scrum Master API", "version": "1.0.0", "status": "running"}
 
 from app.core.security import get_current_user
 
 @app.get("/users/me")
 async def get_user(current_user: dict = Depends(get_current_user)):
+    """Get current authenticated user"""
     return current_user

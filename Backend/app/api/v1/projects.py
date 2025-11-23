@@ -1,9 +1,18 @@
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 from app.core.security import get_current_user
 from app.services.task_service import task_service
 from app.services.project_service import project_service
+from app.services.risk_service import risk_service
+from typing import Optional
+from datetime import datetime
 
 router = APIRouter()
+
+class TaskUpdateRequest(BaseModel):
+    estimate_hours: Optional[int] = None
+    progress_percentage: Optional[int] = None
+    due_date: Optional[str] = None
 
 @router.get("")
 async def get_user_projects(current_user: dict = Depends(get_current_user)):
@@ -17,8 +26,30 @@ async def get_project_tasks(project_id: str, current_user: dict = Depends(get_cu
     tasks = await task_service.get_tasks_for_user_in_project(project_id, user_id)
     return tasks
 
+@router.get("/{project_id}/risks")
+async def get_project_risks(project_id: str, current_user: dict = Depends(get_current_user)):
+    """Get risk summary for a project"""
+    risks = await risk_service.get_project_risks(project_id)
+    return risks
+
 @router.post("/tasks/{task_id}/complete")
 async def complete_task(task_id: str, current_user: dict = Depends(get_current_user)):
     """Mark a task as complete and trigger automated task assignment"""
     task = await task_service.complete_task(task_id, current_user['id'])
     return {"message": "Task completed successfully", "task": task}
+
+@router.patch("/tasks/{task_id}")
+async def update_task(
+    task_id: str,
+    update: TaskUpdateRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update task estimate, progress, or due date"""
+    task = await task_service.update_task_details(task_id, update.dict(exclude_none=True))
+    return {"message": "Task updated successfully", "task": task}
+
+@router.post("/detect-delays")
+async def detect_delays(current_user: dict = Depends(get_current_user)):
+    """Manually trigger delay detection (normally runs on schedule)"""
+    result = await risk_service.detect_delays_and_update_risks()
+    return result

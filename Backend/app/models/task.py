@@ -15,6 +15,9 @@ class Task(Base):
     status = Column(String(20), nullable=False, default='To Do')
     assignee_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     due_date = Column(TIMESTAMP(timezone=True))
+    estimate_hours = Column(Integer, nullable=True)  # Estimated hours to complete
+    progress_percentage = Column(Integer, default=0)  # 0-100
+    risk_level = Column(String(20), default='low')  # low, medium, high
     priority = Column(Integer, default=0)
     order = Column(Integer, default=0)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())

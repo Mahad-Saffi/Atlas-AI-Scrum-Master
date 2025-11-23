@@ -25,21 +25,69 @@ async def check_database_schema():
                 logger.info("✅ Database schema created successfully")
                 return True
             
-            # Check if users table has password_hash column
+            # Check if users table has password_hash column and github_id is nullable
             def check_columns(connection):
                 inspector = inspect(connection)
                 if 'users' in inspector.get_table_names():
-                    columns = [col['name'] for col in inspector.get_columns('users')]
+                    columns = inspector.get_columns('users')
                     return columns
                 return []
             
             columns = await conn.run_sync(check_columns)
+            column_names = [col['name'] for col in columns]
             
-            if 'users' in tables and 'password_hash' not in columns:
-                logger.warning("⚠️  Database schema outdated. Adding password_hash column...")
-                await conn.execute(text("ALTER TABLE users ADD COLUMN password_hash VARCHAR(255)"))
-                await conn.commit()
-                logger.info("✅ Database schema updated successfully")
+            # Check if schema needs updates
+            needs_migration = False
+            
+            if 'users' in tables:
+                # Check if password_hash column exists
+                if 'password_hash' not in column_names:
+                    logger.warning("⚠️  Adding password_hash column...")
+                    await conn.execute(text("ALTER TABLE users ADD COLUMN password_hash VARCHAR(255)"))
+                    needs_migration = True
+                
+                # Check if github_id is nullable (we need to recreate table for SQLite)
+                github_id_col = next((col for col in columns if col['name'] == 'github_id'), None)
+                if github_id_col and not github_id_col.get('nullable', True):
+                    logger.warning("⚠️  Migrating users table to make github_id nullable...")
+                    # For SQLite, we need to recreate the table
+                    await conn.execute(text("""
+                        CREATE TABLE users_new (
+                            id INTEGER PRIMARY KEY,
+                            github_id VARCHAR(50) UNIQUE,
+                            username VARCHAR(100) NOT NULL UNIQUE,
+                            email VARCHAR(255) UNIQUE NOT NULL,
+                            password_hash VARCHAR(255),
+                            avatar_url VARCHAR(500),
+                            role VARCHAR(50) NOT NULL DEFAULT 'developer',
+                            is_active BOOLEAN DEFAULT 1,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            updated_at TIMESTAMP
+                        )
+                    """))
+                    
+                    # Copy data from old table
+                    await conn.execute(text("""
+                        INSERT INTO users_new (id, github_id, username, email, password_hash, avatar_url, role, is_active, created_at, updated_at)
+                        SELECT id, github_id, username, email, password_hash, avatar_url, role, is_active, created_at, updated_at
+                        FROM users
+                    """))
+                    
+                    # Drop old table and rename new one
+                    await conn.execute(text("DROP TABLE users"))
+                    await conn.execute(text("ALTER TABLE users_new RENAME TO users"))
+                    
+                    # Recreate indexes
+                    await conn.execute(text("CREATE INDEX ix_users_id ON users (id)"))
+                    await conn.execute(text("CREATE UNIQUE INDEX ix_users_github_id ON users (github_id)"))
+                    await conn.execute(text("CREATE INDEX ix_users_username ON users (username)"))
+                    await conn.execute(text("CREATE UNIQUE INDEX ix_users_email ON users (email)"))
+                    
+                    needs_migration = True
+                
+                if needs_migration:
+                    await conn.commit()
+                    logger.info("✅ Database schema migrated successfully")
             
             logger.info(f"✅ Database check passed. Tables: {', '.join(tables)}")
             return True

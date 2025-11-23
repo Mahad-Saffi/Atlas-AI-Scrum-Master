@@ -1,7 +1,5 @@
 fastapi
 uvicorn[standard]
-authlib
-itsdangerous
 sqlalchemy
 aiosqlite
 asyncpg
@@ -12,3 +10,6 @@ gunicorn
 alembic
 httpx
 openai
+bcrypt
+python-multipart
+email-validator

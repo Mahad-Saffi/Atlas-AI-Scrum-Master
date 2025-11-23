@@ -33,7 +33,11 @@ class TaskService:
                         "status": task.status,
                         "assignee_id": task.assignee_id,
                         "project_id": str(task.project_id),
-                        "order": task.order
+                        "order": task.order,
+                        "due_date": task.due_date.isoformat() if task.due_date else None,
+                        "estimate_hours": task.estimate_hours,
+                        "progress_percentage": task.progress_percentage,
+                        "risk_level": task.risk_level
                     }
                     for task in tasks
                 ]
@@ -84,9 +88,14 @@ class TaskService:
                 next_task = next_task_result.scalars().first()
                 
                 # Auto-assign next task to the same user
+                next_task_info = None
                 if next_task:
                     next_task.assignee_id = user_id_int
                     next_task.status = "In Progress"
+                    next_task_info = {
+                        "id": str(next_task.id),
+                        "title": next_task.title
+                    }
                 
                 # Commit changes
                 await session.commit()
@@ -96,17 +105,73 @@ class TaskService:
                 if next_task:
                     await session.refresh(next_task)
                 
+                # Create notification for next task assignment
+                if next_task:
+                    from app.services.notification_service import notification_service
+                    await notification_service.create_notification(
+                        user_id=user_id_int,
+                        notification_type="task_assigned",
+                        title="New Task Assigned",
+                        message=f"You've been assigned: {next_task.title}",
+                        link=f"/task-board"
+                    )
+                
                 return {
                     "id": str(task.id),
                     "title": task.title,
                     "status": task.status,
-                    "next_task": {
-                        "id": str(next_task.id),
-                        "title": next_task.title
-                    } if next_task else None
+                    "next_task": next_task_info
                 }
         except Exception as e:
             print(f"Error completing task: {e}")
+            raise
+
+    async def update_task_details(self, task_id: str, updates: dict) -> dict:
+        """Update task estimate, progress, or due date"""
+        try:
+            async with SessionLocal() as session:
+                # Convert task_id to UUID
+                if isinstance(task_id, str):
+                    if len(task_id) == 32 and '-' not in task_id:
+                        task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
+                    task_uuid = uuid.UUID(task_id)
+                else:
+                    task_uuid = task_id
+                
+                result = await session.execute(
+                    select(Task).where(Task.id == task_uuid)
+                )
+                task = result.scalars().first()
+                
+                if not task:
+                    raise ValueError(f"Task not found with id: {task_id}")
+                
+                # Update fields
+                if 'estimate_hours' in updates:
+                    task.estimate_hours = updates['estimate_hours']
+                if 'progress_percentage' in updates:
+                    task.progress_percentage = max(0, min(100, updates['progress_percentage']))
+                if 'due_date' in updates:
+                    from datetime import datetime
+                    task.due_date = datetime.fromisoformat(updates['due_date'].replace('Z', '+00:00'))
+                
+                # Recalculate risk
+                from app.services.risk_service import risk_service
+                task.risk_level = risk_service.calculate_task_risk(task)
+                
+                await session.commit()
+                await session.refresh(task)
+                
+                return {
+                    "id": str(task.id),
+                    "title": task.title,
+                    "estimate_hours": task.estimate_hours,
+                    "progress_percentage": task.progress_percentage,
+                    "due_date": task.due_date.isoformat() if task.due_date else None,
+                    "risk_level": task.risk_level
+                }
+        except Exception as e:
+            print(f"Error updating task: {e}")
             raise
 
 task_service = TaskService()
