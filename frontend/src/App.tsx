@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SignIn from './pages/SignIn';
+import SimpleLogin from './pages/SimpleLogin';
 import AuthCallback from './pages/AuthCallback';
 import ProjectCreation from './pages/ProjectCreation';
 import TaskBoardPage from './pages/TaskBoardPage';
@@ -34,23 +35,25 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<SimpleLogin />} />
+        <Route path="/github-login" element={<SignIn />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/debug-auth" element={<DebugAuth />} />
         <Route path="/create-project" element={
-          isAuthenticated ? <ProjectCreation /> : <SignIn />
+          isAuthenticated ? <ProjectCreation /> : <SimpleLogin />
         } />
-        <Route path="/task-board" element={isAuthenticated ? <TaskBoardPage /> : <SignIn />} />
+        <Route path="/task-board" element={isAuthenticated ? <TaskBoardPage /> : <SimpleLogin />} />
         <Route path="/project/:projectId" element={
-          isAuthenticated ? <ProjectDashboard /> : <SignIn />
+          isAuthenticated ? <ProjectDashboard /> : <SimpleLogin />
         } />
         <Route path="/chat" element={
-          isAuthenticated ? <ChatPage /> : <SignIn />
+          isAuthenticated ? <ChatPage /> : <SimpleLogin />
         } />
         <Route path="/" element={
           isAuthenticated && user ? (
             <UserProfile user={user} onSignOut={handleSignOut} />
           ) : (
-            <SignIn />
+            <SimpleLogin />
           )
         } />
       </Routes>
