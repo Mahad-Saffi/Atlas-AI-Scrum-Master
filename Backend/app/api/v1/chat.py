@@ -111,6 +111,47 @@ async def get_channels(current_user: dict = Depends(get_current_user)):
             for ch in channels
         ]
 
+@router.post("/channels/{channel_id}/join")
+async def join_channel(channel_id: int, current_user: dict = Depends(get_current_user)):
+    """Join a public channel"""
+    async with SessionLocal() as session:
+        # Check if channel exists and is public
+        result = await session.execute(
+            select(Channel).where(Channel.id == channel_id)
+        )
+        channel = result.scalars().first()
+        
+        if not channel:
+            return {"error": "Channel not found"}, 404
+        
+        if channel.channel_type == 'private':
+            return {"error": "Cannot join private channel"}, 403
+        
+        # Check if already a member
+        result = await session.execute(
+            select(ChannelMember).where(
+                and_(
+                    ChannelMember.channel_id == channel_id,
+                    ChannelMember.user_id == current_user['id']
+                )
+            )
+        )
+        existing = result.scalars().first()
+        
+        if existing:
+            return {"message": "Already a member"}
+        
+        # Add as member
+        member = ChannelMember(
+            channel_id=channel_id,
+            user_id=current_user['id'],
+            role='member'
+        )
+        session.add(member)
+        await session.commit()
+        
+        return {"message": "Joined channel successfully"}
+
 @router.post("/channels")
 async def create_channel(
     request: CreateChannelRequest,
@@ -148,15 +189,19 @@ async def create_channel(
 async def get_channel_messages(
     channel_id: int,
     limit: int = Query(50, le=100),
+    search: str = Query(None),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get messages from a channel"""
+    """Get messages from a channel with optional search"""
     async with SessionLocal() as session:
-        result = await session.execute(
-            select(Message).where(
-                Message.channel_id == channel_id
-            ).order_by(desc(Message.created_at)).limit(limit)
-        )
+        query = select(Message).where(Message.channel_id == channel_id)
+        
+        # Add search filter if provided
+        if search:
+            query = query.where(Message.content.contains(search))
+        
+        query = query.order_by(desc(Message.created_at)).limit(limit)
+        result = await session.execute(query)
         messages = result.scalars().all()
         
         return [
@@ -170,6 +215,55 @@ async def get_channel_messages(
             for msg in reversed(messages)
         ]
 
+@router.get("/search")
+async def search_messages(
+    query: str = Query(..., min_length=2),
+    limit: int = Query(20, le=50),
+    current_user: dict = Depends(get_current_user)
+):
+    """Search messages across all channels and DMs"""
+    async with SessionLocal() as session:
+        # Search in channels user is member of
+        result = await session.execute(
+            select(Message).join(Channel).join(ChannelMember).where(
+                and_(
+                    ChannelMember.user_id == current_user['id'],
+                    Message.content.contains(query)
+                )
+            ).order_by(desc(Message.created_at)).limit(limit)
+        )
+        channel_messages = result.scalars().all()
+        
+        # Search in DMs
+        result = await session.execute(
+            select(Message).where(
+                and_(
+                    or_(
+                        Message.sender_id == current_user['id'],
+                        Message.recipient_id == current_user['id']
+                    ),
+                    Message.content.contains(query)
+                )
+            ).order_by(desc(Message.created_at)).limit(limit)
+        )
+        dm_messages = result.scalars().all()
+        
+        all_messages = list(channel_messages) + list(dm_messages)
+        all_messages.sort(key=lambda x: x.created_at, reverse=True)
+        
+        return [
+            {
+                'id': msg.id,
+                'sender_id': msg.sender_id,
+                'content': msg.content,
+                'channel_id': msg.channel_id,
+                'recipient_id': msg.recipient_id,
+                'created_at': msg.created_at.isoformat(),
+                'type': 'channel' if msg.channel_id else 'dm'
+            }
+            for msg in all_messages[:limit]
+        ]
+
 @router.get("/online-users")
 async def get_online_users(current_user: dict = Depends(get_current_user)):
     """Get list of currently online users"""
@@ -179,6 +273,83 @@ async def get_online_users(current_user: dict = Depends(get_current_user)):
         from app.models.user import User
         result = await session.execute(
             select(User).where(User.id.in_(online_user_ids))
+        )
+        users = result.scalars().all()
+        
+        return [
+            {
+                'id': user.id,
+                'username': user.username,
+                'avatar_url': user.avatar_url
+            }
+            for user in users
+        ]
+
+@router.get("/direct-messages/{user_id}")
+async def get_direct_messages(
+    user_id: int,
+    limit: int = Query(50, le=100),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get direct messages with a specific user"""
+    async with SessionLocal() as session:
+        result = await session.execute(
+            select(Message).where(
+                or_(
+                    and_(
+                        Message.sender_id == current_user['id'],
+                        Message.recipient_id == user_id
+                    ),
+                    and_(
+                        Message.sender_id == user_id,
+                        Message.recipient_id == current_user['id']
+                    )
+                )
+            ).order_by(desc(Message.created_at)).limit(limit)
+        )
+        messages = result.scalars().all()
+        
+        return [
+            {
+                'id': msg.id,
+                'sender_id': msg.sender_id,
+                'recipient_id': msg.recipient_id,
+                'content': msg.content,
+                'created_at': msg.created_at.isoformat(),
+                'is_edited': msg.is_edited
+            }
+            for msg in reversed(messages)
+        ]
+
+@router.get("/conversations")
+async def get_conversations(current_user: dict = Depends(get_current_user)):
+    """Get list of users with whom current user has DM conversations"""
+    async with SessionLocal() as session:
+        from app.models.user import User
+        
+        # Get unique user IDs from DMs
+        result = await session.execute(
+            select(Message.sender_id, Message.recipient_id).where(
+                or_(
+                    Message.sender_id == current_user['id'],
+                    Message.recipient_id == current_user['id']
+                )
+            ).distinct()
+        )
+        
+        user_ids = set()
+        for row in result:
+            if row[0] != current_user['id']:
+                user_ids.add(row[0])
+            if row[1] and row[1] != current_user['id']:
+                user_ids.add(row[1])
+        
+        if not user_ids:
+            return []
+        
+        # Get user details
+        result = await session.execute(
+            select(User).where(User.id.in_(user_ids))
         )
         users = result.scalars().all()
         
