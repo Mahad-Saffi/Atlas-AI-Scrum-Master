@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { type User } from '../services/auth';
+import NotificationBell from './NotificationBell';
 
 interface UserProfileProps {
   user: User;
@@ -15,6 +16,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
       padding: '40px 20px',
       fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
     }}>
+      {/* Notification Bell - Top Right */}
+      <div style={{
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        zIndex: 100,
+      }}>
+        <NotificationBell />
+      </div>
+
       {/* Header */}
       <div style={{
         textAlign: 'center',

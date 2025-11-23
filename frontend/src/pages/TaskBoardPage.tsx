@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TaskBoard from '../components/tasks/TaskBoard';
 import { taskService } from '../services/taskService';
+import NotificationBell from '../components/NotificationBell';
 
 interface Task {
   id: string;
@@ -190,6 +191,16 @@ const TaskBoardPage: React.FC = () => {
       padding: '40px 20px',
       fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
     }}>
+      {/* Notification Bell - Top Right */}
+      <div style={{
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        zIndex: 100,
+      }}>
+        <NotificationBell />
+      </div>
+
       {/* Header */}
       <div style={{
         textAlign: 'center',
