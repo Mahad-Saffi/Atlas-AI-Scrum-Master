@@ -1,267 +1,243 @@
-# Atlas Quick Start Guide
+# 🚀 Quick Start Guide - Atlas AI Scrum Master
 
-## 🚀 Get Up and Running in 5 Minutes
+## Prerequisites
 
-### Prerequisites
-- Docker Desktop installed and running
-- GitHub account for OAuth
-- OpenAI API key (for AI features)
+- Python 3.12+
+- Node.js 18+
+- Git
 
----
+## Installation
 
-## Step 1: Clone and Configure
+### 1. Clone & Setup Backend
 
 ```bash
-# Clone the repository
-git clone https://github.com/Mahad-Saffi/Atlas-AI-Scrum-Master.git
-cd Atlas-AI-Scrum-Master
-
-# Copy environment template
-cp backend/.env.example backend/.env
+cd backend
+pip install -r requirements.txt
 ```
 
-## Step 2: Set Up Environment Variables
+### 2. Setup Frontend
 
-Edit `backend/.env` with your credentials:
+```bash
+cd frontend
+npm install
+```
 
+### 3. Configure Environment
+
+Create `backend/.env`:
 ```env
-# GitHub OAuth (Get from: https://github.com/settings/developers)
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-GITHUB_REDIRECT_URI=http://localhost:8000/auth/callback
-
-# JWT Secret (Generate a random string)
-JWT_SECRET_KEY=your_super_secret_jwt_key_here
-SESSION_SECRET_KEY=your_session_secret_key_here
-
-# OpenAI API Key (Get from: https://platform.openai.com/api-keys)
-OPENAI_API_KEY=sk-your-openai-api-key
-
-# Database (Default values work for Docker)
-DATABASE_URL=postgresql+asyncpg://ai_scrum_user:dev_password_change_in_production@db:5432/ai_scrum_master
+JWT_SECRET_KEY=your-secret-key-here-change-this
+OPENAI_API_KEY=sk-your-openai-key-here  # Optional
 ```
 
-## Step 3: Start the Application
+## Running the Application
+
+### Terminal 1 - Backend
+```bash
+cd backend
+uvicorn main:app --reload --port 8000
+```
+
+You should see:
+```
+✅ Database connection verified
+✅ Database check passed
+✅ All startup checks passed!
+Application startup complete
+```
+
+### Terminal 2 - Frontend
+```bash
+cd frontend
+npm run dev
+```
+
+### Terminal 3 - Open Browser
+```
+http://localhost:5173
+```
+
+## First Login
+
+### Option 1: Demo Account (Fastest)
+1. Click "🎮 Try Demo Account"
+2. Start using immediately!
+
+**Credentials**: demo@atlas.ai / demo123
+
+### Option 2: Create Account
+1. Click "Don't have an account? Register"
+2. Enter:
+   - Username: your_name
+   - Email: your@email.com
+   - Password: (min 6 characters)
+3. Click "Create Account"
+
+## Features to Try
+
+### 1. Create a Project with AI
+1. Click "✨ Create New Project"
+2. Chat with AI: "I want to build a todo app"
+3. Answer AI's questions
+4. Say "yes" to create the project
+
+### 2. View Task Board
+1. Click "📋 View Task Board"
+2. See tasks in 3 columns
+3. Click "Mark as Complete" on a task
+4. Watch it move to "Done"
+
+### 3. Check Notifications
+1. Look for 🔔 bell icon (top right)
+2. See unread count badge
+3. Click to view notifications
+4. Get notified when tasks are assigned
+
+### 4. Team Chat
+1. Click "💬 Team Chat"
+2. See who's online
+3. Send messages in real-time
+4. Open in multiple browsers to test
+
+### 5. Project Dashboard
+1. From task board, note the project ID in URL
+2. Go to `/project/{id}`
+3. See statistics and progress
+
+## Troubleshooting
+
+### Backend won't start
+```bash
+# Delete database and restart
+rm backend/test.db
+cd backend
+uvicorn main:app --reload --port 8000
+```
+
+### "Module not found" errors
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+
+# Frontend
+cd frontend
+npm install
+```
+
+### Can't login
+- Try demo account first
+- Check backend is running on port 8000
+- Check browser console for errors
+
+### Database errors
+```bash
+# Reset database
+rm backend/test.db
+# Restart backend - it will recreate tables
+```
+
+## API Documentation
+
+Once backend is running, visit:
+```
+http://localhost:8000/docs
+```
+
+Interactive API documentation with all endpoints!
+
+## Health Check
 
 ```bash
-# Build and start all services
-docker-compose up --build
-
-# Wait for services to be healthy (check logs)
-# You should see:
-# ✓ Database ready
-# ✓ Backend started on port 8000
-# ✓ Frontend started on port 8080
+curl http://localhost:8000/health
 ```
 
-## Step 4: Access the Application
-
-Open your browser and navigate to:
-- **Frontend:** http://localhost:8080
-- **Backend API:** http://localhost:8000
-- **Health Check:** http://localhost:8000/health
-
----
-
-## 🎯 First Time Usage
-
-### 1. Sign In
-- Click "Continue with GitHub"
-- Authorize the application
-- You'll be redirected back to Atlas
-
-### 2. Create a Project
-- Navigate to "Create Project"
-- Start chatting with the AI
-- Describe your project goals
-- AI will suggest team members
-- AI will generate a complete project plan
-
-### 3. Manage Tasks
-- View your tasks on the Task Board
-- Click "Mark as Complete" when done
-- Next task is automatically assigned to you
-
----
-
-## 🛠️ Development Commands
-
-### Backend
-
-```bash
-# Run backend tests
-docker exec -it ai_scrum_backend pytest
-
-# Check backend logs
-docker logs ai_scrum_backend -f
-
-# Run migrations
-docker exec -it ai_scrum_backend alembic upgrade head
-
-# Access backend shell
-docker exec -it ai_scrum_backend bash
+Should return:
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "tables_count": 10
+}
 ```
 
-### Frontend
-
-```bash
-# Check frontend logs
-docker logs ai_scrum_frontend -f
-
-# Run frontend tests
-docker exec -it ai_scrum_frontend npm test
-
-# Access frontend shell
-docker exec -it ai_scrum_frontend sh
-```
-
-### Database
-
-```bash
-# Access PostgreSQL
-docker exec -it ai_scrum_db psql -U ai_scrum_user -d ai_scrum_master
-
-# View tables
-\dt
-
-# Query users
-SELECT * FROM users;
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Services Won't Start
-
-```bash
-# Stop all services
-docker-compose down
-
-# Remove volumes (WARNING: Deletes data)
-docker-compose down -v
-
-# Rebuild from scratch
-docker-compose up --build --force-recreate
-```
-
-### Port Already in Use
-
-```bash
-# Check what's using the port
-netstat -ano | findstr :8000  # Windows
-lsof -i :8000                 # Mac/Linux
-
-# Kill the process or change ports in docker-compose.yml
-```
-
-### Database Connection Issues
-
-```bash
-# Check database is running
-docker ps | grep ai_scrum_db
-
-# Check database logs
-docker logs ai_scrum_db
-
-# Restart database
-docker restart ai_scrum_db
-```
-
-### Frontend Can't Connect to Backend
-
-1. Check CORS settings in `backend/main.py`
-2. Verify `VITE_API_URL` in frontend
-3. Check network in `docker-compose.yml`
-
----
-
-## 📚 Key Endpoints
-
-### Authentication
-- `GET /auth/github` - Initiate GitHub OAuth
-- `GET /auth/callback` - OAuth callback
-- `GET /users/me` - Get current user
-- `POST /auth/refresh` - Refresh JWT token
-
-### Projects
-- `POST /api/v1/ai/discover` - Conversational project creation
-- `GET /api/v1/projects/{id}/tasks` - Get project tasks
-
-### Tasks
-- `POST /api/v1/projects/tasks/{id}/complete` - Complete task
-
-### Health
-- `GET /health` - Service health check
-
----
-
-## 🎨 Project Structure
+## Project Structure
 
 ```
 Atlas-AI-Scrum-Master/
-├── backend/
+├── backend/          # FastAPI backend
 │   ├── app/
-│   │   ├── api/v1/          # API endpoints
-│   │   ├── models/          # Database models
-│   │   ├── services/        # Business logic
-│   │   ├── config/          # Configuration
-│   │   └── core/            # Security & utilities
-│   ├── alembic/             # Database migrations
-│   └── main.py              # FastAPI app
-├── frontend/
+│   │   ├── api/v1/  # API endpoints
+│   │   ├── models/  # Database models
+│   │   ├── services/# Business logic
+│   │   └── core/    # Security, startup
+│   └── main.py      # FastAPI app
+├── frontend/         # React frontend
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── pages/           # Page components
-│   │   ├── services/        # API clients
-│   │   └── types/           # TypeScript types
-│   └── public/              # Static assets
-├── docs/                    # Documentation
-└── docker-compose.yml       # Docker configuration
+│   │   ├── pages/   # Page components
+│   │   ├── components/
+│   │   └── services/# API clients
+│   └── package.json
+└── docs/            # Documentation
 ```
 
+## Common Commands
+
+### Backend
+```bash
+# Start server
+uvicorn main:app --reload --port 8000
+
+# Run tests
+./test-backend-complete.sh
+
+# Check health
+curl http://localhost:8000/health
+```
+
+### Frontend
+```bash
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Features Implemented
+
+✅ Email/password authentication
+✅ AI-powered project creation
+✅ Task board (Kanban)
+✅ Real-time notifications
+✅ Team chat (WebSocket)
+✅ Risk management
+✅ Progress tracking
+✅ Project dashboard
+
+## Next Steps
+
+1. Create your first project with AI
+2. Explore the task board
+3. Try the team chat
+4. Check out the project dashboard
+5. Review the API docs at /docs
+
+## Need Help?
+
+- Check `AUTH_UPDATE.md` for auth details
+- Check `FINAL_SUMMARY.md` for complete feature list
+- Check `SPRINT_6_7_COMPLETE.md` for recent updates
+- Visit http://localhost:8000/docs for API reference
+
+## Demo Credentials
+
+**Email**: demo@atlas.ai
+**Password**: demo123
+
 ---
 
-## 🔑 Environment Variables Reference
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GITHUB_CLIENT_ID` | Yes | GitHub OAuth App ID |
-| `GITHUB_CLIENT_SECRET` | Yes | GitHub OAuth Secret |
-| `GITHUB_REDIRECT_URI` | Yes | OAuth callback URL |
-| `JWT_SECRET_KEY` | Yes | JWT signing key |
-| `SESSION_SECRET_KEY` | Yes | Session encryption key |
-| `OPENAI_API_KEY` | Yes | OpenAI API key |
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-
----
-
-## 📖 Next Steps
-
-1. **Read the Documentation**
-   - `docs/IMPLEMENTATION_STATUS.md` - Current progress
-   - `docs/architecture.md` - System architecture
-   - `WORK_COMPLETED.md` - Recent changes
-
-2. **Explore the Code**
-   - Start with `backend/main.py`
-   - Check out `frontend/src/App.tsx`
-   - Review models in `backend/app/models/`
-
-3. **Start Contributing**
-   - Pick a task from `docs/epics/full-backlog.md`
-   - Create a feature branch
-   - Submit a pull request
-
----
-
-## 💬 Need Help?
-
-- Check the logs: `docker-compose logs -f`
-- Review documentation in `docs/`
-- Check GitHub issues
-- Contact the team
-
----
-
-**Happy Coding! 🚀**
+**Enjoy building with Atlas AI! 🚀**
