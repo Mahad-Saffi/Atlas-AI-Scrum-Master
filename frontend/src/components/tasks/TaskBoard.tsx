@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { taskService } from '../../services/taskService';
 
 interface Task {
@@ -16,6 +16,8 @@ interface TaskBoardProps {
 
 const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
   const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const handleCompleteTask = async (taskId: string) => {
     try {
@@ -32,19 +34,145 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
     }
   };
 
+  // Filter and search tasks
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      // Search filter
+      const matchesSearch = searchQuery === '' || 
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      // Status filter
+      const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+      
+      return matchesSearch && matchesStatus;
+    });
+  }, [tasks, searchQuery, statusFilter]);
+
   const columns = {
-    'To Do': { tasks: tasks.filter(task => task.status === 'To Do'), emoji: '📝' },
-    'In Progress': { tasks: tasks.filter(task => task.status === 'In Progress'), emoji: '⚡' },
-    'Done': { tasks: tasks.filter(task => task.status === 'Done'), emoji: '✅' },
+    'To Do': { tasks: filteredTasks.filter(task => task.status === 'To Do'), emoji: '📝' },
+    'In Progress': { tasks: filteredTasks.filter(task => task.status === 'In Progress'), emoji: '⚡' },
+    'Done': { tasks: filteredTasks.filter(task => task.status === 'Done'), emoji: '✅' },
   };
 
   return (
-    <div style={{ 
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-      gap: '24px',
+    <div style={{
       fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
     }}>
+      {/* Search and Filter Bar */}
+      <div style={{
+        marginBottom: '30px',
+        display: 'flex',
+        gap: '16px',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+      }}>
+        {/* Search Input */}
+        <div style={{ flex: '1', minWidth: '250px' }}>
+          <input
+            type="text"
+            placeholder="🔍 Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              fontSize: '16px',
+              border: '2px solid #1a1a1a',
+              backgroundColor: 'white',
+              boxShadow: '3px 3px 0 #1a1a1a',
+              fontFamily: 'inherit',
+              transition: 'all 0.2s ease',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0 #2563eb';
+              e.currentTarget.style.borderColor = '#2563eb';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = '3px 3px 0 #1a1a1a';
+              e.currentTarget.style.borderColor = '#1a1a1a';
+            }}
+          />
+        </div>
+
+        {/* Status Filter */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <label style={{
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#1a1a1a',
+          }}>
+            Filter:
+          </label>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            style={{
+              padding: '10px 16px',
+              fontSize: '16px',
+              border: '2px solid #1a1a1a',
+              backgroundColor: 'white',
+              boxShadow: '3px 3px 0 #1a1a1a',
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+            }}
+          >
+            <option value="all">All Tasks</option>
+            <option value="To Do">📝 To Do</option>
+            <option value="In Progress">⚡ In Progress</option>
+            <option value="Done">✅ Done</option>
+          </select>
+        </div>
+
+        {/* Clear Filters */}
+        {(searchQuery || statusFilter !== 'all') && (
+          <button
+            onClick={() => {
+              setSearchQuery('');
+              setStatusFilter('all');
+            }}
+            style={{
+              padding: '10px 20px',
+              fontSize: '14px',
+              border: '2px solid #1a1a1a',
+              backgroundColor: 'white',
+              boxShadow: '3px 3px 0 #1a1a1a',
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translate(1px, 1px)';
+              e.currentTarget.style.boxShadow = '2px 2px 0 #1a1a1a';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translate(0, 0)';
+              e.currentTarget.style.boxShadow = '3px 3px 0 #1a1a1a';
+            }}
+          >
+            🔄 Clear Filters
+          </button>
+        )}
+
+        {/* Results Count */}
+        <div style={{
+          fontSize: '14px',
+          color: '#4a4a4a',
+          padding: '10px 16px',
+          border: '2px dashed #1a1a1a',
+          backgroundColor: '#f5f5f5',
+        }}>
+          Showing {filteredTasks.length} of {tasks.length} tasks
+        </div>
+      </div>
+
+      {/* Task Columns */}
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '24px',
+      }}>
       {Object.entries(columns).map(([status, { tasks: tasksInStatus, emoji }]) => (
         <div 
           key={status} 
@@ -203,6 +331,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };
