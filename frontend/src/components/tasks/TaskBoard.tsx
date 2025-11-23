@@ -223,7 +223,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {tasksInStatus.map(task => (
               <div 
-                key={task.id} 
+                key={task.id}
+                role="article"
+                tabIndex={0}
+                aria-label={`Task: ${task.title}. Status: ${status}. ${task.risk_level ? `Risk level: ${task.risk_level}` : ''}`}
                 style={{ 
                   backgroundColor: 'white',
                   border: '2px solid #1a1a1a',
@@ -243,6 +246,13 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translate(0, 0)';
                   e.currentTarget.style.boxShadow = '4px 4px 0 #1a1a1a';
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const button = e.currentTarget.querySelector('button');
+                    if (button) button.focus();
+                  }
                 }}
               >
                 {/* Risk Badge */}

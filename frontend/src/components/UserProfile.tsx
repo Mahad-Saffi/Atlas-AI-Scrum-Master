@@ -13,7 +13,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
     <div style={{
       minHeight: '100vh',
       backgroundColor: '#fefefe',
-      padding: '40px 20px',
+      padding: 'clamp(20px, 5vw, 40px) clamp(10px, 3vw, 20px)',
       fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
     }}>
       {/* Notification Bell - Top Right */}
@@ -32,7 +32,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         marginBottom: '60px',
       }}>
         <h1 style={{
-          fontSize: '56px',
+          fontSize: 'clamp(32px, 8vw, 56px)',
           fontWeight: 'bold',
           color: '#1a1a1a',
           marginBottom: '12px',
@@ -149,8 +149,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         {/* Action Cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '30px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 'clamp(20px, 4vw, 30px)',
         }}>
           {/* Create Project Card */}
           <Link 

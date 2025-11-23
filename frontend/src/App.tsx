@@ -11,6 +11,8 @@ import DebugAuth from './pages/DebugAuth';
 import './App.css';
 import { authService, type User } from './services/auth';
 import UserProfile from './components/UserProfile';
+import ThemeToggle from './components/ThemeToggle';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -33,8 +35,10 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
+    <ErrorBoundary>
+      <Router>
+        <ThemeToggle />
+        <Routes>
         <Route path="/login" element={<SimpleLogin />} />
         <Route path="/github-login" element={<SignIn />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
@@ -58,6 +62,7 @@ function App() {
         } />
       </Routes>
     </Router>
+    </ErrorBoundary>
   );
 }
 
