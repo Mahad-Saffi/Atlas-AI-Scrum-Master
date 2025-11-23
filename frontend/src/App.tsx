@@ -5,6 +5,7 @@ import AuthCallback from './pages/AuthCallback';
 import ProjectCreation from './pages/ProjectCreation';
 import TaskBoardPage from './pages/TaskBoardPage';
 import ProjectDashboard from './pages/ProjectDashboard';
+import ChatPage from './pages/ChatPage';
 import DebugAuth from './pages/DebugAuth';
 import './App.css';
 import { authService, type User } from './services/auth';
@@ -41,6 +42,9 @@ function App() {
         <Route path="/task-board" element={isAuthenticated ? <TaskBoardPage /> : <SignIn />} />
         <Route path="/project/:projectId" element={
           isAuthenticated ? <ProjectDashboard /> : <SignIn />
+        } />
+        <Route path="/chat" element={
+          isAuthenticated ? <ChatPage /> : <SignIn />
         } />
         <Route path="/" element={
           isAuthenticated && user ? (

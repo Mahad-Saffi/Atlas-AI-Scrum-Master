@@ -255,6 +255,58 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               </p>
             </div>
           </Link>
+
+          {/* Team Chat Card */}
+          <Link 
+            to="/chat" 
+            style={{
+              textDecoration: 'none',
+              display: 'block',
+            }}
+          >
+            <div style={{
+              backgroundColor: 'white',
+              border: '3px solid #1a1a1a',
+              boxShadow: '6px 6px 0 #1a1a1a',
+              padding: '40px 30px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              height: '100%',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translate(2px, 2px)';
+              e.currentTarget.style.boxShadow = '4px 4px 0 #1a1a1a';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translate(0, 0)';
+              e.currentTarget.style.boxShadow = '6px 6px 0 #1a1a1a';
+            }}
+            >
+              <div style={{
+                fontSize: '64px',
+                marginBottom: '20px',
+              }}>
+                💬
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                color: '#1a1a1a',
+                marginBottom: '12px',
+                fontWeight: 'bold',
+              }}>
+                Team Chat
+              </h3>
+              <p style={{
+                fontSize: '16px',
+                color: '#4a4a4a',
+                lineHeight: '1.6',
+                margin: 0,
+              }}>
+                Chat with your team in real-time and see who's online
+              </p>
+            </div>
+          </Link>
         </div>
 
         {/* Info Section */}
