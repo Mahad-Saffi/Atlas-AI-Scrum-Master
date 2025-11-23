@@ -7,6 +7,10 @@ interface Task {
   description?: string;
   status: string;
   assignee_id?: string;
+  due_date?: string;
+  estimate_hours?: number;
+  progress_percentage?: number;
+  risk_level?: string;
 }
 
 interface TaskBoardProps {
@@ -228,6 +232,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   transition: 'all 0.2s ease',
                   cursor: 'pointer',
                   position: 'relative',
+                  borderLeft: task.risk_level === 'high' ? '6px solid #ff4444' : 
+                             task.risk_level === 'medium' ? '6px solid #ffaa00' : 
+                             '2px solid #1a1a1a',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translate(2px, 2px)';
@@ -238,6 +245,23 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   e.currentTarget.style.boxShadow = '4px 4px 0 #1a1a1a';
                 }}
               >
+                {/* Risk Badge */}
+                {task.risk_level && task.risk_level !== 'low' && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    padding: '4px 8px',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    backgroundColor: task.risk_level === 'high' ? '#ff4444' : '#ffaa00',
+                    color: 'white',
+                    border: '2px solid #1a1a1a',
+                  }}>
+                    {task.risk_level === 'high' ? '⚠️ HIGH RISK' : '⚡ AT RISK'}
+                  </div>
+                )}
+
                 {/* Task Title */}
                 <div style={{ 
                   color: '#1a1a1a',
@@ -245,6 +269,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   fontWeight: 'bold',
                   marginBottom: '8px',
                   lineHeight: '1.4',
+                  paddingRight: task.risk_level && task.risk_level !== 'low' ? '100px' : '0',
                 }}>
                   {task.title}
                 </div>
@@ -258,6 +283,56 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                     lineHeight: '1.5',
                   }}>
                     {task.description}
+                  </div>
+                )}
+
+                {/* Progress Bar */}
+                {task.progress_percentage !== undefined && task.progress_percentage > 0 && (
+                  <div style={{ marginBottom: '12px' }}>
+                    <div style={{
+                      fontSize: '12px',
+                      color: '#4a4a4a',
+                      marginBottom: '4px',
+                      fontWeight: 'bold',
+                    }}>
+                      Progress: {task.progress_percentage}%
+                    </div>
+                    <div style={{
+                      width: '100%',
+                      height: '8px',
+                      border: '2px solid #1a1a1a',
+                      backgroundColor: '#f5f5f5',
+                    }}>
+                      <div style={{
+                        width: `${task.progress_percentage}%`,
+                        height: '100%',
+                        backgroundColor: '#1a1a1a',
+                        transition: 'width 0.3s ease',
+                      }} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Due Date & Estimate */}
+                {(task.due_date || task.estimate_hours) && (
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#4a4a4a',
+                    marginBottom: '12px',
+                    display: 'flex',
+                    gap: '12px',
+                    flexWrap: 'wrap',
+                  }}>
+                    {task.due_date && (
+                      <div>
+                        📅 Due: {new Date(task.due_date).toLocaleDateString()}
+                      </div>
+                    )}
+                    {task.estimate_hours && (
+                      <div>
+                        ⏱️ Est: {task.estimate_hours}h
+                      </div>
+                    )}
                   </div>
                 )}
 
