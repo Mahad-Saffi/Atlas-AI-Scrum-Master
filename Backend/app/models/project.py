@@ -11,8 +11,10 @@ class Project(Base):
     name = Column(String(200), nullable=False)
     description = Column(Text)
     owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey('organizations.id'), nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     updated_at = Column(TIMESTAMP(timezone=True), onupdate=func.now())
 
     owner = relationship("User")
+    organization = relationship("Organization", back_populates="projects")
     epics = relationship("Epic", back_populates="project", cascade="all, delete-orphan")

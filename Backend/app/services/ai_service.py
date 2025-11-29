@@ -30,9 +30,25 @@ class AIService:
         if user_id in self.user_conversations:
             del self.user_conversations[user_id]
 
-    async def _get_formatted_users(self):
-        users = await user_service.get_all_users()
-        return "\n".join([f"- {user.username} (Role: {user.role})" for user in users])
+    async def _get_formatted_users(self, user_id: int):
+        """Get formatted list of users in the same organization"""
+        from app.services.organization_service import organization_service
+        
+        # Get user's organization
+        org = await organization_service.get_user_organization(user_id)
+        if not org:
+            return "No team members yet. Please add team members first."
+        
+        # Get organization members (pass UUID object directly)
+        members = await organization_service.get_organization_members(org.id)
+        
+        if not members:
+            return "No team members yet. Please add team members first."
+        
+        return "\n".join([
+            f"- {member.user.username} (Role: {member.role}) - {member.description or 'No description'}"
+            for member in members
+        ])
 
     async def _call_openai(self, messages: list) -> str:
         """Call OpenAI API with conversation history"""
@@ -167,15 +183,27 @@ Use emojis occasionally."""
         
         # User wants to create a project - do it immediately!
         try:
+            from app.services.organization_service import organization_service
+            
+            # Get user's organization
+            org = await organization_service.get_user_organization(current_user['id'])
+            if not org:
+                return "❌ Please create an organization and add team members before creating projects.\n\nGo to your dashboard to set up your team first!"
+            
+            # Check if organization has members (besides owner)
+            members = await organization_service.get_organization_members(org.id)
+            if len(members) < 2:  # Only owner
+                return "❌ Please add at least one team member before creating projects.\n\nGo to 'Team Management' to add your team members first!"
+            
             # Generate project plan from user's description
             plan = await self._generate_project_plan(user_message)
             owner_id = current_user['id']
             
-            # Create the project
-            await project_service.create_project_from_plan(plan, owner_id)
+            # Create the project (pass UUID object directly)
+            await project_service.create_project_from_plan(plan, owner_id, org.id)
             
             # Get team info
-            formatted_users = await self._get_formatted_users()
+            formatted_users = await self._get_formatted_users(current_user['id'])
             
             # Reset state for next project
             self._reset_user_state(user_id)

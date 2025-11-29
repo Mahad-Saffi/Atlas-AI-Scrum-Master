@@ -14,5 +14,6 @@ class User(Base):
     avatar_url = Column(String(500))
     role = Column(String(50), nullable=False, default='developer')
     is_active = Column(Boolean, default=True)
+    invited_by = Column(Integer, nullable=True)  # User ID who invited this user
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

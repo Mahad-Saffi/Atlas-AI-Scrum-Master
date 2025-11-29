@@ -25,6 +25,8 @@ class Token(BaseModel):
 @router.post("/register", response_model=Token)
 async def register(user_data: UserRegister):
     """Register a new user with email and password"""
+    from app.services.organization_service import organization_service
+    
     async with SessionLocal() as session:
         # Check if user exists
         result = await session.execute(
@@ -52,6 +54,16 @@ async def register(user_data: UserRegister):
         session.add(new_user)
         await session.commit()
         await session.refresh(new_user)
+        
+        # Create organization for the new user
+        try:
+            await organization_service.create_organization(
+                name=f"{new_user.username}'s Team",
+                description=f"Organization for {new_user.username}",
+                owner_id=new_user.id
+            )
+        except Exception as e:
+            print(f"Warning: Could not create organization: {e}")
         
         # Create access token
         access_token = auth_service.create_access_token(

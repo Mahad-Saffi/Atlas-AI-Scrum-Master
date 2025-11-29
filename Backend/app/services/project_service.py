@@ -9,10 +9,18 @@ import uuid
 
 class ProjectService:
     async def get_user_projects(self, user_id: int) -> list:
-        """Get all projects for a user"""
+        """Get all projects for a user's organization"""
+        from app.services.organization_service import organization_service
+        
         async with SessionLocal() as session:
+            # Get user's organization
+            org = await organization_service.get_user_organization(user_id)
+            if not org:
+                return []
+            
+            # Get all projects in the organization (org.id is already a UUID object)
             result = await session.execute(
-                select(Project).where(Project.owner_id == user_id)
+                select(Project).where(Project.organization_id == org.id)
             )
             projects = result.scalars().all()
             return [
@@ -24,7 +32,7 @@ class ProjectService:
                 }
                 for project in projects
             ]
-    async def create_project_from_plan(self, plan: dict, owner_id: str) -> Project:
+    async def create_project_from_plan(self, plan: dict, owner_id: str, organization_id = None) -> Project:
         """
         Create a project with epics, stories, and tasks from AI-generated plan.
         Expected plan structure:
@@ -55,7 +63,8 @@ class ProjectService:
                 project = Project(
                     name=plan.get('project_name', 'Untitled Project'),
                     description=plan.get('description', ''),
-                    owner_id=owner_id
+                    owner_id=owner_id,
+                    organization_id=organization_id
                 )
                 session.add(project)
                 await session.flush()  # Get project ID
