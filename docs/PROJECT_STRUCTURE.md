@@ -1,251 +1,258 @@
-# Atlas Project Structure
+# 📁 Atlas AI Scrum Master - Project Structure
 
-Clean and organized structure for the Atlas AI Scrum Master project.
+Clean and organized project structure for easy navigation.
 
----
-
-## 📁 Root Directory
+## 🗂️ Root Directory
 
 ```
 Atlas-AI-Scrum-Master/
-├── backend/                 # Python FastAPI backend application
-├── frontend/                # React TypeScript frontend application
-├── docs/                    # All project documentation
-├── .vscode/                 # VS Code settings
-├── .git/                    # Git repository
-├── docker-compose.yml       # Docker services configuration
-├── .env                     # Environment variables (not in git)
-├── .gitignore              # Git ignore rules
-├── README.md               # Project overview and quick start
-├── QUICK_START.md          # Detailed setup guide
-├── CHANGELOG.md            # Recent changes log
-├── WORK_COMPLETED.md       # Work completion summary
-├── PROJECT_STRUCTURE.md    # This file
-└── LICENSE                 # MIT License
+├── 📄 README.md                    # Project overview and quick start
+├── 📄 LICENSE                      # MIT License
+├── 📄 CHANGELOG.md                 # Version history
+├── 📄 .gitignore                   # Git ignore rules
+├── 🐳 docker-compose.yml           # Docker configuration
+├── 🐍 atlas_mcp_server_v2.py       # MCP server (latest version)
+├── 🐍 atlas_mcp_server.py          # MCP server (v1)
+│
+├── 📂 backend/                     # Python FastAPI backend
+├── 📂 frontend/                    # React TypeScript frontend
+├── 📂 docs/                        # All documentation
+└── 📂 scripts/                     # Setup and utility scripts
 ```
 
----
-
-## 🐍 Backend Structure
+## 🔧 Backend Structure
 
 ```
 backend/
-├── app/
-│   ├── api/
-│   │   └── v1/
-│   │       ├── ai.py              # AI/conversational endpoints
-│   │       └── projects.py        # Project and task endpoints
-│   ├── config/
-│   │   ├── __init__.py
-│   │   └── database.py            # Database configuration
-│   ├── core/
-│   │   └── security.py            # Authentication & security
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── user.py                # User model
-│   │   ├── project.py             # Project model
-│   │   ├── epic.py                # Epic model
-│   │   ├── story.py               # Story model
-│   │   └── task.py                # Task model
-│   └── services/
-│       ├── ai_service.py          # AI/LangChain logic
-│       ├── project_service.py     # Project business logic
-│       ├── task_service.py        # Task business logic
-│       └── user_service.py        # User business logic
-├── alembic/
-│   ├── versions/
-│   │   └── 001_add_epic_story_models.py
-│   ├── env.py
-│   └── alembic.ini
-├── tests/
-│   ├── conftest.py
-│   ├── test_auth.py
-│   └── test_ai.py
-├── main.py                        # FastAPI application entry
-├── test_models.py                 # Model verification script
-├── requirements.txt               # Python dependencies
-├── requirements-dev.txt           # Dev dependencies
-├── .env                          # Environment variables
-└── .env.example                  # Environment template
+├── 📄 main.py                      # FastAPI application entry
+├── 📄 requirements.txt             # Python dependencies
+├── 📄 requirements-dev.txt         # Development dependencies
+├── 📄 alembic.ini                  # Database migration config
+├── 🗄️ atlas.db                     # SQLite database (production)
+├── 🗄️ test.db                      # SQLite database (testing)
+├── 🐍 init_database.py             # Database initialization
+├── 🐍 migrate_organizations.py     # Organization migration script
+│
+├── 📂 app/
+│   ├── 📂 api/v1/                  # API endpoints
+│   │   ├── auth.py                 # Authentication
+│   │   ├── organizations.py        # Organization management
+│   │   ├── projects.py             # Project management
+│   │   ├── issues.py               # Issue tracking
+│   │   ├── notifications.py        # Notifications
+│   │   ├── chat.py                 # Real-time chat
+│   │   └── ai.py                   # AI integration
+│   │
+│   ├── 📂 models/                  # SQLAlchemy models
+│   │   ├── user.py                 # User model
+│   │   ├── organization.py         # Organization models
+│   │   ├── project.py              # Project model
+│   │   ├── task.py                 # Task model
+│   │   ├── issue.py                # Issue model
+│   │   └── ...                     # Other models
+│   │
+│   ├── 📂 services/                # Business logic
+│   │   ├── ai_service.py           # OpenAI integration
+│   │   ├── organization_service.py # Organization logic
+│   │   ├── project_service.py      # Project logic
+│   │   ├── task_service.py         # Task logic
+│   │   ├── notification_service.py # Notification logic
+│   │   └── ...                     # Other services
+│   │
+│   ├── 📂 core/                    # Core utilities
+│   │   ├── security.py             # JWT & authentication
+│   │   ├── startup.py              # Startup checks
+│   │   └── ...                     # Other core modules
+│   │
+│   └── 📂 config/                  # Configuration
+│       └── database.py             # Database config
+│
+├── 📂 alembic/                     # Database migrations
+│   └── versions/                   # Migration files
+│
+└── 📂 tests/                       # Backend tests
+    └── test_*.py                   # Test files
 ```
 
----
-
-## ⚛️ Frontend Structure
+## 🎨 Frontend Structure
 
 ```
 frontend/
-├── src/
-│   ├── assets/
-│   │   └── logo.png
-│   ├── components/
-│   │   ├── chat/
-│   │   │   ├── ChatInterface.tsx
-│   │   │   └── ChatInterface.test.tsx
-│   │   ├── tasks/
-│   │   │   └── TaskBoard.tsx
-│   │   └── UserProfile.tsx
-│   ├── pages/
-│   │   ├── SignIn.tsx             # Login page
-│   │   ├── AuthCallback.tsx       # OAuth callback
-│   │   ├── ProjectCreation.tsx    # Project creation page
-│   │   └── TaskBoardPage.tsx      # Task board page
-│   ├── services/
-│   │   ├── auth.ts                # Authentication service
-│   │   ├── aiService.ts           # AI API client
-│   │   └── taskService.ts         # Task API client
-│   ├── tests/
-│   │   └── setup.ts
-│   ├── types/
-│   │   └── index.ts               # TypeScript types
-│   ├── App.tsx                    # Main app component
-│   ├── App.css
-│   ├── main.tsx                   # Entry point
-│   └── index.css
-├── public/
-│   ├── vite.svg
-│   └── bg.jpg
-├── Dockerfile                     # Frontend Docker config
-├── nginx.conf                     # Nginx configuration
-├── package.json                   # NPM dependencies
-├── package-lock.json
-├── tsconfig.json                  # TypeScript config
-├── vite.config.ts                 # Vite config
-├── tailwind.config.js             # Tailwind CSS config
-├── postcss.config.js
-└── eslint.config.js
+├── 📄 package.json                 # Node dependencies
+├── 📄 vite.config.ts               # Vite configuration
+├── 📄 tsconfig.json                # TypeScript config
+├── 📄 tailwind.config.js           # Tailwind CSS config
+├── 📄 index.html                   # HTML entry point
+│
+├── 📂 src/
+│   ├── 📄 main.tsx                 # React entry point
+│   ├── 📄 App.tsx                  # Main App component
+│   │
+│   ├── 📂 components/              # React components
+│   │   ├── Dashboard.tsx           # Dashboard view
+│   │   ├── TaskBoard.tsx           # Kanban board
+│   │   ├── ChatInterface.tsx       # Chat UI
+│   │   ├── IssueTracker.tsx        # Issue management
+│   │   └── ...                     # Other components
+│   │
+│   ├── 📂 services/                # API services
+│   │   ├── api.ts                  # API client
+│   │   ├── auth.ts                 # Auth service
+│   │   └── websocket.ts            # WebSocket service
+│   │
+│   ├── 📂 types/                   # TypeScript types
+│   │   └── index.ts                # Type definitions
+│   │
+│   ├── 📂 styles/                  # CSS styles
+│   │   └── index.css               # Global styles
+│   │
+│   └── 📂 assets/                  # Static assets
+│       └── images/                 # Images
+│
+└── 📂 public/                      # Public assets
+    └── favicon.ico                 # Favicon
 ```
-
----
 
 ## 📚 Documentation Structure
 
 ```
 docs/
-├── README.md                      # Documentation overview
-├── architecture.md                # Complete system architecture
-├── IMPLEMENTATION_STATUS.md       # Current project status
-├── epics/
-│   ├── README.md                  # Epic overview
-│   └── full-backlog.md           # Complete product backlog
-├── sprints/
-│   ├── SPRINT_PLAN.md            # 10-sprint plan
-│   ├── sprint-1-report.md        # Sprint 1 retrospective
-│   └── sprint-2-report.md        # Sprint 2 retrospective
-└── project/
-    └── prd.md                     # Product Requirements Document
+├── 📄 README.md                    # Documentation index
+├── 📄 INDEX.md                     # Complete documentation guide
+├── 📄 architecture.md              # System architecture
+├── 📄 HOW_IT_WORKS.md              # How the system works
+├── 📄 ORGANIZATION_FEATURE.md      # Multi-tenant features
+├── 📄 IMPLEMENTATION_STATUS.md     # Implementation progress
+├── 📄 PROJECT_STRUCTURE.md         # This file
+│
+├── 📂 guides/                      # User guides
+│   ├── QUICK_START.md              # 5-minute setup
+│   ├── HOW_TO_CREATE_MCP_SERVER.md # MCP development guide
+│   └── ...                         # Other guides
+│
+├── 📂 mcp/                         # MCP integration docs
+│   ├── README.md                   # MCP overview
+│   ├── MCP_QUICK_START.md          # Quick setup
+│   ├── SETUP_MCP.md                # Detailed setup
+│   ├── MCP_IMPLEMENTATION_GUIDE.md # Implementation details
+│   └── RESTART_CLAUDE.md           # Troubleshooting
+│
+├── 📂 tests/                       # Test scripts
+│   ├── README.md                   # Test documentation
+│   ├── test_bulk_assign.py         # Bulk assignment test
+│   ├── test_mcp.py                 # MCP integration test
+│   └── test_organization.sh        # Organization test
+│
+├── 📂 setup/                       # Setup guides
+│   ├── BACKEND_SETUP.md            # Backend installation
+│   ├── FRONTEND_SETUP.md           # Frontend installation
+│   └── ...                         # Other setup docs
+│
+├── 📂 sprints/                     # Sprint documentation
+│   ├── sprint-1/                   # Sprint 1 docs
+│   ├── sprint-2/                   # Sprint 2 docs
+│   └── ...                         # Other sprints
+│
+├── 📂 summaries/                   # Project summaries
+│   ├── PROJECT_COMPLETE.md         # Completion summary
+│   └── ...                         # Other summaries
+│
+├── 📂 epics/                       # Epic documentation
+│   └── *.md                        # Epic files
+│
+└── 📂 testing/                     # Testing documentation
+    └── *.md                        # Test docs
 ```
 
----
-
-## 🐳 Docker Configuration
+## 🔧 Scripts Structure
 
 ```
-docker-compose.yml                 # Main Docker Compose file
-
-Services:
-├── db          (PostgreSQL 15.4)  # Database
-├── redis       (Redis 7.2)        # Cache & sessions
-├── backend     (Python 3.11)      # FastAPI backend
-└── frontend    (Node 18)          # React frontend
+scripts/
+├── 📄 README.md                    # Scripts documentation
+├── 🔧 setup_claude.bat             # Claude Desktop setup
+└── 🔧 update_claude_config.bat     # Update Claude config
 ```
 
----
+## 🎯 Key Files
 
-## 🗂️ Key Files
+### Essential Configuration
+- **`.env`** - Environment variables (backend)
+- **`atlas.db`** - Production database
+- **`claude_desktop_config.json`** - MCP configuration (in AppData)
 
-### Configuration Files
-- **docker-compose.yml** - Docker services setup
-- **backend/.env** - Backend environment variables
-- **backend/alembic.ini** - Database migration config
-- **frontend/vite.config.ts** - Frontend build config
-- **frontend/tailwind.config.js** - Tailwind CSS config
+### Entry Points
+- **Backend**: `backend/main.py`
+- **Frontend**: `frontend/src/main.tsx`
+- **MCP Server**: `atlas_mcp_server_v2.py`
 
-### Documentation Files
-- **README.md** - Project overview
-- **QUICK_START.md** - Setup instructions
-- **CHANGELOG.md** - Recent changes
-- **WORK_COMPLETED.md** - Work summary
-- **PROJECT_STRUCTURE.md** - This file
+### Documentation
+- **Main README**: `README.md`
+- **Docs Index**: `docs/INDEX.md`
+- **Quick Start**: `docs/guides/QUICK_START.md`
 
-### Development Files
-- **.gitignore** - Git ignore rules
-- **.vscode/settings.json** - VS Code settings
-- **backend/test_models.py** - Model verification
-- **LICENSE** - MIT License
+## 📊 File Count Summary
 
----
+- **Total Files**: ~150+
+- **Python Files**: ~40
+- **TypeScript/React**: ~30
+- **Documentation**: ~50
+- **Configuration**: ~15
+- **Tests**: ~15
 
-## 📦 Dependencies
+## 🗂️ Organization Principles
 
-### Backend (Python)
-- **FastAPI** - Web framework
-- **SQLAlchemy** - ORM
-- **Alembic** - Database migrations
-- **LangChain** - AI framework
-- **Authlib** - OAuth implementation
-- **PyJWT** - JWT tokens
-- **asyncpg** - Async PostgreSQL driver
+### ✅ Clean Root Directory
+- Only essential files in root
+- No loose documentation files
+- Clear separation of concerns
 
-### Frontend (TypeScript/React)
-- **React 18** - UI framework
-- **React Router** - Routing
-- **Axios** - HTTP client
-- **Tailwind CSS** - Styling
-- **Vite** - Build tool
-- **TypeScript** - Type safety
+### 📁 Logical Grouping
+- **Code**: `backend/`, `frontend/`
+- **Docs**: `docs/`
+- **Scripts**: `scripts/`
+- **MCP**: Root level (for easy access)
 
----
+### 📝 Documentation First
+- Every directory has README.md
+- Clear navigation paths
+- Comprehensive guides
 
-## 🚀 Getting Started
+### 🔧 Easy Access
+- Quick start in main README
+- Scripts in dedicated folder
+- Tests organized by type
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Mahad-Saffi/Atlas-AI-Scrum-Master.git
-   cd Atlas-AI-Scrum-Master
-   ```
+## 🚀 Navigation Tips
 
-2. **Set up environment**
-   ```bash
-   cp backend/.env.example backend/.env
-   # Edit backend/.env with your credentials
-   ```
+### Finding Things Quickly
 
-3. **Start services**
-   ```bash
-   docker-compose up --build
-   ```
+**Need to start the app?**
+→ `README.md` → Quick Start section
 
-4. **Access the application**
-   - Frontend: http://localhost:8080
-   - Backend: http://localhost:8000
-   - Health: http://localhost:8000/health
+**Need MCP setup?**
+→ `docs/mcp/MCP_QUICK_START.md`
 
----
+**Need to run tests?**
+→ `docs/tests/README.md`
 
-## 📝 Notes
+**Need API documentation?**
+→ `http://localhost:8000/docs` (when backend running)
 
-### Naming Conventions
-- **Backend:** snake_case for Python files and functions
-- **Frontend:** PascalCase for components, camelCase for functions
-- **Database:** snake_case for tables and columns
-- **API:** kebab-case for endpoints
+**Need architecture info?**
+→ `docs/architecture.md`
 
-### Code Organization
-- **Models:** Database schema definitions
-- **Services:** Business logic layer
-- **API:** HTTP endpoint handlers
-- **Components:** Reusable UI elements
-- **Pages:** Full page components
+**Need sprint details?**
+→ `docs/sprints/sprint-X/`
 
-### Best Practices
-- Keep components small and focused
-- Use TypeScript for type safety
-- Write tests for critical paths
-- Document complex logic
-- Follow the existing patterns
+## 📚 Related Documentation
+
+- [Documentation Index](./INDEX.md)
+- [Quick Start Guide](./guides/QUICK_START.md)
+- [Architecture Overview](./architecture.md)
+- [MCP Integration](./mcp/README.md)
 
 ---
 
-**Last Updated:** November 8, 2025  
-**Maintained By:** Atlas Development Team
+**Last Updated**: November 30, 2025  
+**Version**: 2.0  
+**Status**: Production Ready 🚀

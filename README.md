@@ -44,13 +44,19 @@ Comprehensive project documentation is organized in the [`docs/`](./docs/) direc
 
 ### 📁 **Documentation Structure**
 - **[Guides](./docs/guides/)** - User guides and tutorials
+- **[MCP Integration](./docs/mcp/)** - Model Context Protocol setup and guides
 - **[Setup](./docs/setup/)** - Configuration and installation
-- **[Testing](./docs/testing/)** - Test documentation and results
+- **[Testing](./docs/tests/)** - Test scripts and documentation
 - **[Summaries](./docs/summaries/)** - Sprint and completion reports
-- **[Scripts](./docs/scripts/)** - Utility scripts for development
 - **[Architecture](./docs/architecture.md)** - System design
 - **[Sprints](./docs/sprints/)** - Sprint planning and reports
 - **[Epics](./docs/epics/)** - Product backlog and epics
+
+### 🔌 **MCP Server**
+- **[MCP Quick Start](./docs/mcp/MCP_QUICK_START.md)** - Get started with Claude Desktop integration
+- **[MCP Setup Guide](./docs/mcp/SETUP_MCP.md)** - Detailed configuration instructions
+- **[MCP Implementation](./docs/mcp/MCP_IMPLEMENTATION_GUIDE.md)** - Technical implementation details
+- **[Restart Claude](./docs/mcp/RESTART_CLAUDE.md)** - Troubleshooting guide
 
 ## 🚀 Quick Start
 

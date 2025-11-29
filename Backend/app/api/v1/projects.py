@@ -13,6 +13,12 @@ class TaskUpdateRequest(BaseModel):
     estimate_hours: Optional[int] = None
     progress_percentage: Optional[int] = None
     due_date: Optional[str] = None
+    status: Optional[str] = None
+    assigned_to: Optional[int] = None
+
+class BulkTaskAssignRequest(BaseModel):
+    task_ids: list[str]
+    assigned_to: int
 
 @router.get("")
 async def get_user_projects(current_user: dict = Depends(get_current_user)):
@@ -47,6 +53,20 @@ async def update_task(
     """Update task estimate, progress, or due date"""
     task = await task_service.update_task_details(task_id, update.dict(exclude_none=True))
     return {"message": "Task updated successfully", "task": task}
+
+@router.post("/tasks/bulk-assign")
+async def bulk_assign_tasks(
+    request: BulkTaskAssignRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Assign multiple tasks to a user at once"""
+    results = await task_service.bulk_assign_tasks(request.task_ids, request.assigned_to)
+    return {
+        "message": f"Successfully assigned {results['success_count']} tasks",
+        "success_count": results['success_count'],
+        "failed_count": results['failed_count'],
+        "failed_tasks": results['failed_tasks']
+    }
 
 @router.post("/detect-delays")
 async def detect_delays(current_user: dict = Depends(get_current_user)):

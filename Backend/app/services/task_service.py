@@ -154,6 +154,10 @@ class TaskService:
                 if 'due_date' in updates:
                     from datetime import datetime
                     task.due_date = datetime.fromisoformat(updates['due_date'].replace('Z', '+00:00'))
+                if 'status' in updates:
+                    task.status = updates['status']
+                if 'assigned_to' in updates:
+                    task.assignee_id = updates['assigned_to']
                 
                 # Recalculate risk
                 from app.services.risk_service import risk_service
@@ -165,6 +169,8 @@ class TaskService:
                 return {
                     "id": str(task.id),
                     "title": task.title,
+                    "status": task.status,
+                    "assigned_to": task.assignee_id,
                     "estimate_hours": task.estimate_hours,
                     "progress_percentage": task.progress_percentage,
                     "due_date": task.due_date.isoformat() if task.due_date else None,
@@ -173,5 +179,46 @@ class TaskService:
         except Exception as e:
             print(f"Error updating task: {e}")
             raise
+    
+    async def bulk_assign_tasks(self, task_ids: list[str], assigned_to: int) -> dict:
+        """Assign multiple tasks to a user at once"""
+        success_count = 0
+        failed_count = 0
+        failed_tasks = []
+        
+        async with SessionLocal() as session:
+            for task_id in task_ids:
+                try:
+                    # Convert task_id to UUID
+                    if isinstance(task_id, str):
+                        if len(task_id) == 32 and '-' not in task_id:
+                            task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
+                        task_uuid = uuid.UUID(task_id)
+                    else:
+                        task_uuid = task_id
+                    
+                    result = await session.execute(
+                        select(Task).where(Task.id == task_uuid)
+                    )
+                    task = result.scalars().first()
+                    
+                    if task:
+                        task.assignee_id = assigned_to
+                        success_count += 1
+                    else:
+                        failed_count += 1
+                        failed_tasks.append({"task_id": str(task_id), "reason": "Task not found"})
+                
+                except Exception as e:
+                    failed_count += 1
+                    failed_tasks.append({"task_id": str(task_id), "reason": str(e)})
+            
+            await session.commit()
+        
+        return {
+            "success_count": success_count,
+            "failed_count": failed_count,
+            "failed_tasks": failed_tasks
+        }
 
 task_service = TaskService()
