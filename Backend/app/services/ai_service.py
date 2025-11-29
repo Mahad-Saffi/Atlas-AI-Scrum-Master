@@ -140,78 +140,59 @@ Return ONLY valid JSON, no markdown formatting."""
 
     async def get_discover_response(self, user_message: str, current_user: dict) -> str:
         """
-        Conversational AI for project discovery using OpenAI.
+        One-shot project creation - generates project immediately without follow-up questions.
         """
         user_id = current_user['id']
-        conv_state = self._get_user_state(user_id)
         
-        # Add user message to history
-        conv_state["history"].append({"role": "user", "content": user_message})
+        # Check if user is asking a question or wants to chat (not create a project)
+        question_keywords = ["what", "how", "why", "when", "where", "who", "can you", "tell me", "explain"]
+        is_question = any(user_message.lower().strip().startswith(keyword) for keyword in question_keywords)
         
-        if conv_state["state"] == "INITIAL":
-            # First interaction - ask about the project
+        if is_question:
+            # Just answer the question, don't create a project
             if self.client:
-                # Use OpenAI for natural conversation
-                system_prompt = """You are a friendly project planning assistant. 
-Your job is to understand what project the user wants to build.
-Ask clarifying questions about their project idea.
-Keep responses concise and friendly (2-3 sentences max).
-Use emojis occasionally for personality."""
+                system_prompt = """You are a helpful project management assistant.
+Answer the user's question concisely and friendly.
+Keep responses short (2-3 sentences max).
+Use emojis occasionally."""
                 
-                messages = [{"role": "system", "content": system_prompt}] + conv_state["history"]
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ]
                 response = await self._call_openai(messages)
-            else:
-                response = "👋 Hey! I'd love to help you plan your project. What are you thinking of building?"
-            
-            conv_state["history"].append({"role": "assistant", "content": response})
-            conv_state["state"] = "GATHERING_INFO"
-            conv_state["project_description"] = user_message
-            return response
-
-        elif conv_state["state"] == "GATHERING_INFO":
-            # Continue gathering information
-            conv_state["project_description"] += " " + user_message
-            
-            # Check if user wants to proceed
-            proceed_keywords = ["yes", "yeah", "sure", "ok", "okay", "proceed", "continue", "go ahead", "create", "generate"]
-            if any(keyword in user_message.lower() for keyword in proceed_keywords):
-                conv_state["state"] = "TEAM_SUGGESTION"
-                formatted_users = await self._get_formatted_users()
-                response = f"Great! 🎉 Based on your project, I suggest this team:\n\n{formatted_users}\n\nSound good? I'll generate a detailed project plan for you!"
-                conv_state["history"].append({"role": "assistant", "content": response})
                 return response
-            
-            # Continue conversation
-            if self.client:
-                system_prompt = """You are a friendly project planning assistant.
-Continue the conversation to understand the project better.
-After 2-3 exchanges, suggest moving forward with: "Ready to create your project plan?"
-Keep responses concise (2-3 sentences max)."""
-                
-                messages = [{"role": "system", "content": system_prompt}] + conv_state["history"]
-                response = await self._call_openai(messages)
             else:
-                response = "Interesting! Tell me more about what you want to build, or say 'yes' when you're ready to create the project plan."
+                return "👋 I'm here to help you create projects! Just describe what you want to build, and I'll generate a complete project plan for you instantly."
+        
+        # User wants to create a project - do it immediately!
+        try:
+            # Generate project plan from user's description
+            plan = await self._generate_project_plan(user_message)
+            owner_id = current_user['id']
             
-            conv_state["history"].append({"role": "assistant", "content": response})
-            return response
+            # Create the project
+            await project_service.create_project_from_plan(plan, owner_id)
+            
+            # Get team info
+            formatted_users = await self._get_formatted_users()
+            
+            # Reset state for next project
+            self._reset_user_state(user_id)
+            
+            return f"""✅ **Project Created: {plan['project_name']}**
 
-        elif conv_state["state"] == "TEAM_SUGGESTION":
-            # User confirmed team, generate plan
-            try:
-                plan = await self._generate_project_plan(conv_state["project_description"])
-                owner_id = current_user['id']
-                await project_service.create_project_from_plan(plan, owner_id)
-                
-                # Reset state for next project
-                self._reset_user_state(user_id)
-                
-                return f"✅ Awesome! I've created your project: **{plan['project_name']}**\n\nYour project plan includes epics, stories, and tasks. Head over to the Task Board to see everything! 🚀"
-                
-            except Exception as e:
-                print(f"Error creating project: {e}")
-                return f"😅 Oops! I hit a snag creating your project: {str(e)}\n\nWant to try again?"
+📋 {plan['description']}
 
-        return "I'm not sure what to do next. Let's start over - what project do you want to build?"
+🎯 I've generated {len(plan.get('epics', []))} epics with stories and tasks for you!
+
+👥 **Suggested Team:**
+{formatted_users}
+
+🚀 Head over to the Task Board to see your complete project plan and start working!"""
+            
+        except Exception as e:
+            print(f"Error creating project: {e}")
+            return f"😅 Oops! I hit a snag creating your project: {str(e)}\n\nTry describing your project again, and I'll create it for you!"
 
 ai_service = AIService()
