@@ -49,7 +49,7 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "project_id": {"type": "integer", "description": "Project ID"},
+                    "project_id": {"type": "string", "description": "Project ID (UUID)"},
                     "status": {"type": "string", "enum": ["todo", "in_progress", "done"], "description": "Filter by status (optional)"},
                 },
                 "required": ["project_id"],
@@ -61,7 +61,7 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "task_id": {"type": "integer", "description": "Task ID to complete"},
+                    "task_id": {"type": "string", "description": "Task ID (UUID) to complete"},
                 },
                 "required": ["task_id"],
             },
@@ -72,7 +72,7 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "project_id": {"type": "integer", "description": "Project ID"},
+                    "project_id": {"type": "string", "description": "Project ID (UUID)"},
                 },
                 "required": ["project_id"],
             },
@@ -83,7 +83,7 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "project_id": {"type": "integer", "description": "Project ID"},
+                    "project_id": {"type": "string", "description": "Project ID (UUID)"},
                     "title": {"type": "string", "description": "Issue title"},
                     "description": {"type": "string", "description": "Issue description"},
                     "issue_type": {"type": "string", "enum": ["blocker", "bug", "question"]},
@@ -98,7 +98,7 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "project_id": {"type": "integer", "description": "Project ID"},
+                    "project_id": {"type": "string", "description": "Project ID (UUID)"},
                 },
                 "required": ["project_id"],
             },
@@ -144,8 +144,9 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
             
             result = "📋 **Projects:**\n\n"
             for p in projects:
-                result += f"• **{p['name']}** (ID: {p['id']})\n"
-                result += f"  {p.get('description', 'No description')}\n\n"
+                result += f"• **{p['name']}**\n"
+                result += f"  ID: `{p['id']}`\n"
+                result += f"  Description: {p.get('description', 'No description')}\n\n"
             
             return [TextContent(type="text", text=result)]
         
@@ -166,10 +167,13 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
             result = f"📝 **Tasks** ({len(tasks)}):\n\n"
             for t in tasks:
                 risk = "🔴" if t.get('risk_level') == 'high' else "🟡" if t.get('risk_level') == 'medium' else "🟢"
-                result += f"{risk} **{t['title']}** (ID: {t['id']})\n"
+                result += f"{risk} **{t['title']}**\n"
+                result += f"   ID: `{t['id']}`\n"
                 result += f"   Status: {t['status']}\n"
                 if t.get('risk_level'):
                     result += f"   Risk: {t['risk_level']}\n"
+                if t.get('assignee_id'):
+                    result += f"   Assigned to: User {t['assignee_id']}\n"
                 result += "\n"
             
             return [TextContent(type="text", text=result)]
