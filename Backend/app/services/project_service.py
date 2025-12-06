@@ -118,3 +118,63 @@ class ProjectService:
                 return project
 
 project_service = ProjectService()
+
+    async def get_project_epics(self, project_id: str) -> list:
+        """Get all epics with their stories and tasks for a project"""
+        async with SessionLocal() as session:
+            # Convert project_id to UUID
+            if isinstance(project_id, str):
+                if len(project_id) == 32 and '-' not in project_id:
+                    project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
+                project_uuid = uuid.UUID(project_id)
+            else:
+                project_uuid = project_id
+            
+            # Get all epics for the project
+            result = await session.execute(
+                select(Epic).where(Epic.project_id == project_uuid).order_by(Epic.order)
+            )
+            epics = result.scalars().all()
+            
+            epic_list = []
+            for epic in epics:
+                # Get stories for this epic
+                story_result = await session.execute(
+                    select(Story).where(Story.epic_id == epic.id).order_by(Story.order)
+                )
+                stories = story_result.scalars().all()
+                
+                story_list = []
+                for story in stories:
+                    # Get tasks for this story
+                    task_result = await session.execute(
+                        select(Task).where(Task.story_id == story.id).order_by(Task.order)
+                    )
+                    tasks = task_result.scalars().all()
+                    
+                    story_list.append({
+                        "id": str(story.id),
+                        "name": story.name,
+                        "description": story.description,
+                        "order": story.order,
+                        "tasks": [
+                            {
+                                "id": str(task.id),
+                                "title": task.title,
+                                "status": task.status,
+                                "assignee_id": task.assignee_id,
+                                "progress_percentage": task.progress_percentage or 0
+                            }
+                            for task in tasks
+                        ]
+                    })
+                
+                epic_list.append({
+                    "id": str(epic.id),
+                    "name": epic.name,
+                    "description": epic.description,
+                    "order": epic.order,
+                    "stories": story_list
+                })
+            
+            return epic_list

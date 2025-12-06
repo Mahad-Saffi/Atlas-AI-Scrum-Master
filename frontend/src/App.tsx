@@ -13,6 +13,7 @@ import IssuesPage from "./pages/IssuesPage";
 import ProjectRisks from "./pages/ProjectRisks";
 import RiskDashboard from "./pages/RiskDashboard";
 import TeamMembers from "./pages/TeamMembers";
+import EpicView from "./pages/EpicView";
 import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
@@ -73,6 +74,10 @@ function App() {
           <Route
             path="/project/:projectId/risk-dashboard"
             element={isAuthenticated ? <RiskDashboard /> : <SimpleLogin />}
+          />
+          <Route
+            path="/project/:projectId/epics"
+            element={isAuthenticated ? <EpicView /> : <SimpleLogin />}
           />
           <Route
             path="/team-members"

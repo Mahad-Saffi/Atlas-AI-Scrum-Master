@@ -9,6 +9,7 @@ const NotificationBell: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showUnreadOnly, setShowUnreadOnly] = useState<boolean>(false);
 
   const fetchUnreadCount = async () => {
     try {
@@ -22,7 +23,7 @@ const NotificationBell: React.FC = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const notifs = await notificationService.getNotifications();
+      const notifs = await notificationService.getNotifications(showUnreadOnly);
       setNotifications(notifs);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -37,6 +38,12 @@ const NotificationBell: React.FC = () => {
     const interval = setInterval(fetchUnreadCount, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchNotifications();
+    }
+  }, [showUnreadOnly]);
 
   const handleToggle = async () => {
     if (!isOpen) {
@@ -152,34 +159,64 @@ const NotificationBell: React.FC = () => {
             style={{
               padding: "16px",
               borderBottom: "2px solid #697565",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
               background: "rgba(105, 117, 101, 0.1)",
             }}
           >
-            <h3
+            <div
               style={{
-                margin: 0,
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "#181C14",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "12px",
               }}
             >
-              🔔 Notifications
-            </h3>
-            {unreadCount > 0 && (
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: "#181C14",
+                }}
+              >
+                🔔 Notifications
+              </h3>
+              {unreadCount > 0 && (
+                <button
+                  onClick={handleMarkAllAsRead}
+                  className="btn-secondary"
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "12px",
+                  }}
+                >
+                  Mark all read
+                </button>
+              )}
+            </div>
+            <div style={{ display: "flex", gap: "8px" }}>
               <button
-                onClick={handleMarkAllAsRead}
-                className="btn-secondary"
+                onClick={() => setShowUnreadOnly(false)}
+                className={!showUnreadOnly ? "btn-primary" : "btn-secondary"}
                 style={{
                   padding: "6px 12px",
                   fontSize: "12px",
+                  flex: 1,
                 }}
               >
-                Mark all read
+                All
               </button>
-            )}
+              <button
+                onClick={() => setShowUnreadOnly(true)}
+                className={showUnreadOnly ? "btn-primary" : "btn-secondary"}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "12px",
+                  flex: 1,
+                }}
+              >
+                Unread ({unreadCount})
+              </button>
+            </div>
           </div>
 
           {/* Notifications List */}

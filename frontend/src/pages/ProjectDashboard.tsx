@@ -208,12 +208,20 @@ const ProjectDashboard: React.FC = () => {
             }}
           >
             <button
+              onClick={() => navigate(`/project/${projectId}/epics`)}
+              className="btn-secondary"
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <span>📚</span>
+              <span>Epics</span>
+            </button>
+            <button
               onClick={() => navigate(`/project/${projectId}/risk-dashboard`)}
               className="btn-secondary"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
               <span>⚠️</span>
-              <span>Risk Dashboard</span>
+              <span>Risks</span>
             </button>
             <button
               onClick={() => navigate(`/project/${projectId}/issues`)}
