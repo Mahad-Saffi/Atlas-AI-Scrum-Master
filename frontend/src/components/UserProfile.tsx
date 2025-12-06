@@ -54,15 +54,18 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--color-cream)",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Header */}
       <header
+        className="glass-header"
         style={{
-          background: "var(--color-white)",
-          borderBottom: "1px solid var(--color-border)",
           padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <div
@@ -85,12 +88,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 width: "40px",
                 height: "40px",
-                background: "var(--color-dark)",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "1.25rem",
+                boxShadow: "0 4px 15px rgba(102, 126, 234, 0.4)",
               }}
             >
               🤖
@@ -132,20 +136,23 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 alignItems: "center",
                 gap: "0.75rem",
                 padding: "0.5rem 1rem",
-                background: "var(--color-light-gray)",
+                background: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(10px)",
                 borderRadius: "var(--radius-md)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
               }}
             >
               <div
                 style={{
                   width: "32px",
                   height: "32px",
-                  background: "var(--color-dark)",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "var(--color-white)",
+                  color: "white",
                   fontSize: "0.875rem",
                   fontWeight: "600",
                 }}
@@ -182,6 +189,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           maxWidth: "1400px",
           margin: "0 auto",
           padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Stats Section */}
@@ -309,7 +318,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "600",
-              color: "var(--color-text-primary)",
+              color: "white",
+              textShadow: "0 2px 10px rgba(0,0,0,0.2)",
             }}
           >
             Projects
@@ -436,7 +446,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingTop: "1rem",
-                    borderTop: "1px solid var(--color-border)",
+                    borderTop: "1px solid rgba(0, 0, 0, 0.05)",
                   }}
                 >
                   <span

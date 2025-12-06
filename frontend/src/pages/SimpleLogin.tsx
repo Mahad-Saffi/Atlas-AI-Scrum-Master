@@ -75,11 +75,12 @@ const SimpleLogin: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--color-cream)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: "20px",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       <div
@@ -98,35 +99,38 @@ const SimpleLogin: React.FC = () => {
         >
           <div
             style={{
-              width: "64px",
-              height: "64px",
-              background: "var(--color-dark)",
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
               borderRadius: "var(--radius-xl)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 1rem",
-              fontSize: "2rem",
+              margin: "0 auto 1.5rem",
+              fontSize: "2.5rem",
+              boxShadow: "0 10px 40px rgba(102, 126, 234, 0.5)",
+              animation: "float 3s ease-in-out infinite",
             }}
           >
             🤖
           </div>
           <h1
             style={{
-              fontSize: "1.875rem",
-              fontWeight: "600",
-              color: "var(--color-text-primary)",
-              marginBottom: "0.25rem",
-              letterSpacing: "-0.01em",
+              fontSize: "2.5rem",
+              fontWeight: "700",
+              color: "white",
+              marginBottom: "0.5rem",
+              letterSpacing: "-0.02em",
+              textShadow: "0 2px 20px rgba(0,0,0,0.3)",
             }}
           >
             Atlas AI
           </h1>
           <p
             style={{
-              fontSize: "0.9375rem",
-              color: "var(--color-text-secondary)",
-              fontWeight: "400",
+              fontSize: "1.125rem",
+              color: "rgba(255,255,255,0.95)",
+              fontWeight: "500",
             }}
           >
             Intelligent Scrum Master
@@ -135,17 +139,14 @@ const SimpleLogin: React.FC = () => {
 
         {/* Login Card */}
         <div
+          className="card-glass"
           style={{
-            background: "var(--color-white)",
-            borderRadius: "var(--radius-xl)",
-            padding: "2rem",
-            boxShadow: "var(--shadow-lg)",
-            border: "1px solid var(--color-border)",
+            padding: "2.5rem",
           }}
         >
           <h2
             style={{
-              fontSize: "1.5rem",
+              fontSize: "1.75rem",
               fontWeight: "600",
               color: "var(--color-text-primary)",
               marginBottom: "0.5rem",
@@ -157,7 +158,7 @@ const SimpleLogin: React.FC = () => {
             style={{
               fontSize: "0.875rem",
               color: "var(--color-text-secondary)",
-              marginBottom: "1.5rem",
+              marginBottom: "2rem",
             }}
           >
             {isLogin
@@ -168,13 +169,14 @@ const SimpleLogin: React.FC = () => {
           {error && (
             <div
               style={{
-                padding: "0.875rem",
-                marginBottom: "1.25rem",
-                backgroundColor: "#fee2e2",
-                border: "1px solid #fecaca",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                border: "1px solid rgba(239, 68, 68, 0.3)",
                 borderRadius: "var(--radius-md)",
                 color: "#dc2626",
                 fontSize: "0.875rem",
+                backdropFilter: "blur(10px)",
               }}
             >
               {error}
@@ -183,13 +185,13 @@ const SimpleLogin: React.FC = () => {
 
           <form onSubmit={handleSubmit}>
             {!isLogin && (
-              <div style={{ marginBottom: "1rem" }}>
+              <div style={{ marginBottom: "1.25rem" }}>
                 <label
                   style={{
                     display: "block",
                     marginBottom: "0.5rem",
                     fontSize: "0.875rem",
-                    fontWeight: "500",
+                    fontWeight: "600",
                     color: "var(--color-text-primary)",
                   }}
                 >
@@ -206,13 +208,13 @@ const SimpleLogin: React.FC = () => {
               </div>
             )}
 
-            <div style={{ marginBottom: "1rem" }}>
+            <div style={{ marginBottom: "1.25rem" }}>
               <label
                 style={{
                   display: "block",
                   marginBottom: "0.5rem",
                   fontSize: "0.875rem",
-                  fontWeight: "500",
+                  fontWeight: "600",
                   color: "var(--color-text-primary)",
                 }}
               >
@@ -228,13 +230,13 @@ const SimpleLogin: React.FC = () => {
               />
             </div>
 
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ marginBottom: "2rem" }}>
               <label
                 style={{
                   display: "block",
                   marginBottom: "0.5rem",
                   fontSize: "0.875rem",
-                  fontWeight: "500",
+                  fontWeight: "600",
                   color: "var(--color-text-primary)",
                 }}
               >
@@ -257,9 +259,9 @@ const SimpleLogin: React.FC = () => {
               className="btn-primary"
               style={{
                 width: "100%",
-                padding: "0.75rem",
+                padding: "0.875rem",
                 marginBottom: "1rem",
-                opacity: loading ? 0.6 : 1,
+                opacity: loading ? 0.7 : 1,
                 cursor: loading ? "not-allowed" : "pointer",
               }}
             >
@@ -270,15 +272,25 @@ const SimpleLogin: React.FC = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "0.5rem",
+                    position: "relative",
+                    zIndex: 3,
                   }}
                 >
-                  <div className="spinner" />
+                  <div
+                    className="spinner"
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderWidth: "2px",
+                      borderTopColor: "white",
+                    }}
+                  />
                   Processing...
                 </span>
-              ) : isLogin ? (
-                "Sign in"
               ) : (
-                "Create account"
+                <span style={{ position: "relative", zIndex: 3 }}>
+                  {isLogin ? "Sign in" : "Create account"}
+                </span>
               )}
             </button>
           </form>
@@ -286,7 +298,7 @@ const SimpleLogin: React.FC = () => {
           <div
             style={{
               textAlign: "center",
-              marginBottom: "1.25rem",
+              marginBottom: "1.5rem",
             }}
           >
             <button
@@ -297,8 +309,13 @@ const SimpleLogin: React.FC = () => {
                 color: "var(--color-text-secondary)",
                 fontSize: "0.875rem",
                 cursor: "pointer",
-                fontWeight: "400",
+                fontWeight: "500",
+                transition: "color 0.2s",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#667eea")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "var(--color-text-secondary)")
+              }
             >
               {isLogin
                 ? "Don't have an account? Sign up"
@@ -308,8 +325,8 @@ const SimpleLogin: React.FC = () => {
 
           <div
             style={{
-              borderTop: "1px solid var(--color-border)",
-              paddingTop: "1.25rem",
+              borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+              paddingTop: "1.5rem",
             }}
           >
             <button
@@ -318,12 +335,14 @@ const SimpleLogin: React.FC = () => {
               className="btn-secondary"
               style={{
                 width: "100%",
-                padding: "0.75rem",
-                opacity: loading ? 0.6 : 1,
+                padding: "0.875rem",
+                opacity: loading ? 0.7 : 1,
                 cursor: loading ? "not-allowed" : "pointer",
               }}
             >
-              Try demo account
+              <span style={{ position: "relative", zIndex: 3 }}>
+                🎮 Try demo account
+              </span>
             </button>
           </div>
         </div>
@@ -331,15 +350,23 @@ const SimpleLogin: React.FC = () => {
         {/* Footer Info */}
         <div
           style={{
-            marginTop: "1.25rem",
+            marginTop: "1.5rem",
             textAlign: "center",
-            fontSize: "0.8125rem",
-            color: "var(--color-text-muted)",
+            fontSize: "0.875rem",
+            color: "rgba(255,255,255,0.9)",
+            textShadow: "0 1px 3px rgba(0,0,0,0.3)",
           }}
         >
-          <p>Demo: demo@atlas.ai / demo123</p>
+          <p>💡 Demo: demo@atlas.ai / demo123</p>
         </div>
       </div>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
     </div>
   );
 };
