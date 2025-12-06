@@ -116,12 +116,10 @@ const ProjectDashboard: React.FC = () => {
         }}
       >
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
             textAlign: "center",
             padding: "3rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
           }}
         >
           <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
@@ -129,8 +127,9 @@ const ProjectDashboard: React.FC = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#181C14",
+              color: "#ECDFCC",
               marginBottom: "1rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             Project Not Found
@@ -254,18 +253,15 @@ const ProjectDashboard: React.FC = () => {
       >
         {/* Project Info */}
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
-            padding: "1.5rem",
             marginBottom: "2rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
           }}
         >
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "#3C3D37",
+              color: "#ECDFCC",
               lineHeight: "1.6",
             }}
           >
@@ -275,7 +271,7 @@ const ProjectDashboard: React.FC = () => {
             style={{
               marginTop: "1rem",
               fontSize: "0.8125rem",
-              color: "#697565",
+              color: "#ECDFCC",
             }}
           >
             Created{" "}
@@ -301,15 +297,13 @@ const ProjectDashboard: React.FC = () => {
               className="card"
               style={{
                 padding: "1rem",
-                background: "rgba(236, 223, 204, 0.9)",
-                border: "2px solid #697565",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
                   fontSize: "0.75rem",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   marginBottom: "0.5rem",
                   fontWeight: "600",
                 }}
@@ -320,7 +314,8 @@ const ProjectDashboard: React.FC = () => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.totalTasks}
@@ -331,15 +326,13 @@ const ProjectDashboard: React.FC = () => {
               className="card"
               style={{
                 padding: "1rem",
-                background: "rgba(236, 223, 204, 0.9)",
-                border: "2px solid #697565",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
                   fontSize: "0.75rem",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   marginBottom: "0.5rem",
                   fontWeight: "600",
                 }}
@@ -350,7 +343,8 @@ const ProjectDashboard: React.FC = () => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.todoTasks}
@@ -361,15 +355,15 @@ const ProjectDashboard: React.FC = () => {
               className="card"
               style={{
                 padding: "1rem",
-                background: "rgba(245, 158, 11, 0.15)",
-                border: "2px solid #f59e0b",
                 textAlign: "center",
+                background: "rgba(245, 158, 11, 0.15)",
+                border: "1px solid rgba(245, 158, 11, 0.4)",
               }}
             >
               <div
                 style={{
                   fontSize: "0.75rem",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   marginBottom: "0.5rem",
                   fontWeight: "600",
                 }}
@@ -381,6 +375,7 @@ const ProjectDashboard: React.FC = () => {
                   fontSize: "1.75rem",
                   fontWeight: "700",
                   color: "#f59e0b",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.inProgressTasks}
@@ -391,15 +386,15 @@ const ProjectDashboard: React.FC = () => {
               className="card"
               style={{
                 padding: "1rem",
-                background: "rgba(16, 185, 129, 0.15)",
-                border: "2px solid #10b981",
                 textAlign: "center",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
               }}
             >
               <div
                 style={{
                   fontSize: "0.75rem",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   marginBottom: "0.5rem",
                   fontWeight: "600",
                 }}
@@ -411,6 +406,7 @@ const ProjectDashboard: React.FC = () => {
                   fontSize: "1.75rem",
                   fontWeight: "700",
                   color: "#10b981",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.doneTasks}
@@ -422,12 +418,9 @@ const ProjectDashboard: React.FC = () => {
         {/* Progress Section */}
         {stats && (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
-              padding: "1.5rem",
               marginBottom: "2rem",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px solid #697565",
             }}
           >
             <div
@@ -442,7 +435,8 @@ const ProjectDashboard: React.FC = () => {
                 style={{
                   fontSize: "1.125rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Overall Progress
@@ -451,7 +445,8 @@ const ProjectDashboard: React.FC = () => {
                 style={{
                   fontSize: "1.5rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.completionPercentage}%
@@ -461,17 +456,20 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 width: "100%",
                 height: "12px",
-                background: "rgba(105, 117, 101, 0.2)",
+                background: "rgba(24, 28, 20, 0.3)",
                 borderRadius: "8px",
                 overflow: "hidden",
+                border: "1px solid rgba(236, 223, 204, 0.2)",
               }}
             >
               <div
                 style={{
                   width: `${stats.completionPercentage}%`,
                   height: "100%",
-                  background: "#10b981",
+                  background:
+                    "linear-gradient(90deg, #10b981 0%, #34d399 100%)",
                   transition: "width 0.5s ease",
+                  boxShadow: "0 0 10px rgba(16, 185, 129, 0.5)",
                 }}
               />
             </div>
@@ -479,20 +477,14 @@ const ProjectDashboard: React.FC = () => {
         )}
 
         {/* Recent Tasks */}
-        <div
-          className="card"
-          style={{
-            padding: "1.5rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
-          }}
-        >
+        <div className="card-glass-solid">
           <h3
             style={{
               fontSize: "1.125rem",
               fontWeight: "700",
-              color: "#181C14",
+              color: "#ECDFCC",
               marginBottom: "1.25rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             Recent Tasks
@@ -502,7 +494,7 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                color: "#3C3D37",
+                color: "#ECDFCC",
               }}
             >
               No tasks yet. Create tasks to get started.
@@ -520,14 +512,28 @@ const ProjectDashboard: React.FC = () => {
                   key={task.id}
                   style={{
                     padding: "1rem",
-                    background: "rgba(255, 255, 255, 0.5)",
+                    background: "rgba(236, 223, 204, 0.1)",
+                    backdropFilter: "blur(10px)",
                     borderRadius: "8px",
-                    border: "1px solid #697565",
+                    border: "1px solid rgba(236, 223, 204, 0.25)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexWrap: "wrap",
                     gap: "0.75rem",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(236, 223, 204, 0.15)";
+                    e.currentTarget.style.borderColor =
+                      "rgba(236, 223, 204, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(236, 223, 204, 0.1)";
+                    e.currentTarget.style.borderColor =
+                      "rgba(236, 223, 204, 0.25)";
                   }}
                 >
                   <div style={{ flex: 1, minWidth: "200px" }}>
@@ -535,7 +541,7 @@ const ProjectDashboard: React.FC = () => {
                       style={{
                         fontSize: "0.9375rem",
                         fontWeight: "600",
-                        color: "#181C14",
+                        color: "#ECDFCC",
                         marginBottom: "0.25rem",
                       }}
                     >
@@ -545,7 +551,8 @@ const ProjectDashboard: React.FC = () => {
                       <div
                         style={{
                           fontSize: "0.8125rem",
-                          color: "#697565",
+                          color: "#ECDFCC",
+                          opacity: 0.8,
                         }}
                       >
                         Due: {new Date(task.due_date).toLocaleDateString()}
@@ -560,22 +567,22 @@ const ProjectDashboard: React.FC = () => {
                       borderRadius: "8px",
                       background:
                         task.status === "Done"
-                          ? "rgba(16, 185, 129, 0.15)"
+                          ? "rgba(16, 185, 129, 0.2)"
                           : task.status === "In Progress"
-                          ? "rgba(245, 158, 11, 0.15)"
-                          : "rgba(105, 117, 101, 0.2)",
+                          ? "rgba(245, 158, 11, 0.2)"
+                          : "rgba(236, 223, 204, 0.2)",
                       color:
                         task.status === "Done"
                           ? "#10b981"
                           : task.status === "In Progress"
                           ? "#f59e0b"
-                          : "#697565",
+                          : "#ECDFCC",
                       border:
                         task.status === "Done"
-                          ? "1px solid #10b981"
+                          ? "1px solid rgba(16, 185, 129, 0.5)"
                           : task.status === "In Progress"
-                          ? "1px solid #f59e0b"
-                          : "1px solid #697565",
+                          ? "1px solid rgba(245, 158, 11, 0.5)"
+                          : "1px solid rgba(236, 223, 204, 0.3)",
                     }}
                   >
                     {task.status}

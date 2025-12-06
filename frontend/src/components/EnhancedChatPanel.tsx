@@ -236,7 +236,7 @@ const EnhancedChatPanel: React.FC = () => {
 
   return (
     <div
-      className="card-glass"
+      className="card-glass-solid"
       style={{
         display: "flex",
         height: "calc(100vh - 135px)",
@@ -251,8 +251,8 @@ const EnhancedChatPanel: React.FC = () => {
           borderRight: "1px solid rgba(236, 223, 204, 0.3)",
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.5)",
-          backdropFilter: "blur(10px)",
+          background: "rgba(236, 223, 204, 0.15)",
+          backdropFilter: "blur(15px)",
         }}
       >
         {/* Tabs */}
@@ -272,14 +272,16 @@ const EnhancedChatPanel: React.FC = () => {
               padding: "0.875rem",
               background:
                 activeView === "channels"
-                  ? "rgba(236, 223, 204, 0.8)"
+                  ? "rgba(236, 223, 204, 0.3)"
                   : "transparent",
               border: "none",
               borderBottom:
-                activeView === "channels" ? "2px solid #697565" : "none",
+                activeView === "channels"
+                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  : "none",
               fontSize: "0.875rem",
               fontWeight: "600",
-              color: "#181C14",
+              color: "#ECDFCC",
               cursor: "pointer",
             }}
           >
@@ -295,13 +297,16 @@ const EnhancedChatPanel: React.FC = () => {
               padding: "0.875rem",
               background:
                 activeView === "dms"
-                  ? "rgba(236, 223, 204, 0.8)"
+                  ? "rgba(236, 223, 204, 0.3)"
                   : "transparent",
               border: "none",
-              borderBottom: activeView === "dms" ? "2px solid #697565" : "none",
+              borderBottom:
+                activeView === "dms"
+                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  : "none",
               fontSize: "0.875rem",
               fontWeight: "600",
-              color: "#181C14",
+              color: "#ECDFCC",
               cursor: "pointer",
             }}
           >
@@ -337,8 +342,13 @@ const EnhancedChatPanel: React.FC = () => {
                     marginBottom: "0.5rem",
                     background:
                       selectedChannel === channel.id
-                        ? "rgba(105, 117, 101, 0.3)"
-                        : "rgba(255, 255, 255, 0.5)",
+                        ? "rgba(236, 223, 204, 0.25)"
+                        : "rgba(236, 223, 204, 0.1)",
+                    backdropFilter: "blur(10px)",
+                    border:
+                      selectedChannel === channel.id
+                        ? "1px solid rgba(236, 223, 204, 0.4)"
+                        : "1px solid rgba(236, 223, 204, 0.2)",
                     borderRadius: "var(--radius-md)",
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -348,7 +358,7 @@ const EnhancedChatPanel: React.FC = () => {
                     style={{
                       fontSize: "0.875rem",
                       fontWeight: "600",
-                      color: "#181C14",
+                      color: "#ECDFCC",
                     }}
                   >
                     # {channel.name}
@@ -357,7 +367,8 @@ const EnhancedChatPanel: React.FC = () => {
                     <div
                       style={{
                         fontSize: "0.75rem",
-                        color: "#697565",
+                        color: "#ECDFCC",
+                        opacity: 0.8,
                         marginTop: "0.25rem",
                       }}
                     >
@@ -373,7 +384,7 @@ const EnhancedChatPanel: React.FC = () => {
                 style={{
                   fontSize: "0.75rem",
                   fontWeight: "700",
-                  color: "#697565",
+                  color: "#ECDFCC",
                   textTransform: "uppercase",
                   marginBottom: "0.75rem",
                 }}
@@ -395,8 +406,13 @@ const EnhancedChatPanel: React.FC = () => {
                     marginBottom: "0.5rem",
                     background:
                       selectedUser === user.id
-                        ? "rgba(105, 117, 101, 0.3)"
-                        : "rgba(255, 255, 255, 0.5)",
+                        ? "rgba(236, 223, 204, 0.25)"
+                        : "rgba(236, 223, 204, 0.1)",
+                    backdropFilter: "blur(10px)",
+                    border:
+                      selectedUser === user.id
+                        ? "1px solid rgba(236, 223, 204, 0.4)"
+                        : "1px solid rgba(236, 223, 204, 0.2)",
                     borderRadius: "var(--radius-md)",
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -416,7 +432,7 @@ const EnhancedChatPanel: React.FC = () => {
                     style={{
                       fontSize: "0.875rem",
                       fontWeight: "500",
-                      color: "#181C14",
+                      color: "#ECDFCC",
                     }}
                   >
                     {user.username}
@@ -434,7 +450,7 @@ const EnhancedChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.3)",
+          background: "rgba(236, 223, 204, 0.08)",
         }}
       >
         {/* Header with Search */}
@@ -442,7 +458,8 @@ const EnhancedChatPanel: React.FC = () => {
           style={{
             padding: "0.75rem 1.25rem",
             borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
-            background: "rgba(236, 223, 204, 0.5)",
+            background: "rgba(236, 223, 204, 0.15)",
+            backdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
             gap: "0.75rem",
@@ -488,7 +505,7 @@ const EnhancedChatPanel: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                color: "#697565",
+                color: "#ECDFCC",
                 padding: "3rem 1rem",
               }}
             >
@@ -503,22 +520,23 @@ const EnhancedChatPanel: React.FC = () => {
             messages.map((msg, index) => (
               <div
                 key={index}
-                className="card"
                 style={{
                   padding: "1rem",
-                  background: "rgba(255, 255, 255, 0.8)",
+                  background: "rgba(236, 223, 204, 0.15)",
                   backdropFilter: "blur(15px)",
-                  border: "1px solid rgba(236, 223, 204, 0.4)",
+                  border: "1px solid rgba(236, 223, 204, 0.25)",
                   borderRadius: "var(--radius-md)",
-                  boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                  boxShadow: "0 2px 8px rgba(24, 28, 20, 0.15)",
+                  transition: "all 0.2s ease",
                 }}
               >
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#697565",
+                    color: "#ECDFCC",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
+                    opacity: 0.8,
                   }}
                 >
                   User #{msg.sender_id}
@@ -526,7 +544,7 @@ const EnhancedChatPanel: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.9375rem",
-                    color: "#181C14",
+                    color: "#ECDFCC",
                     lineHeight: "1.5",
                   }}
                 >
@@ -543,8 +561,8 @@ const EnhancedChatPanel: React.FC = () => {
           style={{
             padding: "1.25rem",
             borderTop: "1px solid rgba(236, 223, 204, 0.3)",
-            background: "rgba(236, 223, 204, 0.5)",
-            backdropFilter: "blur(10px)",
+            background: "rgba(236, 223, 204, 0.15)",
+            backdropFilter: "blur(15px)",
             display: "flex",
             gap: "0.75rem",
           }}
@@ -624,7 +642,7 @@ const CreateChannelModal: React.FC<{
       onClick={onClose}
     >
       <div
-        className="card-glass"
+        className="card-glass-solid"
         style={{
           maxWidth: "450px",
           width: "100%",
@@ -637,8 +655,9 @@ const CreateChannelModal: React.FC<{
           style={{
             fontSize: "1.5rem",
             fontWeight: "700",
-            color: "#181C14",
+            color: "#ECDFCC",
             marginBottom: "1.5rem",
+            textShadow: "0 2px 4px rgba(0,0,0,0.3)",
           }}
         >
           Create Channel
@@ -651,7 +670,7 @@ const CreateChannelModal: React.FC<{
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
               }}
             >
@@ -673,7 +692,7 @@ const CreateChannelModal: React.FC<{
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
               }}
             >

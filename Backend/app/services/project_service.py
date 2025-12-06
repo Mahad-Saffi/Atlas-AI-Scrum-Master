@@ -117,8 +117,6 @@ class ProjectService:
                 await session.commit()
                 return project
 
-project_service = ProjectService()
-
     async def get_project_epics(self, project_id: str) -> list:
         """Get all epics with their stories and tasks for a project"""
         async with SessionLocal() as session:
@@ -178,3 +176,6 @@ project_service = ProjectService()
                 })
             
             return epic_list
+
+
+project_service = ProjectService()

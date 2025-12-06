@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import OrganizationInfo from "./OrganizationInfo";
 
 interface User {
   id: number;
@@ -220,6 +221,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           zIndex: 1,
         }}
       >
+        {/* Organization Info */}
+        <div style={{ marginBottom: "2rem" }}>
+          <OrganizationInfo />
+        </div>
+
         {/* Stats Section */}
         <div
           style={{
@@ -233,20 +239,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "1px solid rgba(105, 117, 101, 0.3)",
-              transition: "all 0.2s ease",
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = "#697565";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
@@ -261,9 +256,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   lineHeight: "1",
                   marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {projects.length}
@@ -271,7 +267,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               <div
                 style={{
                   fontSize: "0.875rem",
-                  color: "#697565",
+                  color: "#ECDFCC",
                   fontWeight: "500",
                   whiteSpace: "nowrap",
                 }}
@@ -285,20 +281,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "1px solid rgba(105, 117, 101, 0.3)",
-              transition: "all 0.2s ease",
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = "#697565";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
@@ -313,9 +298,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   lineHeight: "1",
                   marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 0
@@ -323,7 +309,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               <div
                 style={{
                   fontSize: "0.875rem",
-                  color: "#697565",
+                  color: "#ECDFCC",
                   fontWeight: "500",
                   whiteSpace: "nowrap",
                 }}
@@ -337,20 +323,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "1px solid rgba(105, 117, 101, 0.3)",
-              transition: "all 0.2s ease",
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = "#697565";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
@@ -365,9 +340,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
                   lineHeight: "1",
                   marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 0
@@ -375,7 +351,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               <div
                 style={{
                   fontSize: "0.875rem",
-                  color: "#697565",
+                  color: "#ECDFCC",
                   fontWeight: "500",
                   whiteSpace: "nowrap",
                 }}
@@ -504,12 +480,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           </div>
         ) : projects.length === 0 ? (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px dashed #697565",
+              border: "2px dashed rgba(236, 223, 204, 0.4)",
             }}
           >
             <div
@@ -531,8 +506,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.75rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No projects yet
@@ -540,7 +516,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             <p
               style={{
                 fontSize: "1rem",
-                color: "#3C3D37",
+                color: "#ECDFCC",
                 marginBottom: "2rem",
                 maxWidth: "500px",
                 margin: "0 auto 2rem",
@@ -589,25 +565,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             })().map((project) => (
               <div
                 key={project.id}
-                className="card"
+                className="card-glass-solid"
                 style={{
-                  padding: "1.5rem",
                   cursor: "pointer",
-                  background: "rgba(236, 223, 204, 0.9)",
-                  border: "2px solid #697565",
-                  transition: "all 0.3s ease",
                   position: "relative",
                   overflow: "hidden",
                 }}
                 onClick={() => navigate(`/project/${project.id}`)}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px)";
-                  e.currentTarget.style.borderColor = "#3C3D37";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "#697565";
-                }}
               >
                 <div
                   style={{
@@ -631,9 +595,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#181C14",
+                    color: "#ECDFCC",
                     marginBottom: "0.75rem",
                     paddingRight: "3rem",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                   }}
                 >
                   {project.name}
@@ -641,7 +606,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 <p
                   style={{
                     fontSize: "0.9375rem",
-                    color: "#3C3D37",
+                    color: "#ECDFCC",
                     marginBottom: "1.25rem",
                     lineHeight: "1.6",
                     minHeight: "3rem",
@@ -655,7 +620,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingTop: "1rem",
-                    borderTop: "2px solid #697565",
+                    borderTop: "1px solid rgba(236, 223, 204, 0.3)",
                   }}
                 >
                   <div
@@ -669,7 +634,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     <span
                       style={{
                         fontSize: "0.875rem",
-                        color: "#697565",
+                        color: "#ECDFCC",
                         fontWeight: "500",
                       }}
                     >

@@ -46,8 +46,6 @@ const OrganizationInfo: React.FC = () => {
         className="card"
         style={{
           padding: "1.5rem",
-          background: "rgba(236, 223, 204, 0.9)",
-          border: "1px solid rgba(105, 117, 101, 0.3)",
         }}
       >
         <div className="spinner" />
@@ -63,40 +61,29 @@ const OrganizationInfo: React.FC = () => {
     <div
       className="card"
       style={{
-        padding: "1.5rem",
-        background: "rgba(236, 223, 204, 0.9)",
-        border: "1px solid rgba(105, 117, 101, 0.3)",
+        padding: "1.25rem 1.5rem",
+        display: "flex",
+        alignItems: "center",
+        gap: "1rem",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          marginBottom: "1rem",
-        }}
-      >
+      <div style={{ fontSize: "2rem" }}>🏢</div>
+      <div style={{ flex: 1 }}>
         <div
           style={{
-            width: "48px",
-            height: "48px",
-            background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-            borderRadius: "var(--radius-md)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            fontSize: "1.5rem",
+            gap: "0.5rem",
+            marginBottom: "0.25rem",
           }}
         >
-          🏢
-        </div>
-        <div style={{ flex: 1 }}>
           <h3
             style={{
-              fontSize: "1.125rem",
+              fontSize: "1.6rem",
               fontWeight: "700",
-              color: "#181C14",
-              marginBottom: "0.25rem",
+              color: "#ECDFCC",
+              margin: 0,
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             {org.name}
@@ -104,42 +91,22 @@ const OrganizationInfo: React.FC = () => {
           {org.is_owner && (
             <span
               style={{
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                color: "#697565",
-                padding: "0.25rem 0.5rem",
-                background: "rgba(105, 117, 101, 0.2)",
+                fontSize: "0.625rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
+                padding: "0.125rem 0.375rem",
+                background: "rgba(236, 223, 204, 0.2)",
                 borderRadius: "var(--radius-sm)",
+                textTransform: "uppercase",
               }}
             >
-              OWNER
+              Owner
             </span>
           )}
         </div>
-      </div>
-
-      {org.description && (
-        <p
-          style={{
-            fontSize: "0.875rem",
-            color: "#3C3D37",
-            marginBottom: "1rem",
-            lineHeight: "1.5",
-          }}
-        >
-          {org.description}
-        </p>
-      )}
-
-      <div
-        style={{
-          fontSize: "0.8125rem",
-          color: "#697565",
-          paddingTop: "1rem",
-          borderTop: "1px solid rgba(105, 117, 101, 0.2)",
-        }}
-      >
-        Created: {new Date(org.created_at).toLocaleDateString()}
+        <div style={{ fontSize: "0.75rem", color: "#ECDFCC" }}>
+          Created: {new Date(org.created_at).toLocaleDateString()}
+        </div>
       </div>
     </div>
   );

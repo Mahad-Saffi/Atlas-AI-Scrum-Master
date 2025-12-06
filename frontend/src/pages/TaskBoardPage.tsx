@@ -158,13 +158,11 @@ const TaskBoardPage: React.FC = () => {
         }}
       >
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
             textAlign: "center",
             padding: "3rem",
             maxWidth: "500px",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
           }}
         >
           <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
@@ -172,8 +170,9 @@ const TaskBoardPage: React.FC = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#181C14",
+              color: "#ECDFCC",
               marginBottom: "0.5rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             Oops!
@@ -181,7 +180,7 @@ const TaskBoardPage: React.FC = () => {
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "#3C3D37",
+              color: "#ECDFCC",
               marginBottom: "1.5rem",
             }}
           >
@@ -316,15 +315,13 @@ const TaskBoardPage: React.FC = () => {
             className="card"
             style={{
               padding: "1rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "2px solid #697565",
               textAlign: "center",
             }}
           >
             <div
               style={{
                 fontSize: "0.75rem",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
                 fontWeight: "600",
               }}
@@ -335,7 +332,8 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {taskStats.total}
@@ -346,15 +344,13 @@ const TaskBoardPage: React.FC = () => {
             className="card"
             style={{
               padding: "1rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "2px solid #697565",
               textAlign: "center",
             }}
           >
             <div
               style={{
                 fontSize: "0.75rem",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
                 fontWeight: "600",
               }}
@@ -365,7 +361,8 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {taskStats.todo}
@@ -376,15 +373,15 @@ const TaskBoardPage: React.FC = () => {
             className="card"
             style={{
               padding: "1rem",
-              background: "rgba(245, 158, 11, 0.15)",
-              border: "2px solid #f59e0b",
               textAlign: "center",
+              background: "rgba(245, 158, 11, 0.15)",
+              border: "1px solid rgba(245, 158, 11, 0.4)",
             }}
           >
             <div
               style={{
                 fontSize: "0.75rem",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
                 fontWeight: "600",
               }}
@@ -396,6 +393,7 @@ const TaskBoardPage: React.FC = () => {
                 fontSize: "1.75rem",
                 fontWeight: "700",
                 color: "#f59e0b",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {taskStats.inProgress}
@@ -406,15 +404,15 @@ const TaskBoardPage: React.FC = () => {
             className="card"
             style={{
               padding: "1rem",
-              background: "rgba(16, 185, 129, 0.15)",
-              border: "2px solid #10b981",
               textAlign: "center",
+              background: "rgba(16, 185, 129, 0.15)",
+              border: "1px solid rgba(16, 185, 129, 0.4)",
             }}
           >
             <div
               style={{
                 fontSize: "0.75rem",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
                 fontWeight: "600",
               }}
@@ -426,6 +424,7 @@ const TaskBoardPage: React.FC = () => {
                 fontSize: "1.75rem",
                 fontWeight: "700",
                 color: "#10b981",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {taskStats.done}
@@ -435,12 +434,9 @@ const TaskBoardPage: React.FC = () => {
 
         {/* Project Selector & Filters */}
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
-            padding: "1rem",
             marginBottom: "1.5rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -455,7 +451,7 @@ const TaskBoardPage: React.FC = () => {
               gap: "1rem",
             }}
           >
-            <span style={{ fontWeight: "600", color: "#181C14" }}>
+            <span style={{ fontWeight: "600", color: "#ECDFCC" }}>
               Project:
             </span>
             {projects.length > 0 && (
@@ -634,12 +630,9 @@ const TaskBoardPage: React.FC = () => {
 
         {/* Task Board */}
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
-            padding: "1.5rem",
             minHeight: "500px",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
           }}
         >
           <TaskBoard tasks={filteredTasks} onTaskUpdate={handleTaskUpdate} />
