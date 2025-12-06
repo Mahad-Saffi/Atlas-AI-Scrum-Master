@@ -7,6 +7,15 @@ from app.api.v1 import ai as ai_router
 
 app = FastAPI()
 
+# Add CORS middleware FIRST (before routes)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080", "http://localhost:8000", "http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 from app.models import Base
 from app.config.database import engine
 from app.core.startup import startup_checks
@@ -81,15 +90,6 @@ app.include_router(notifications_router.router, prefix="/api/v1/notifications", 
 app.include_router(chat_router.router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(issues_router.router, prefix="/api/v1/issues", tags=["issues"])
 app.include_router(organizations_router.router, prefix="/api/v1/organizations", tags=["organizations"])
-
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:8000", "http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.get("/")
 async def read_root():
