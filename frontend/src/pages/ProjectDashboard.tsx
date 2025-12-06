@@ -88,10 +88,11 @@ const ProjectDashboard: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "var(--color-cream)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
@@ -107,10 +108,11 @@ const ProjectDashboard: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "var(--color-cream)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
@@ -118,14 +120,16 @@ const ProjectDashboard: React.FC = () => {
           style={{
             textAlign: "center",
             padding: "3rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
           }}
         >
           <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
           <h2
             style={{
               fontSize: "1.5rem",
-              fontWeight: "600",
-              color: "var(--color-text-primary)",
+              fontWeight: "700",
+              color: "#181C14",
               marginBottom: "1rem",
             }}
           >
@@ -145,15 +149,18 @@ const ProjectDashboard: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--color-cream)",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Header */}
       <header
+        className="glass-header"
         style={{
-          background: "var(--color-white)",
-          borderBottom: "1px solid var(--color-border)",
           padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <div
@@ -174,12 +181,10 @@ const ProjectDashboard: React.FC = () => {
           >
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                padding: "0.5rem 1rem",
                 fontSize: "1.25rem",
-                color: "var(--color-text-secondary)",
               }}
             >
               ←
@@ -188,7 +193,7 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "var(--color-text-primary)",
+                color: "#181C14",
               }}
             >
               {project.name}
@@ -220,7 +225,7 @@ const ProjectDashboard: React.FC = () => {
             </button>
             <button
               onClick={() => navigate("/task-board")}
-              className="btn-primary"
+              className="btn-secondary"
             >
               View Task Board
             </button>
@@ -235,6 +240,8 @@ const ProjectDashboard: React.FC = () => {
           maxWidth: "1400px",
           margin: "0 auto",
           padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Project Info */}
@@ -243,12 +250,14 @@ const ProjectDashboard: React.FC = () => {
           style={{
             padding: "1.5rem",
             marginBottom: "2rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
           }}
         >
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "var(--color-text-secondary)",
+              color: "#3C3D37",
               lineHeight: "1.6",
             }}
           >
@@ -258,7 +267,7 @@ const ProjectDashboard: React.FC = () => {
             style={{
               marginTop: "1rem",
               fontSize: "0.8125rem",
-              color: "var(--color-text-muted)",
+              color: "#697565",
             }}
           >
             Created{" "}
@@ -275,89 +284,125 @@ const ProjectDashboard: React.FC = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "1.25rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+              gap: "1rem",
               marginBottom: "2rem",
             }}
           >
-            <div className="card" style={{ padding: "1.5rem" }}>
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                background: "rgba(236, 223, 204, 0.9)",
+                border: "2px solid #697565",
+                textAlign: "center",
+              }}
+            >
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "0.75rem",
+                  fontSize: "0.75rem",
+                  color: "#181C14",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
                 }}
               >
                 Total Tasks
               </div>
               <div
                 style={{
-                  fontSize: "2.25rem",
-                  fontWeight: "600",
-                  color: "var(--color-text-primary)",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
                 }}
               >
                 {stats.totalTasks}
               </div>
             </div>
 
-            <div className="card" style={{ padding: "1.5rem" }}>
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                background: "rgba(236, 223, 204, 0.9)",
+                border: "2px solid #697565",
+                textAlign: "center",
+              }}
+            >
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "0.75rem",
+                  fontSize: "0.75rem",
+                  color: "#181C14",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
                 }}
               >
                 To Do
               </div>
               <div
                 style={{
-                  fontSize: "2.25rem",
-                  fontWeight: "600",
-                  color: "var(--color-text-primary)",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
                 }}
               >
                 {stats.todoTasks}
               </div>
             </div>
 
-            <div className="card" style={{ padding: "1.5rem" }}>
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                background: "rgba(245, 158, 11, 0.15)",
+                border: "2px solid #f59e0b",
+                textAlign: "center",
+              }}
+            >
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "0.75rem",
+                  fontSize: "0.75rem",
+                  color: "#181C14",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
                 }}
               >
                 In Progress
               </div>
               <div
                 style={{
-                  fontSize: "2.25rem",
-                  fontWeight: "600",
-                  color: "var(--color-warning)",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#f59e0b",
                 }}
               >
                 {stats.inProgressTasks}
               </div>
             </div>
 
-            <div className="card" style={{ padding: "1.5rem" }}>
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "2px solid #10b981",
+                textAlign: "center",
+              }}
+            >
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "0.75rem",
+                  fontSize: "0.75rem",
+                  color: "#181C14",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
                 }}
               >
                 Completed
               </div>
               <div
                 style={{
-                  fontSize: "2.25rem",
-                  fontWeight: "600",
-                  color: "var(--color-success)",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#10b981",
                 }}
               >
                 {stats.doneTasks}
@@ -373,6 +418,8 @@ const ProjectDashboard: React.FC = () => {
             style={{
               padding: "1.5rem",
               marginBottom: "2rem",
+              background: "rgba(236, 223, 204, 0.95)",
+              border: "2px solid #697565",
             }}
           >
             <div
@@ -386,17 +433,17 @@ const ProjectDashboard: React.FC = () => {
               <h3
                 style={{
                   fontSize: "1.125rem",
-                  fontWeight: "600",
-                  color: "var(--color-text-primary)",
+                  fontWeight: "700",
+                  color: "#181C14",
                 }}
               >
-                Progress
+                Overall Progress
               </h3>
               <span
                 style={{
                   fontSize: "1.5rem",
-                  fontWeight: "600",
-                  color: "var(--color-text-primary)",
+                  fontWeight: "700",
+                  color: "#181C14",
                 }}
               >
                 {stats.completionPercentage}%
@@ -406,8 +453,8 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 width: "100%",
                 height: "12px",
-                background: "var(--color-light-gray)",
-                borderRadius: "var(--radius-lg)",
+                background: "rgba(105, 117, 101, 0.2)",
+                borderRadius: "8px",
                 overflow: "hidden",
               }}
             >
@@ -415,8 +462,7 @@ const ProjectDashboard: React.FC = () => {
                 style={{
                   width: `${stats.completionPercentage}%`,
                   height: "100%",
-                  background:
-                    "linear-gradient(90deg, var(--color-success), #34d399)",
+                  background: "#10b981",
                   transition: "width 0.5s ease",
                 }}
               />
@@ -429,13 +475,15 @@ const ProjectDashboard: React.FC = () => {
           className="card"
           style={{
             padding: "1.5rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
           }}
         >
           <h3
             style={{
               fontSize: "1.125rem",
-              fontWeight: "600",
-              color: "var(--color-text-primary)",
+              fontWeight: "700",
+              color: "#181C14",
               marginBottom: "1.25rem",
             }}
           >
@@ -446,7 +494,7 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                color: "var(--color-text-secondary)",
+                color: "#3C3D37",
               }}
             >
               No tasks yet. Create tasks to get started.
@@ -464,20 +512,22 @@ const ProjectDashboard: React.FC = () => {
                   key={task.id}
                   style={{
                     padding: "1rem",
-                    background: "var(--color-light-gray)",
-                    borderRadius: "var(--radius-md)",
-                    border: "1px solid var(--color-border)",
+                    background: "rgba(255, 255, 255, 0.5)",
+                    borderRadius: "8px",
+                    border: "1px solid #697565",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: "0.75rem",
                   }}
                 >
-                  <div>
+                  <div style={{ flex: 1, minWidth: "200px" }}>
                     <div
                       style={{
                         fontSize: "0.9375rem",
-                        fontWeight: "500",
-                        color: "var(--color-text-primary)",
+                        fontWeight: "600",
+                        color: "#181C14",
                         marginBottom: "0.25rem",
                       }}
                     >
@@ -487,7 +537,7 @@ const ProjectDashboard: React.FC = () => {
                       <div
                         style={{
                           fontSize: "0.8125rem",
-                          color: "var(--color-text-muted)",
+                          color: "#697565",
                         }}
                       >
                         Due: {new Date(task.due_date).toLocaleDateString()}
@@ -498,20 +548,26 @@ const ProjectDashboard: React.FC = () => {
                     style={{
                       padding: "0.375rem 0.75rem",
                       fontSize: "0.8125rem",
-                      fontWeight: "500",
-                      borderRadius: "var(--radius-sm)",
+                      fontWeight: "600",
+                      borderRadius: "8px",
                       background:
                         task.status === "Done"
-                          ? "#d1fae5"
+                          ? "rgba(16, 185, 129, 0.15)"
                           : task.status === "In Progress"
-                          ? "#fef3c7"
-                          : "#e5e7eb",
+                          ? "rgba(245, 158, 11, 0.15)"
+                          : "rgba(105, 117, 101, 0.2)",
                       color:
                         task.status === "Done"
-                          ? "#065f46"
+                          ? "#10b981"
                           : task.status === "In Progress"
-                          ? "#92400e"
-                          : "#374151",
+                          ? "#f59e0b"
+                          : "#697565",
+                      border:
+                        task.status === "Done"
+                          ? "1px solid #10b981"
+                          : task.status === "In Progress"
+                          ? "1px solid #f59e0b"
+                          : "1px solid #697565",
                     }}
                   >
                     {task.status}

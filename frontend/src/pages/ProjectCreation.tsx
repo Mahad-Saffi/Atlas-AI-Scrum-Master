@@ -86,7 +86,7 @@ const ProjectCreation: React.FC = () => {
           zIndex: 1,
         }}
       >
-        {/* Info Card */}
+        {/* Info Card
         <div
           className="card"
           style={{
@@ -117,22 +117,25 @@ const ProjectCreation: React.FC = () => {
             Tell me about your project goals, timeline, and team. I'll help you
             build a complete plan with tasks, milestones, and assignments.
           </p>
-        </div>
+        </div> */}
 
         {/* Chat Interface */}
         <div
           className="card"
           style={{
             padding: "0",
-            height: "600px",
+            height: "calc(100vh - 145px)",
+            maxHeight: "600px",
+            minHeight: "400px",
             overflow: "hidden",
           }}
         >
           <ChatInterface />
+          
         </div>
 
         {/* Tips */}
-        <div
+        {/* <div
           className="card"
           style={{
             marginTop: "1.5rem",
@@ -165,7 +168,7 @@ const ProjectCreation: React.FC = () => {
               more details you provide, the better I can help you plan.
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
 
       <style>{`

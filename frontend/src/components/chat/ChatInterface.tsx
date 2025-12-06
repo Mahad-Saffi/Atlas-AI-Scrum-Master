@@ -67,8 +67,8 @@ const ChatInterface: React.FC = () => {
       style={{
         width: "100%",
         height: "100%",
-        background: "rgba(255, 255, 255, 0.5)",
-        backdropFilter: "blur(10px)",
+        background: "rgba(236, 223, 204, 0.3)",
+        backdropFilter: "blur(15px)",
         display: "flex",
         flexDirection: "column",
         borderRadius: "var(--radius-xl)",
@@ -78,11 +78,11 @@ const ChatInterface: React.FC = () => {
       <div
         style={{
           flex: "1",
-          padding: "20px",
+          padding: "1.25rem",
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
-          gap: "16px",
+          gap: "1rem",
         }}
       >
         {messages.map((msg, index) => (
@@ -97,28 +97,27 @@ const ChatInterface: React.FC = () => {
             <div
               style={{
                 maxWidth: "75%",
-                padding: "14px 18px",
-                borderRadius: "12px",
+                padding: "1rem 1.25rem",
+                borderRadius: "var(--radius-lg)",
                 background:
                   msg.sender === "user"
-                    ? "linear-gradient(145deg, #f0f0f0, #cacaca)"
-                    : "#e8e8e8",
-                boxShadow:
-                  msg.sender === "user"
-                    ? "6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff"
-                    : "6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff",
+                    ? "linear-gradient(145deg, #ECDFCC, #D4C7B4)"
+                    : "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(15px)",
+                border: "1px solid rgba(236, 223, 204, 0.4)",
+                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
                 fontFamily: "inherit",
-                fontSize: "15px",
+                fontSize: "0.9375rem",
                 lineHeight: "1.6",
-                color: "#090909",
+                color: "#181C14",
               }}
             >
               <div
                 style={{
-                  fontWeight: "bold",
-                  marginBottom: "6px",
-                  fontSize: "13px",
-                  color: "#666",
+                  fontWeight: "600",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.8125rem",
+                  color: msg.sender === "user" ? "#3C3D37" : "#697565",
                 }}
               >
                 {msg.sender === "ai" ? "🤖 Atlas AI" : "👤 You"}
@@ -141,18 +140,22 @@ const ChatInterface: React.FC = () => {
           >
             <div
               style={{
-                padding: "14px 18px",
-                borderRadius: "12px",
-                background: "#e8e8e8",
-                boxShadow: "6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff",
+                padding: "1rem 1.25rem",
+                borderRadius: "var(--radius-lg)",
+                background: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(15px)",
+                border: "1px solid rgba(236, 223, 204, 0.4)",
+                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
                 fontFamily: "inherit",
-                color: "#666",
-                fontSize: "15px",
+                color: "#697565",
+                fontSize: "0.9375rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
-              <span style={{ animation: "pulse 1.5s ease-in-out infinite" }}>
-                🤔 Thinking...
-              </span>
+              <span className="spinner"></span>
+              <span>Thinking...</span>
             </div>
           </div>
         )}
@@ -161,7 +164,7 @@ const ChatInterface: React.FC = () => {
           <div
             style={{
               textAlign: "center",
-              marginTop: "20px",
+              marginTop: "1.25rem",
               animation: "bounceIn 0.5s ease-out",
             }}
           >
@@ -170,6 +173,7 @@ const ChatInterface: React.FC = () => {
               className="btn-primary"
               style={{
                 fontSize: "1rem",
+                padding: "0.875rem 2rem",
               }}
             >
               🎉 View Your Project!
@@ -182,11 +186,11 @@ const ChatInterface: React.FC = () => {
       {/* Input Area */}
       <div
         style={{
-          padding: "20px",
-          borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+          padding: "1.25rem",
+          borderTop: "1px solid rgba(236, 223, 204, 0.3)",
           display: "flex",
-          gap: "12px",
-          background: "rgba(255, 255, 255, 0.3)",
+          gap: "0.75rem",
+          background: "rgba(236, 223, 204, 0.5)",
           backdropFilter: "blur(10px)",
           borderBottomLeftRadius: "var(--radius-xl)",
           borderBottomRightRadius: "var(--radius-xl)",
@@ -210,8 +214,23 @@ const ChatInterface: React.FC = () => {
           onClick={handleSendMessage}
           className="btn-primary"
           disabled={isLoading || projectCreated}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
         >
-          {isLoading ? "⏳ Sending..." : "📤 Send"}
+          {isLoading ? (
+            <>
+              <span className="spinner"></span>
+              <span>Sending...</span>
+            </>
+          ) : (
+            <>
+              <span>📤</span>
+              <span>Send</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -227,22 +246,13 @@ const ChatInterface: React.FC = () => {
           }
         }
 
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-
         @keyframes bounceIn {
           0% {
             opacity: 0;
-            transform: scale(0.3);
+            transform: scale(0.9);
           }
           50% {
-            transform: scale(1.05);
+            transform: scale(1.02);
           }
           100% {
             opacity: 1;

@@ -25,6 +25,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<string>("default");
+  const [showSortMenu, setShowSortMenu] = useState(false);
 
   useEffect(() => {
     fetchProjects();
@@ -117,6 +119,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             }}
           >
             <button
+              onClick={() => navigate("/chat")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <span>💬</span>
+              <span>Chat</span>
+            </button>
+
+            <button
               onClick={() => navigate("/organization-setup")}
               className="btn-secondary"
               style={{
@@ -131,7 +146,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
 
             <button
               onClick={() => navigate("/create-project")}
-              className="btn-primary"
+              className="btn-secondary"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -209,194 +224,164 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "1.25rem",
-            marginBottom: "2.5rem",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1rem",
+            marginBottom: "2rem",
           }}
         >
           <div
             className="card"
             style={{
-              padding: "1.5rem",
+              padding: "1.25rem 1.5rem",
               background: "rgba(236, 223, 204, 0.9)",
-              border: "2px solid #697565",
-              transition: "all 0.3s ease",
+              border: "1px solid rgba(105, 117, 101, 0.3)",
+              transition: "all 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.borderColor = "#3C3D37";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "#697565";
+              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "1rem",
+                fontSize: "2rem",
               }}
             >
+              📊
+            </div>
+            <div>
               <div
                 style={{
-                  width: "48px",
-                  height: "48px",
-                  background:
-                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                  borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.5rem",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
                 }}
               >
-                📊
+                {projects.length}
               </div>
-            </div>
-            <div
-              style={{
-                fontSize: "2.25rem",
-                fontWeight: "700",
-                color: "#181C14",
-                marginBottom: "0.25rem",
-              }}
-            >
-              {projects.length}
-            </div>
-            <div
-              style={{
-                fontSize: "0.9375rem",
-                color: "#3C3D37",
-                fontWeight: "500",
-              }}
-            >
-              Total Projects
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#697565",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Total Projects
+              </div>
             </div>
           </div>
 
           <div
             className="card"
             style={{
-              padding: "1.5rem",
+              padding: "1.25rem 1.5rem",
               background: "rgba(236, 223, 204, 0.9)",
-              border: "2px solid #697565",
-              transition: "all 0.3s ease",
+              border: "1px solid rgba(105, 117, 101, 0.3)",
+              transition: "all 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.borderColor = "#3C3D37";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "#697565";
+              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "1rem",
+                fontSize: "2rem",
               }}
             >
+              ✅
+            </div>
+            <div>
               <div
                 style={{
-                  width: "48px",
-                  height: "48px",
-                  background:
-                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                  borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.5rem",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
                 }}
               >
-                ✅
+                0
               </div>
-            </div>
-            <div
-              style={{
-                fontSize: "2.25rem",
-                fontWeight: "700",
-                color: "#181C14",
-                marginBottom: "0.25rem",
-              }}
-            >
-              0
-            </div>
-            <div
-              style={{
-                fontSize: "0.9375rem",
-                color: "#3C3D37",
-                fontWeight: "500",
-              }}
-            >
-              Tasks Completed
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#697565",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Tasks Completed
+              </div>
             </div>
           </div>
 
           <div
             className="card"
             style={{
-              padding: "1.5rem",
+              padding: "1.25rem 1.5rem",
               background: "rgba(236, 223, 204, 0.9)",
-              border: "2px solid #697565",
-              transition: "all 0.3s ease",
+              border: "1px solid rgba(105, 117, 101, 0.3)",
+              transition: "all 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.borderColor = "#3C3D37";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "#697565";
+              e.currentTarget.style.borderColor = "rgba(105, 117, 101, 0.3)";
             }}
           >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "1rem",
+                fontSize: "2rem",
               }}
             >
+              ⚡
+            </div>
+            <div>
               <div
                 style={{
-                  width: "48px",
-                  height: "48px",
-                  background:
-                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                  borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.5rem",
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
                 }}
               >
-                ⚡
+                0
               </div>
-            </div>
-            <div
-              style={{
-                fontSize: "2.25rem",
-                fontWeight: "700",
-                color: "#181C14",
-                marginBottom: "0.25rem",
-              }}
-            >
-              0
-            </div>
-            <div
-              style={{
-                fontSize: "0.9375rem",
-                color: "#3C3D37",
-                fontWeight: "500",
-              }}
-            >
-              In Progress
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#697565",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                In Progress
+              </div>
             </div>
           </div>
         </div>
@@ -426,20 +411,80 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               display: "flex",
               gap: "0.75rem",
+              position: "relative",
             }}
           >
-            <button
-              className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
-            >
-              📅 Sort by
-            </button>
-            <button
-              className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
-            >
-              🔍 Filters
-            </button>
+            {/* Sort By Dropdown */}
+            <div style={{ position: "relative" }}>
+              <button
+                className="btn-secondary"
+                style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
+                onClick={() => setShowSortMenu(!showSortMenu)}
+              >
+                📅 Sort by
+              </button>
+              {showSortMenu && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 0.5rem)",
+                    right: 0,
+                    background: "rgba(236, 223, 204, 0.98)",
+                    border: "2px solid #697565",
+                    borderRadius: "8px",
+                    padding: "0.5rem",
+                    minWidth: "180px",
+                    zIndex: 1000,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  {[
+                    { value: "default", label: "Default" },
+                    { value: "name", label: "Name (A-Z)" },
+                    { value: "date", label: "Newest First" },
+                    { value: "oldest", label: "Oldest First" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setSortBy(option.value);
+                        setShowSortMenu(false);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem 0.75rem",
+                        textAlign: "left",
+                        background:
+                          sortBy === option.value
+                            ? "rgba(105, 117, 101, 0.3)"
+                            : "transparent",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "0.875rem",
+                        color: "#181C14",
+                        fontWeight: sortBy === option.value ? "600" : "500",
+                        marginBottom: "0.25rem",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background =
+                            "rgba(105, 117, 101, 0.15)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background = "transparent";
+                        }
+                      }}
+                    >
+                      {sortBy === option.value ? "✓ " : ""}
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -523,7 +568,25 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               gap: "1.25rem",
             }}
           >
-            {projects.map((project) => (
+            {(() => {
+              let sortedProjects = [...projects];
+              if (sortBy === "name") {
+                sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
+              } else if (sortBy === "date") {
+                sortedProjects.sort(
+                  (a, b) =>
+                    new Date(b.created_at).getTime() -
+                    new Date(a.created_at).getTime()
+                );
+              } else if (sortBy === "oldest") {
+                sortedProjects.sort(
+                  (a, b) =>
+                    new Date(a.created_at).getTime() -
+                    new Date(b.created_at).getTime()
+                );
+              }
+              return sortedProjects;
+            })().map((project) => (
               <div
                 key={project.id}
                 className="card"
@@ -624,7 +687,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                       navigate(`/task-board`);
                     }}
                   >
-                    View Tasks →
+                    View Tasks
                   </button>
                 </div>
               </div>

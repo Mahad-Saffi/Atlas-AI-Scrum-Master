@@ -30,6 +30,10 @@ const TaskBoardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<string>("default");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -80,11 +84,38 @@ const TaskBoardPage: React.FC = () => {
     }
   };
 
-  const filteredTasks = tasks.filter(
+  // Filter tasks
+  let filteredTasks = tasks.filter(
     (task) =>
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Apply status filter
+  if (filterStatus !== "all") {
+    filteredTasks = filteredTasks.filter(
+      (task) => task.status === filterStatus
+    );
+  }
+
+  // Sort tasks
+  if (sortBy === "title") {
+    filteredTasks = [...filteredTasks].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+  } else if (sortBy === "dueDate") {
+    filteredTasks = [...filteredTasks].sort((a, b) => {
+      if (!a.due_date) return 1;
+      if (!b.due_date) return -1;
+      return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
+    });
+  } else if (sortBy === "priority") {
+    filteredTasks = [...filteredTasks].sort((a, b) => {
+      const priorityA = a.priority || 0;
+      const priorityB = b.priority || 0;
+      return priorityB - priorityA;
+    });
+  }
 
   const taskStats = {
     total: tasks.length,
@@ -118,11 +149,12 @@ const TaskBoardPage: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "var(--color-cream)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: "20px",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
@@ -131,14 +163,16 @@ const TaskBoardPage: React.FC = () => {
             textAlign: "center",
             padding: "3rem",
             maxWidth: "500px",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
           }}
         >
           <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
           <h2
             style={{
               fontSize: "1.5rem",
-              fontWeight: "600",
-              color: "var(--color-text-primary)",
+              fontWeight: "700",
+              color: "#181C14",
               marginBottom: "0.5rem",
             }}
           >
@@ -147,7 +181,7 @@ const TaskBoardPage: React.FC = () => {
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "var(--color-text-secondary)",
+              color: "#3C3D37",
               marginBottom: "1.5rem",
             }}
           >
@@ -200,12 +234,10 @@ const TaskBoardPage: React.FC = () => {
           >
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                padding: "0.5rem 1rem",
                 fontSize: "1.25rem",
-                color: "var(--color-text-secondary)",
               }}
             >
               ←
@@ -214,7 +246,7 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "var(--color-text-primary)",
+                color: "#181C14",
               }}
             >
               Task Board
@@ -275,17 +307,26 @@ const TaskBoardPage: React.FC = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
             gap: "1rem",
             marginBottom: "2rem",
           }}
         >
-          <div className="card" style={{ padding: "1.25rem" }}>
+          <div
+            className="card"
+            style={{
+              padding: "1rem",
+              background: "rgba(236, 223, 204, 0.9)",
+              border: "2px solid #697565",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.75rem",
+                color: "#181C14",
                 marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               Total Tasks
@@ -293,20 +334,29 @@ const TaskBoardPage: React.FC = () => {
             <div
               style={{
                 fontSize: "1.75rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontWeight: "700",
+                color: "#181C14",
               }}
             >
               {taskStats.total}
             </div>
           </div>
 
-          <div className="card" style={{ padding: "1.25rem" }}>
+          <div
+            className="card"
+            style={{
+              padding: "1rem",
+              background: "rgba(236, 223, 204, 0.9)",
+              border: "2px solid #697565",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.75rem",
+                color: "#181C14",
                 marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               To Do
@@ -314,20 +364,29 @@ const TaskBoardPage: React.FC = () => {
             <div
               style={{
                 fontSize: "1.75rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontWeight: "700",
+                color: "#181C14",
               }}
             >
               {taskStats.todo}
             </div>
           </div>
 
-          <div className="card" style={{ padding: "1.25rem" }}>
+          <div
+            className="card"
+            style={{
+              padding: "1rem",
+              background: "rgba(245, 158, 11, 0.15)",
+              border: "2px solid #f59e0b",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.75rem",
+                color: "#181C14",
                 marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               In Progress
@@ -335,20 +394,29 @@ const TaskBoardPage: React.FC = () => {
             <div
               style={{
                 fontSize: "1.75rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontWeight: "700",
+                color: "#f59e0b",
               }}
             >
               {taskStats.inProgress}
             </div>
           </div>
 
-          <div className="card" style={{ padding: "1.25rem" }}>
+          <div
+            className="card"
+            style={{
+              padding: "1rem",
+              background: "rgba(16, 185, 129, 0.15)",
+              border: "2px solid #10b981",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.75rem",
+                color: "#181C14",
                 marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               Done
@@ -356,8 +424,8 @@ const TaskBoardPage: React.FC = () => {
             <div
               style={{
                 fontSize: "1.75rem",
-                fontWeight: "600",
-                color: "var(--color-success)",
+                fontWeight: "700",
+                color: "#10b981",
               }}
             >
               {taskStats.done}
@@ -367,11 +435,17 @@ const TaskBoardPage: React.FC = () => {
 
         {/* Project Selector & Filters */}
         <div
+          className="card"
           style={{
+            padding: "1rem",
+            marginBottom: "1.5rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "1.5rem",
+            flexWrap: "wrap",
+            gap: "1rem",
           }}
         >
           <div
@@ -381,21 +455,13 @@ const TaskBoardPage: React.FC = () => {
               gap: "1rem",
             }}
           >
+            <span style={{ fontWeight: "600", color: "#181C14" }}>
+              Project:
+            </span>
             {projects.length > 0 && (
               <select
                 value={selectedProjectId || ""}
                 onChange={(e) => setSelectedProjectId(e.target.value)}
-                style={{
-                  padding: "0.625rem 1rem",
-                  fontSize: "0.9375rem",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--radius-md)",
-                  background: "var(--color-white)",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  color: "var(--color-text-primary)",
-                  fontWeight: "500",
-                }}
               >
                 {projects.map((project) => (
                   <option key={project.id} value={project.id}>
@@ -410,20 +476,159 @@ const TaskBoardPage: React.FC = () => {
             style={{
               display: "flex",
               gap: "0.75rem",
+              position: "relative",
             }}
           >
-            <button
-              className="btn-secondary"
-              style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
-            >
-              Sort by
-            </button>
-            <button
-              className="btn-secondary"
-              style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
-            >
-              Filters
-            </button>
+            {/* Sort By Dropdown */}
+            <div style={{ position: "relative" }}>
+              <button
+                className="btn-secondary"
+                style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
+                onClick={() => {
+                  setShowSortMenu(!showSortMenu);
+                  setShowFilterMenu(false);
+                }}
+              >
+                📊 Sort by
+              </button>
+              {showSortMenu && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 0.5rem)",
+                    right: 0,
+                    background: "rgba(236, 223, 204, 0.98)",
+                    border: "2px solid #697565",
+                    borderRadius: "8px",
+                    padding: "0.5rem",
+                    minWidth: "180px",
+                    zIndex: 1000,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  {[
+                    { value: "default", label: "Default" },
+                    { value: "title", label: "Title (A-Z)" },
+                    { value: "dueDate", label: "Due Date" },
+                    { value: "priority", label: "Priority" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setSortBy(option.value);
+                        setShowSortMenu(false);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem 0.75rem",
+                        textAlign: "left",
+                        background:
+                          sortBy === option.value
+                            ? "rgba(105, 117, 101, 0.3)"
+                            : "transparent",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "0.875rem",
+                        color: "#181C14",
+                        fontWeight: sortBy === option.value ? "600" : "500",
+                        marginBottom: "0.25rem",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background =
+                            "rgba(105, 117, 101, 0.15)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background = "transparent";
+                        }
+                      }}
+                    >
+                      {sortBy === option.value ? "✓ " : ""}
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Filter Dropdown */}
+            <div style={{ position: "relative" }}>
+              <button
+                className="btn-secondary"
+                style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
+                onClick={() => {
+                  setShowFilterMenu(!showFilterMenu);
+                  setShowSortMenu(false);
+                }}
+              >
+                🔍 Filters
+              </button>
+              {showFilterMenu && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 0.5rem)",
+                    right: 0,
+                    background: "rgba(236, 223, 204, 0.98)",
+                    border: "2px solid #697565",
+                    borderRadius: "8px",
+                    padding: "0.5rem",
+                    minWidth: "180px",
+                    zIndex: 1000,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  {[
+                    { value: "all", label: "All Tasks" },
+                    { value: "To Do", label: "To Do" },
+                    { value: "In Progress", label: "In Progress" },
+                    { value: "Done", label: "Done" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setFilterStatus(option.value);
+                        setShowFilterMenu(false);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem 0.75rem",
+                        textAlign: "left",
+                        background:
+                          filterStatus === option.value
+                            ? "rgba(105, 117, 101, 0.3)"
+                            : "transparent",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "0.875rem",
+                        color: "#181C14",
+                        fontWeight:
+                          filterStatus === option.value ? "600" : "500",
+                        marginBottom: "0.25rem",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (filterStatus !== option.value) {
+                          e.currentTarget.style.background =
+                            "rgba(105, 117, 101, 0.15)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (filterStatus !== option.value) {
+                          e.currentTarget.style.background = "transparent";
+                        }
+                      }}
+                    >
+                      {filterStatus === option.value ? "✓ " : ""}
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -433,6 +638,8 @@ const TaskBoardPage: React.FC = () => {
           style={{
             padding: "1.5rem",
             minHeight: "500px",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
           }}
         >
           <TaskBoard tasks={filteredTasks} onTaskUpdate={handleTaskUpdate} />
