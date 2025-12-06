@@ -98,10 +98,11 @@ const TaskBoardPage: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "var(--color-cream)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
@@ -167,15 +168,18 @@ const TaskBoardPage: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--color-cream)",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Header */}
       <header
+        className="glass-header"
         style={{
-          background: "var(--color-white)",
-          borderBottom: "1px solid var(--color-border)",
           padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <div

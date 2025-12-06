@@ -85,7 +85,7 @@ const ProjectRisks: React.FC = () => {
   };
 
   const filteredTasks =
-    riskData?.at_risk_tasks.filter((task) =>
+    riskData?.at_risk_tasks?.filter((task) =>
       filterLevel === "all" ? true : task.risk_level === filterLevel
     ) || [];
 
@@ -201,26 +201,26 @@ const ProjectRisks: React.FC = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                gap: "1.25rem",
+                gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+                gap: "0.75rem",
                 marginBottom: "2rem",
               }}
             >
               <div
                 className="card"
                 style={{
-                  padding: "1.5rem",
+                  padding: "0.75rem",
                   background: "rgba(236, 223, 204, 0.9)",
                   border: "2px solid #697565",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
                   📊
                 </div>
                 <div
                   style={{
-                    fontSize: "2rem",
+                    fontSize: "1.25rem",
                     fontWeight: "700",
                     color: "#181C14",
                     marginBottom: "0.25rem",
@@ -230,9 +230,9 @@ const ProjectRisks: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#3C3D37",
-                    fontWeight: "500",
+                    fontSize: "0.75rem",
+                    color: "#181C14",
+                    fontWeight: "600",
                   }}
                 >
                   Total Tasks
@@ -242,18 +242,18 @@ const ProjectRisks: React.FC = () => {
               <div
                 className="card"
                 style={{
-                  padding: "1.5rem",
-                  background: "rgba(239, 68, 68, 0.1)",
+                  padding: "0.75rem",
+                  background: "rgba(239, 68, 68, 0.15)",
                   border: "2px solid #ef4444",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
                   🔴
                 </div>
                 <div
                   style={{
-                    fontSize: "2rem",
+                    fontSize: "1.25rem",
                     fontWeight: "700",
                     color: "#ef4444",
                     marginBottom: "0.25rem",
@@ -263,9 +263,9 @@ const ProjectRisks: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#3C3D37",
-                    fontWeight: "500",
+                    fontSize: "0.75rem",
+                    color: "#181C14",
+                    fontWeight: "600",
                   }}
                 >
                   High Risk
@@ -275,18 +275,18 @@ const ProjectRisks: React.FC = () => {
               <div
                 className="card"
                 style={{
-                  padding: "1.5rem",
-                  background: "rgba(245, 158, 11, 0.1)",
+                  padding: "0.75rem",
+                  background: "rgba(245, 158, 11, 0.15)",
                   border: "2px solid #f59e0b",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
                   🟡
                 </div>
                 <div
                   style={{
-                    fontSize: "2rem",
+                    fontSize: "1.25rem",
                     fontWeight: "700",
                     color: "#f59e0b",
                     marginBottom: "0.25rem",
@@ -296,9 +296,9 @@ const ProjectRisks: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#3C3D37",
-                    fontWeight: "500",
+                    fontSize: "0.75rem",
+                    color: "#181C14",
+                    fontWeight: "600",
                   }}
                 >
                   Medium Risk
@@ -308,18 +308,18 @@ const ProjectRisks: React.FC = () => {
               <div
                 className="card"
                 style={{
-                  padding: "1.5rem",
-                  background: "rgba(16, 185, 129, 0.1)",
+                  padding: "0.75rem",
+                  background: "rgba(16, 185, 129, 0.15)",
                   border: "2px solid #10b981",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
                   🟢
                 </div>
                 <div
                   style={{
-                    fontSize: "2rem",
+                    fontSize: "1.25rem",
                     fontWeight: "700",
                     color: "#10b981",
                     marginBottom: "0.25rem",
@@ -329,9 +329,9 @@ const ProjectRisks: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#3C3D37",
-                    fontWeight: "500",
+                    fontSize: "0.75rem",
+                    color: "#181C14",
+                    fontWeight: "600",
                   }}
                 >
                   Low Risk
