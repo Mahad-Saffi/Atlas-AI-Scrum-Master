@@ -132,7 +132,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </button>
 
             <button
-              onClick={() => navigate("/organization-setup")}
+              onClick={() => navigate("/team-members")}
               className="btn-secondary"
               style={{
                 display: "flex",

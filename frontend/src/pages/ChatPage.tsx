@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ChatPanel from "../components/ChatPanel";
+import EnhancedChatPanel from "../components/EnhancedChatPanel";
 import NotificationBell from "../components/NotificationBell";
 
 const ChatPage: React.FC = () => {
@@ -79,7 +79,7 @@ const ChatPage: React.FC = () => {
           zIndex: 1,
         }}
       >
-        <ChatPanel />
+        <EnhancedChatPanel />
       </main>
     </div>
   );

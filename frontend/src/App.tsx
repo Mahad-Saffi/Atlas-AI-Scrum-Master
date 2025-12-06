@@ -11,6 +11,8 @@ import DebugAuth from "./pages/DebugAuth";
 import OrganizationSetup from "./pages/OrganizationSetup";
 import IssuesPage from "./pages/IssuesPage";
 import ProjectRisks from "./pages/ProjectRisks";
+import RiskDashboard from "./pages/RiskDashboard";
+import TeamMembers from "./pages/TeamMembers";
 import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
@@ -67,6 +69,14 @@ function App() {
           <Route
             path="/project/:projectId/risks"
             element={isAuthenticated ? <ProjectRisks /> : <SimpleLogin />}
+          />
+          <Route
+            path="/project/:projectId/risk-dashboard"
+            element={isAuthenticated ? <RiskDashboard /> : <SimpleLogin />}
+          />
+          <Route
+            path="/team-members"
+            element={isAuthenticated ? <TeamMembers /> : <SimpleLogin />}
           />
           <Route
             path="/chat"
