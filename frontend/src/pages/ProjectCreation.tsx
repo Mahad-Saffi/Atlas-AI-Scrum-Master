@@ -49,11 +49,25 @@ const ProjectCreation: React.FC = () => {
             >
               ←
             </button>
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                borderRadius: "var(--radius-md)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1rem",
+              }}
+            >
+              🤖
+            </div>
             <h1
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#090909",
+                color: "#181C14",
               }}
             >
               Create New Project
@@ -76,37 +90,28 @@ const ProjectCreation: React.FC = () => {
         <div
           className="card"
           style={{
-            padding: "2rem",
+            padding: "1.25rem",
             marginBottom: "1.5rem",
-            background: "rgba(255, 255, 255, 0.95)",
+            background: "rgba(236, 223, 204, 0.95)",
             backdropFilter: "blur(20px)",
             textAlign: "center",
           }}
         >
-          <div
-            style={{
-              fontSize: "3rem",
-              marginBottom: "1rem",
-              animation: "float 3s ease-in-out infinite",
-            }}
-          >
-            🤖
-          </div>
           <h2
             style={{
-              fontSize: "1.75rem",
+              fontSize: "1.25rem",
               fontWeight: "700",
-              marginBottom: "0.75rem",
-              color: "#090909",
+              marginBottom: "0.5rem",
+              color: "#181C14",
             }}
           >
             Let's create your project together
           </h2>
           <p
             style={{
-              fontSize: "1rem",
-              color: "#666",
-              lineHeight: "1.6",
+              fontSize: "0.875rem",
+              color: "#3C3D37",
+              lineHeight: "1.5",
             }}
           >
             Tell me about your project goals, timeline, and team. I'll help you
@@ -131,25 +136,25 @@ const ProjectCreation: React.FC = () => {
           className="card"
           style={{
             marginTop: "1.5rem",
-            padding: "1.25rem",
-            background: "rgba(255, 255, 255, 0.9)",
+            padding: "1rem",
+            background: "rgba(236, 223, 204, 0.9)",
             backdropFilter: "blur(15px)",
           }}
         >
           <div
             style={{
-              fontSize: "0.9375rem",
-              color: "#666",
+              fontSize: "0.875rem",
+              color: "#3C3D37",
               display: "flex",
               alignItems: "flex-start",
               gap: "0.5rem",
             }}
           >
-            <span style={{ fontSize: "1.25rem" }}>💡</span>
+            <span style={{ fontSize: "1rem" }}>💡</span>
             <div>
               <strong
                 style={{
-                  color: "#090909",
+                  color: "#181C14",
                   display: "block",
                   marginBottom: "0.25rem",
                 }}

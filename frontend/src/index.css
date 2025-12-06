@@ -229,7 +229,12 @@ select:focus {
 
 .input-modern::placeholder,
 input::placeholder {
-  color: var(--color-text-muted);
+  color: rgba(236, 223, 204, 0.6);
+}
+
+.input-modern:focus::placeholder,
+input:focus::placeholder {
+  color: rgba(24, 28, 20, 0.5);
 }
 
 select {

@@ -86,15 +86,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           >
             <div
               style={{
-                width: "40px",
-                height: "40px",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                width: "32px",
+                height: "32px",
+                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                 borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1.25rem",
-                boxShadow: "0 4px 15px rgba(102, 126, 234, 0.4)",
+                fontSize: "1rem",
               }}
             >
               🤖
@@ -134,26 +133,26 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.75rem",
-                padding: "0.5rem 1rem",
-                background: "rgba(255, 255, 255, 0.8)",
+                gap: "0.5rem",
+                padding: "0.375rem 0.75rem",
+                background: "rgba(236, 223, 204, 0.8)",
                 backdropFilter: "blur(10px)",
                 borderRadius: "var(--radius-md)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
+                border: "1px solid rgba(236, 223, 204, 0.3)",
               }}
             >
               <div
                 style={{
-                  width: "32px",
-                  height: "32px",
+                  width: "28px",
+                  height: "28px",
                   background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "white",
-                  fontSize: "0.875rem",
+                  color: "#ECDFCC",
+                  fontSize: "0.8125rem",
                   fontWeight: "600",
                 }}
               >
@@ -161,7 +160,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               </div>
               <span
                 style={{
-                  fontSize: "0.9375rem",
+                  fontSize: "0.875rem",
                   fontWeight: "500",
                   color: "var(--color-text-primary)",
                 }}
