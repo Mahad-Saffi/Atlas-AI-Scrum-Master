@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const SimpleLogin: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? '/api/v1/auth/login' : '/api/v1/auth/register';
-      const body = isLogin 
+      const endpoint = isLogin ? "/api/v1/auth/login" : "/api/v1/auth/register";
+      const body = isLogin
         ? { email, password }
         : { email, password, username };
 
       const response = await fetch(`http://localhost:8000${endpoint}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
@@ -30,15 +30,12 @@ const SimpleLogin: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'Authentication failed');
+        throw new Error(data.detail || "Authentication failed");
       }
 
-      // Store token and user data
-      localStorage.setItem('jwt', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Redirect to home
-      window.location.href = '/';
+      localStorage.setItem("jwt", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "/";
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -47,26 +44,26 @@ const SimpleLogin: React.FC = () => {
   };
 
   const handleDemoLogin = async () => {
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/demo-login', {
-        method: 'POST',
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/v1/auth/demo-login",
+        {
+          method: "POST",
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'Demo login failed');
+        throw new Error(data.detail || "Demo login failed");
       }
 
-      // Store token and user data
-      localStorage.setItem('jwt', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Redirect to home
-      window.location.href = '/';
+      localStorage.setItem("jwt", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "/";
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -75,81 +72,127 @@ const SimpleLogin: React.FC = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#fefefe',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px',
-      fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '450px',
-      }}>
-        {/* Header */}
-        <div style={{
-          textAlign: 'center',
-          marginBottom: '40px',
-        }}>
-          <h1 style={{
-            fontSize: '48px',
-            fontWeight: 'bold',
-            color: '#1a1a1a',
-            marginBottom: '12px',
-            textShadow: '3px 3px 0 rgba(0,0,0,0.1)',
-          }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--color-cream)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
+    >
+      <div
+        className="animate-fade-in"
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+        }}
+      >
+        {/* Logo & Header */}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "2rem",
+          }}
+        >
+          <div
+            style={{
+              width: "64px",
+              height: "64px",
+              background: "var(--color-dark)",
+              borderRadius: "var(--radius-xl)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 1rem",
+              fontSize: "2rem",
+            }}
+          >
+            🤖
+          </div>
+          <h1
+            style={{
+              fontSize: "1.875rem",
+              fontWeight: "600",
+              color: "var(--color-text-primary)",
+              marginBottom: "0.25rem",
+              letterSpacing: "-0.01em",
+            }}
+          >
             Atlas AI
           </h1>
-          <p style={{
-            fontSize: '18px',
-            color: '#4a4a4a',
-          }}>
-            Scrum Master
+          <p
+            style={{
+              fontSize: "0.9375rem",
+              color: "var(--color-text-secondary)",
+              fontWeight: "400",
+            }}
+          >
+            Intelligent Scrum Master
           </p>
         </div>
 
-        {/* Login/Register Form */}
-        <div style={{
-          backgroundColor: 'white',
-          border: '3px solid #1a1a1a',
-          boxShadow: '8px 8px 0 #1a1a1a',
-          padding: '40px',
-        }}>
-          <h2 style={{
-            fontSize: '28px',
-            color: '#1a1a1a',
-            marginBottom: '24px',
-            textAlign: 'center',
-            fontWeight: 'bold',
-          }}>
-            {isLogin ? '👋 Welcome Back!' : '✨ Create Account'}
+        {/* Login Card */}
+        <div
+          style={{
+            background: "var(--color-white)",
+            borderRadius: "var(--radius-xl)",
+            padding: "2rem",
+            boxShadow: "var(--shadow-lg)",
+            border: "1px solid var(--color-border)",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "600",
+              color: "var(--color-text-primary)",
+              marginBottom: "0.5rem",
+            }}
+          >
+            {isLogin ? "Welcome back" : "Create account"}
           </h2>
+          <p
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--color-text-secondary)",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {isLogin
+              ? "Sign in to continue to your dashboard"
+              : "Get started with your free account"}
+          </p>
 
           {error && (
-            <div style={{
-              padding: '12px',
-              marginBottom: '20px',
-              backgroundColor: '#ffebee',
-              border: '2px solid #ff4444',
-              color: '#c62828',
-              fontSize: '14px',
-            }}>
+            <div
+              style={{
+                padding: "0.875rem",
+                marginBottom: "1.25rem",
+                backgroundColor: "#fee2e2",
+                border: "1px solid #fecaca",
+                borderRadius: "var(--radius-md)",
+                color: "#dc2626",
+                fontSize: "0.875rem",
+              }}
+            >
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit}>
             {!isLogin && (
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  color: '#1a1a1a',
-                }}>
+              <div style={{ marginBottom: "1rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "0.5rem",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    color: "var(--color-text-primary)",
+                  }}
+                >
                   Username
                 </label>
                 <input
@@ -157,27 +200,22 @@ const SimpleLogin: React.FC = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required={!isLogin}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    border: '2px solid #1a1a1a',
-                    backgroundColor: 'white',
-                    fontSize: '16px',
-                    fontFamily: 'inherit',
-                    boxShadow: '2px 2px 0 #1a1a1a',
-                  }}
+                  placeholder="Enter your username"
+                  className="input-modern"
                 />
               </div>
             )}
 
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '8px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                color: '#1a1a1a',
-              }}>
+            <div style={{ marginBottom: "1rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  color: "var(--color-text-primary)",
+                }}
+              >
                 Email
               </label>
               <input
@@ -185,26 +223,21 @@ const SimpleLogin: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '2px solid #1a1a1a',
-                  backgroundColor: 'white',
-                  fontSize: '16px',
-                  fontFamily: 'inherit',
-                  boxShadow: '2px 2px 0 #1a1a1a',
-                }}
+                placeholder="you@example.com"
+                className="input-modern"
               />
             </div>
 
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '8px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                color: '#1a1a1a',
-              }}>
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  color: "var(--color-text-primary)",
+                }}
+              >
                 Password
               </label>
               <input
@@ -213,92 +246,98 @@ const SimpleLogin: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '2px solid #1a1a1a',
-                  backgroundColor: 'white',
-                  fontSize: '16px',
-                  fontFamily: 'inherit',
-                  boxShadow: '2px 2px 0 #1a1a1a',
-                }}
+                placeholder="••••••••"
+                className="input-modern"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
+              className="btn-primary"
               style={{
-                width: '100%',
-                padding: '14px',
-                border: '3px solid #1a1a1a',
-                backgroundColor: 'white',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '4px 4px 0 #1a1a1a',
-                fontFamily: 'inherit',
-                marginBottom: '16px',
+                width: "100%",
+                padding: "0.75rem",
+                marginBottom: "1rem",
                 opacity: loading ? 0.6 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
               }}
             >
-              {loading ? '⏳ Please wait...' : isLogin ? '🚀 Sign In' : '✨ Create Account'}
+              {loading ? (
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <div className="spinner" />
+                  Processing...
+                </span>
+              ) : isLogin ? (
+                "Sign in"
+              ) : (
+                "Create account"
+              )}
             </button>
           </form>
 
-          <div style={{
-            textAlign: 'center',
-            marginBottom: '16px',
-          }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginBottom: "1.25rem",
+            }}
+          >
             <button
               onClick={() => setIsLogin(!isLogin)}
               style={{
-                background: 'none',
-                border: 'none',
-                color: '#4a4a4a',
-                fontSize: '14px',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                fontFamily: 'inherit',
+                background: "none",
+                border: "none",
+                color: "var(--color-text-secondary)",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+                fontWeight: "400",
               }}
             >
-              {isLogin ? "Don't have an account? Register" : 'Already have an account? Login'}
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : "Already have an account? Sign in"}
             </button>
           </div>
 
-          <div style={{
-            borderTop: '2px dashed #1a1a1a',
-            paddingTop: '16px',
-            textAlign: 'center',
-          }}>
+          <div
+            style={{
+              borderTop: "1px solid var(--color-border)",
+              paddingTop: "1.25rem",
+            }}
+          >
             <button
               onClick={handleDemoLogin}
               disabled={loading}
+              className="btn-secondary"
               style={{
-                padding: '10px 20px',
-                border: '2px solid #1a1a1a',
-                backgroundColor: '#f5f5f5',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '3px 3px 0 #1a1a1a',
-                fontFamily: 'inherit',
+                width: "100%",
+                padding: "0.75rem",
                 opacity: loading ? 0.6 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
               }}
             >
-              🎮 Try Demo Account
+              Try demo account
             </button>
           </div>
         </div>
 
-        {/* Info */}
-        <div style={{
-          marginTop: '24px',
-          textAlign: 'center',
-          fontSize: '14px',
-          color: '#4a4a4a',
-        }}>
-          <p>💡 Demo account: demo@atlas.ai / demo123</p>
+        {/* Footer Info */}
+        <div
+          style={{
+            marginTop: "1.25rem",
+            textAlign: "center",
+            fontSize: "0.8125rem",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <p>Demo: demo@atlas.ai / demo123</p>
         </div>
       </div>
     </div>

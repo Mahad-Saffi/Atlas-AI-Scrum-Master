@@ -1,123 +1,141 @@
-import React from 'react';
-import ChatInterface from '../components/chat/ChatInterface';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import ChatInterface from "../components/chat/ChatInterface";
 
 const ProjectCreation: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#fefefe',
-      padding: '40px 20px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}>
-      {/* Header with hand-drawn style */}
-      <div style={{
-        textAlign: 'center',
-        marginBottom: '40px',
-        maxWidth: '800px',
-      }}>
-        <h1 style={{
-          fontSize: '48px',
-          fontWeight: 'bold',
-          color: '#1a1a1a',
-          marginBottom: '16px',
-          fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
-          textShadow: '3px 3px 0 rgba(0,0,0,0.1)',
-        }}>
-          ✨ Create Your Project
-        </h1>
-        <p style={{
-          fontSize: '20px',
-          color: '#4a4a4a',
-          fontFamily: '"Segoe Print", cursive',
-          lineHeight: '1.6',
-        }}>
-          Tell me about your project, and I'll help you build a complete plan!
-        </p>
-        
-        {/* Decorative hand-drawn line */}
-        <svg width="200" height="20" style={{ margin: '20px auto', display: 'block' }}>
-          <path
-            d="M 10 10 Q 50 5, 100 10 T 190 10"
-            stroke="#1a1a1a"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--color-cream)",
+      }}
+    >
+      {/* Header */}
+      <header
+        style={{
+          background: "var(--color-white)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "1rem 2rem",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <button
+              onClick={() => navigate("/")}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1.25rem",
+                color: "var(--color-text-secondary)",
+              }}
+            >
+              ←
+            </button>
+            <h1
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "var(--color-text-primary)",
+              }}
+            >
+              Create New Project
+            </h1>
+          </div>
+        </div>
+      </header>
 
-      {/* Chat Interface Container */}
-      <div style={{
-        width: '100%',
-        maxWidth: '900px',
-        height: '600px',
-        border: '3px solid #1a1a1a',
-        backgroundColor: 'white',
-        boxShadow: '8px 8px 0 #1a1a1a',
-        padding: '20px',
-        position: 'relative',
-      }}>
-        {/* Corner decorations */}
-        <div style={{
-          position: 'absolute',
-          top: '-3px',
-          left: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderRight: 'none',
-          borderBottom: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '-3px',
-          right: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderLeft: 'none',
-          borderBottom: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-3px',
-          left: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderRight: 'none',
-          borderTop: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-3px',
-          right: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderLeft: 'none',
-          borderTop: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        
-        <ChatInterface />
-      </div>
+      {/* Main Content */}
+      <main
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "2rem",
+        }}
+      >
+        {/* Info Card */}
+        <div
+          className="card"
+          style={{
+            padding: "1.5rem",
+            marginBottom: "1.5rem",
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            color: "white",
+            border: "none",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "600",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Let's create your project together
+          </h2>
+          <p
+            style={{
+              fontSize: "0.9375rem",
+              opacity: 0.95,
+            }}
+          >
+            Tell me about your project goals, timeline, and team. I'll help you
+            build a complete plan with tasks, milestones, and assignments.
+          </p>
+        </div>
 
-      {/* Footer note */}
-      <div style={{
-        marginTop: '30px',
-        textAlign: 'center',
-        color: '#4a4a4a',
-        fontSize: '14px',
-        fontFamily: '"Segoe Print", cursive',
-      }}>
-        <p>💡 Tip: Be as detailed as you like - I'll ask questions if I need more info!</p>
-      </div>
+        {/* Chat Interface */}
+        <div
+          className="card"
+          style={{
+            padding: "0",
+            height: "600px",
+            overflow: "hidden",
+          }}
+        >
+          <ChatInterface />
+        </div>
+
+        {/* Tips */}
+        <div
+          style={{
+            marginTop: "1.5rem",
+            padding: "1rem",
+            background: "var(--color-light-gray)",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-border)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--color-text-secondary)",
+            }}
+          >
+            <strong style={{ color: "var(--color-text-primary)" }}>
+              💡 Tips:
+            </strong>{" "}
+            Be specific about your project scope, timeline, and team size. The
+            more details you provide, the better I can help you plan.
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

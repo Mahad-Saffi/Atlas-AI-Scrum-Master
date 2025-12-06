@@ -2,112 +2,242 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hand-drawn Style Variables */
+/* Import General Sans Font */
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
+
+/* Design System - Based on Reference */
 :root {
-  --paper-white: #fefefe;
-  --ink-black: #1a1a1a;
-  --sketch-gray: #4a4a4a;
-  --accent-blue: #2563eb;
-  --light-gray: #f5f5f5;
+  /* Brand Colors from Reference */
+  --color-dark: #1f1f1f;
+  --color-cream: #f6f7ed;
+  --color-light-gray: #f4f4f4;
+  --color-white: #ffffff;
+
+  /* Extended Palette */
+  --color-dark-hover: #2a2a2a;
+  --color-border: #e5e5e5;
+  --color-text-primary: #1f1f1f;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #9b9b9b;
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Shadows - Subtle and Clean */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
+
+  /* Border Radius - Clean and Modern */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
 }
 
 /* Global Styles */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   margin: 0;
-  font-family: "Segoe Print", "Comic Sans MS", "Bradley Hand", cursive, sans-serif;
+  font-family: "General Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Inter", "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--paper-white);
-  color: var(--ink-black);
+  background: var(--color-cream);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  font-size: 15px;
 }
 
-/* Hand-drawn button style */
-.hand-drawn-btn {
-  position: relative;
-  background: white;
-  border: 2px solid var(--ink-black);
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 600;
+/* Button Styles - Clean and Minimal */
+.btn-primary {
+  background: var(--color-dark);
+  color: var(--color-white);
+  border: none;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 3px 3px 0 var(--ink-black);
-}
-
-.hand-drawn-btn:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 var(--ink-black);
-}
-
-.hand-drawn-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--ink-black);
-}
-
-/* Hand-drawn input style */
-.hand-drawn-input {
-  border: 2px solid var(--ink-black);
-  background: white;
-  padding: 12px 16px;
-  font-size: 16px;
+  box-shadow: none;
   font-family: inherit;
+}
+
+.btn-primary:hover {
+  background: var(--color-dark-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 2px 2px 0 var(--sketch-gray);
+  font-family: inherit;
 }
 
-.hand-drawn-input:focus {
+.btn-secondary:hover {
+  border-color: var(--color-dark);
+  background: var(--color-light-gray);
+}
+
+/* Input Styles - Clean and Minimal */
+.input-modern {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: var(--color-text-primary);
+}
+
+.input-modern:focus {
   outline: none;
-  border-color: var(--accent-blue);
-  box-shadow: 3px 3px 0 var(--accent-blue);
+  border-color: var(--color-dark);
+  box-shadow: 0 0 0 3px rgba(31, 31, 31, 0.05);
 }
 
-/* Chat bubble styles */
-.chat-bubble {
-  position: relative;
-  padding: 16px 20px;
-  margin: 12px 0;
-  border: 2px solid var(--ink-black);
-  background: white;
-  box-shadow: 3px 3px 0 var(--ink-black);
-  max-width: 80%;
+.input-modern::placeholder {
+  color: var(--color-text-muted);
 }
 
-.chat-bubble.user {
-  margin-left: auto;
-  background: var(--light-gray);
+/* Card Styles - Clean and Minimal */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
 }
 
-.chat-bubble.ai {
-  margin-right: auto;
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-/* Smooth transitions */
-button,
-input,
-select,
-textarea {
-  transition: all 0.2s ease-in-out;
+.card-glass {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
 }
 
-/* Custom scrollbar */
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--light-gray);
-  border: 1px solid var(--sketch-gray);
+  background: var(--color-light-gray);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--ink-black);
-  border: 1px solid var(--ink-black);
+  background: var(--color-text-muted);
+  border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--sketch-gray);
+  background: var(--color-text-secondary);
+}
+
+/* Smooth Transitions */
+button,
+input,
+select,
+textarea,
+.card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading Spinner */
+.spinner {
+  border: 2px solid var(--color-border);
+  border-top: 2px solid var(--color-dark);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
