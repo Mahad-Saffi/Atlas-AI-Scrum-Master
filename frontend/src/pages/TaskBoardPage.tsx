@@ -9,9 +9,12 @@ interface Task {
   title: string;
   status: string;
   description?: string;
-  assignee_id?: number;
+  assignee_id?: string;
   due_date?: string;
   priority?: number;
+  estimate_hours?: number;
+  progress_percentage?: number;
+  risk_level?: string;
 }
 
 interface Project {
@@ -245,7 +248,7 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               Task Board

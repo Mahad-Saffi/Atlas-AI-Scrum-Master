@@ -192,7 +192,7 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               {project.name}

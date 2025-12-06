@@ -130,7 +130,7 @@ const TeamMembers: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               Team Members
@@ -168,8 +168,6 @@ const TeamMembers: React.FC = () => {
           style={{
             padding: "1.25rem 1.5rem",
             marginBottom: "2rem",
-            background: "rgba(236, 223, 204, 0.9)",
-            border: "1px solid rgba(105, 117, 101, 0.3)",
             display: "flex",
             alignItems: "center",
             gap: "1rem",
@@ -181,9 +179,10 @@ const TeamMembers: React.FC = () => {
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 lineHeight: "1",
                 marginBottom: "0.375rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {members.length}
@@ -191,7 +190,7 @@ const TeamMembers: React.FC = () => {
             <div
               style={{
                 fontSize: "0.875rem",
-                color: "#697565",
+                color: "#ECDFCC",
                 fontWeight: "500",
               }}
             >
@@ -216,11 +215,10 @@ const TeamMembers: React.FC = () => {
           </div>
         ) : members.length === 0 ? (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
             }}
           >
             <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>👥</div>
@@ -228,8 +226,9 @@ const TeamMembers: React.FC = () => {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No Team Members Yet
@@ -237,7 +236,7 @@ const TeamMembers: React.FC = () => {
             <p
               style={{
                 fontSize: "1rem",
-                color: "#697565",
+                color: "#ECDFCC",
                 marginBottom: "2rem",
               }}
             >
@@ -259,15 +258,7 @@ const TeamMembers: React.FC = () => {
             }}
           >
             {members.map((member) => (
-              <div
-                key={member.id}
-                className="card"
-                style={{
-                  padding: "1.5rem",
-                  background: "rgba(236, 223, 204, 0.9)",
-                  border: "1px solid rgba(105, 117, 101, 0.3)",
-                }}
-              >
+              <div key={member.id} className="card">
                 <div
                   style={{
                     display: "flex",
@@ -299,11 +290,12 @@ const TeamMembers: React.FC = () => {
                       style={{
                         fontSize: "1.125rem",
                         fontWeight: "700",
-                        color: "#181C14",
+                        color: "#ECDFCC",
                         marginBottom: "0.25rem",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                       }}
                     >
                       {member.username}
@@ -311,7 +303,7 @@ const TeamMembers: React.FC = () => {
                     <p
                       style={{
                         fontSize: "0.8125rem",
-                        color: "#697565",
+                        color: "#ECDFCC",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -334,10 +326,10 @@ const TeamMembers: React.FC = () => {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: "700",
-                      color: "#181C14",
+                      color: "#ECDFCC",
                       textTransform: "uppercase",
                       padding: "0.25rem 0.75rem",
-                      background: "rgba(105, 117, 101, 0.2)",
+                      background: "rgba(236, 223, 204, 0.2)",
                       borderRadius: "var(--radius-sm)",
                     }}
                   >
@@ -349,7 +341,7 @@ const TeamMembers: React.FC = () => {
                   <p
                     style={{
                       fontSize: "0.875rem",
-                      color: "#3C3D37",
+                      color: "#ECDFCC",
                       marginBottom: "0.75rem",
                       lineHeight: "1.5",
                     }}
@@ -361,7 +353,7 @@ const TeamMembers: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#697565",
+                    color: "#ECDFCC",
                     marginBottom: "1rem",
                   }}
                 >

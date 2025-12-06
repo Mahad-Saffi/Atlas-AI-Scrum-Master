@@ -183,7 +183,7 @@ const EpicView: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               Epics & Stories
@@ -217,11 +217,10 @@ const EpicView: React.FC = () => {
           </div>
         ) : epics.length === 0 ? (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
             }}
           >
             <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>📚</div>
@@ -229,13 +228,14 @@ const EpicView: React.FC = () => {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No Epics Yet
             </h3>
-            <p style={{ fontSize: "1rem", color: "#697565" }}>
+            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
               Create a project with AI to generate epics and stories
             </p>
           </div>
@@ -248,15 +248,7 @@ const EpicView: React.FC = () => {
               const progress = calculateEpicProgress(epic);
 
               return (
-                <div
-                  key={epic.id}
-                  className="card"
-                  style={{
-                    padding: "1.5rem",
-                    background: "rgba(236, 223, 204, 0.9)",
-                    border: "2px solid #697565",
-                  }}
-                >
+                <div key={epic.id} className="card-glass-solid">
                   {/* Epic Header */}
                   <div
                     onClick={() => toggleEpic(epic.id)}
@@ -289,8 +281,9 @@ const EpicView: React.FC = () => {
                         style={{
                           fontSize: "1.25rem",
                           fontWeight: "700",
-                          color: "#181C14",
+                          color: "#ECDFCC",
                           marginBottom: "0.25rem",
+                          textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                         }}
                       >
                         {epic.name}
@@ -298,7 +291,7 @@ const EpicView: React.FC = () => {
                       <p
                         style={{
                           fontSize: "0.875rem",
-                          color: "#697565",
+                          color: "#ECDFCC",
                           marginBottom: "0.5rem",
                         }}
                       >
@@ -314,7 +307,7 @@ const EpicView: React.FC = () => {
                         <div
                           style={{
                             fontSize: "0.8125rem",
-                            color: "#3C3D37",
+                            color: "#ECDFCC",
                             fontWeight: "600",
                           }}
                         >
@@ -330,9 +323,10 @@ const EpicView: React.FC = () => {
                             flex: 1,
                             maxWidth: "200px",
                             height: "8px",
-                            background: "rgba(105, 117, 101, 0.2)",
+                            background: "rgba(24, 28, 20, 0.3)",
                             borderRadius: "4px",
                             overflow: "hidden",
+                            border: "1px solid rgba(236, 223, 204, 0.2)",
                           }}
                         >
                           <div
@@ -340,8 +334,9 @@ const EpicView: React.FC = () => {
                               width: `${progress}%`,
                               height: "100%",
                               background:
-                                "linear-gradient(90deg, #697565, #3C3D37)",
+                                "linear-gradient(90deg, #ECDFCC, #D4C7B4)",
                               transition: "width 0.3s",
+                              boxShadow: "0 0 8px rgba(236, 223, 204, 0.5)",
                             }}
                           />
                         </div>
@@ -349,7 +344,8 @@ const EpicView: React.FC = () => {
                           style={{
                             fontSize: "0.8125rem",
                             fontWeight: "700",
-                            color: "#181C14",
+                            color: "#ECDFCC",
+                            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                           }}
                         >
                           {progress}%
@@ -386,10 +382,11 @@ const EpicView: React.FC = () => {
                           <div
                             key={story.id}
                             style={{
-                              background: "rgba(255, 255, 255, 0.6)",
+                              background: "rgba(236, 223, 204, 0.15)",
+                              backdropFilter: "blur(10px)",
                               borderRadius: "var(--radius-lg)",
                               padding: "1.25rem",
-                              border: "1px solid rgba(105, 117, 101, 0.3)",
+                              border: "1px solid rgba(236, 223, 204, 0.3)",
                             }}
                           >
                             {/* Story Header */}
@@ -407,14 +404,14 @@ const EpicView: React.FC = () => {
                                 style={{
                                   width: "32px",
                                   height: "32px",
-                                  background: "rgba(105, 117, 101, 0.3)",
+                                  background: "rgba(236, 223, 204, 0.3)",
                                   borderRadius: "var(--radius-sm)",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
                                   fontSize: "0.875rem",
                                   fontWeight: "700",
-                                  color: "#181C14",
+                                  color: "#ECDFCC",
                                   flexShrink: 0,
                                 }}
                               >
@@ -425,7 +422,7 @@ const EpicView: React.FC = () => {
                                   style={{
                                     fontSize: "1rem",
                                     fontWeight: "600",
-                                    color: "#181C14",
+                                    color: "#ECDFCC",
                                     marginBottom: "0.25rem",
                                   }}
                                 >
@@ -434,8 +431,9 @@ const EpicView: React.FC = () => {
                                 <p
                                   style={{
                                     fontSize: "0.8125rem",
-                                    color: "#697565",
+                                    color: "#ECDFCC",
                                     marginBottom: "0.5rem",
+                                    opacity: 0.9,
                                   }}
                                 >
                                   {story.description}
@@ -450,7 +448,7 @@ const EpicView: React.FC = () => {
                                   <div
                                     style={{
                                       fontSize: "0.75rem",
-                                      color: "#3C3D37",
+                                      color: "#ECDFCC",
                                       fontWeight: "600",
                                     }}
                                   >
@@ -461,17 +459,21 @@ const EpicView: React.FC = () => {
                                       flex: 1,
                                       maxWidth: "150px",
                                       height: "6px",
-                                      background: "rgba(105, 117, 101, 0.2)",
+                                      background: "rgba(24, 28, 20, 0.3)",
                                       borderRadius: "3px",
                                       overflow: "hidden",
+                                      border:
+                                        "1px solid rgba(236, 223, 204, 0.2)",
                                     }}
                                   >
                                     <div
                                       style={{
                                         width: `${storyProgress}%`,
                                         height: "100%",
-                                        background: "#697565",
+                                        background: "#ECDFCC",
                                         transition: "width 0.3s",
+                                        boxShadow:
+                                          "0 0 6px rgba(236, 223, 204, 0.5)",
                                       }}
                                     />
                                   </div>
@@ -479,7 +481,7 @@ const EpicView: React.FC = () => {
                                     style={{
                                       fontSize: "0.75rem",
                                       fontWeight: "700",
-                                      color: "#181C14",
+                                      color: "#ECDFCC",
                                     }}
                                   >
                                     {storyProgress}%
@@ -519,6 +521,7 @@ const EpicView: React.FC = () => {
                                         gap: "0.75rem",
                                         padding: "0.75rem",
                                         background: colors.bg,
+                                        backdropFilter: "blur(10px)",
                                         border: `1px solid ${colors.border}`,
                                         borderRadius: "var(--radius-md)",
                                       }}
@@ -530,6 +533,7 @@ const EpicView: React.FC = () => {
                                           borderRadius: "50%",
                                           background: colors.border,
                                           flexShrink: 0,
+                                          boxShadow: `0 0 4px ${colors.border}`,
                                         }}
                                       />
                                       <div style={{ flex: 1 }}>
@@ -537,7 +541,7 @@ const EpicView: React.FC = () => {
                                           style={{
                                             fontSize: "0.875rem",
                                             fontWeight: "500",
-                                            color: "#181C14",
+                                            color: "#ECDFCC",
                                             marginBottom: "0.25rem",
                                           }}
                                         >
@@ -557,10 +561,10 @@ const EpicView: React.FC = () => {
                                         style={{
                                           fontSize: "0.75rem",
                                           fontWeight: "700",
-                                          color: "#181C14",
+                                          color: "#ECDFCC",
                                           padding: "0.25rem 0.5rem",
                                           background:
-                                            "rgba(255, 255, 255, 0.5)",
+                                            "rgba(236, 223, 204, 0.2)",
                                           borderRadius: "var(--radius-sm)",
                                         }}
                                       >

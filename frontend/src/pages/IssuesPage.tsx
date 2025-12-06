@@ -278,7 +278,7 @@ const IssuesPage: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               Issues & Bugs
@@ -305,12 +305,9 @@ const IssuesPage: React.FC = () => {
       >
         {/* Filter Bar */}
         <div
-          className="card"
+          className="card-glass-solid"
           style={{
-            padding: "1rem",
             marginBottom: "2rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
           }}
         >
           <div
@@ -321,7 +318,7 @@ const IssuesPage: React.FC = () => {
               flexWrap: "wrap",
             }}
           >
-            <span style={{ fontWeight: "600", color: "#181C14" }}>Filter:</span>
+            <span style={{ fontWeight: "600", color: "#ECDFCC" }}>Filter:</span>
             {["all", "open", "in_progress", "resolved", "closed"].map(
               (status) => (
                 <button
@@ -342,12 +339,9 @@ const IssuesPage: React.FC = () => {
         {/* Create Issue Form */}
         {showCreateForm && (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
-              padding: "2rem",
               marginBottom: "2rem",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px solid #3C3D37",
             }}
           >
             <div
@@ -362,7 +356,8 @@ const IssuesPage: React.FC = () => {
                 style={{
                   fontSize: "1.25rem",
                   fontWeight: "700",
-                  color: "#181C14",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Report New Issue
@@ -524,12 +519,11 @@ const IssuesPage: React.FC = () => {
           </div>
         ) : issues.length === 0 ? (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px dashed #697565",
+              border: "2px dashed rgba(236, 223, 204, 0.4)",
             }}
           >
             <div
@@ -551,13 +545,14 @@ const IssuesPage: React.FC = () => {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.75rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No issues found
             </h3>
-            <p style={{ fontSize: "1rem", color: "#3C3D37" }}>
+            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
               {filterStatus === "all"
                 ? "Great! No issues reported yet."
                 : `No ${filterStatus.replace("_", " ")} issues.`}
@@ -566,16 +561,7 @@ const IssuesPage: React.FC = () => {
         ) : (
           <div style={{ display: "grid", gap: "1.25rem" }}>
             {issues.map((issue) => (
-              <div
-                key={issue.id}
-                className="card"
-                style={{
-                  padding: "1.5rem",
-                  background: "rgba(236, 223, 204, 0.9)",
-                  border: "2px solid #697565",
-                  transition: "all 0.3s ease",
-                }}
-              >
+              <div key={issue.id} className="card-glass-solid">
                 <div
                   style={{
                     display: "flex",
@@ -601,8 +587,9 @@ const IssuesPage: React.FC = () => {
                         style={{
                           fontSize: "1.125rem",
                           fontWeight: "700",
-                          color: "#181C14",
+                          color: "#ECDFCC",
                           flex: 1,
+                          textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                         }}
                       >
                         {issue.title}
@@ -636,7 +623,7 @@ const IssuesPage: React.FC = () => {
                     <p
                       style={{
                         fontSize: "0.9375rem",
-                        color: "#3C3D37",
+                        color: "#ECDFCC",
                         marginBottom: "1rem",
                         lineHeight: "1.6",
                       }}
@@ -650,7 +637,7 @@ const IssuesPage: React.FC = () => {
                         alignItems: "center",
                         gap: "1.5rem",
                         fontSize: "0.875rem",
-                        color: "#697565",
+                        color: "#ECDFCC",
                       }}
                     >
                       <span>
@@ -684,7 +671,7 @@ const IssuesPage: React.FC = () => {
                         >
                           Resolution:
                         </div>
-                        <div style={{ fontSize: "0.875rem", color: "#3C3D37" }}>
+                        <div style={{ fontSize: "0.875rem", color: "#ECDFCC" }}>
                           {issue.resolution}
                         </div>
                       </div>

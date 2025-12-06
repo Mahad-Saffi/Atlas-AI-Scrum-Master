@@ -129,7 +129,7 @@ const RiskDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#181C14",
+                color: "#ECDFCC",
               }}
             >
               Risk Dashboard
@@ -184,8 +184,8 @@ const RiskDashboard: React.FC = () => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(239, 68, 68, 0.1)",
-              border: "1px solid rgba(239, 68, 68, 0.3)",
+              background: "rgba(239, 68, 68, 0.15)",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -198,6 +198,7 @@ const RiskDashboard: React.FC = () => {
                     color: "#dc2626",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                   }}
                 >
                   {riskSummary?.high_risk_count || 0}
@@ -219,8 +220,8 @@ const RiskDashboard: React.FC = () => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(245, 158, 11, 0.1)",
-              border: "1px solid rgba(245, 158, 11, 0.3)",
+              background: "rgba(245, 158, 11, 0.15)",
+              border: "1px solid rgba(245, 158, 11, 0.4)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -233,6 +234,7 @@ const RiskDashboard: React.FC = () => {
                     color: "#d97706",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                   }}
                 >
                   {riskSummary?.medium_risk_count || 0}
@@ -254,8 +256,6 @@ const RiskDashboard: React.FC = () => {
             className="card"
             style={{
               padding: "1.25rem 1.5rem",
-              background: "rgba(236, 223, 204, 0.9)",
-              border: "1px solid rgba(105, 117, 101, 0.3)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -265,9 +265,10 @@ const RiskDashboard: React.FC = () => {
                   style={{
                     fontSize: "1.75rem",
                     fontWeight: "700",
-                    color: "#181C14",
+                    color: "#ECDFCC",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                   }}
                 >
                   {riskSummary?.low_risk_count || 0}
@@ -275,7 +276,7 @@ const RiskDashboard: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.875rem",
-                    color: "#697565",
+                    color: "#ECDFCC",
                     fontWeight: "500",
                   }}
                 >
@@ -302,11 +303,10 @@ const RiskDashboard: React.FC = () => {
           </div>
         ) : !riskSummary || riskSummary.high_risk_tasks.length === 0 ? (
           <div
-            className="card"
+            className="card-glass-solid"
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
             }}
           >
             <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>🎉</div>
@@ -314,13 +314,14 @@ const RiskDashboard: React.FC = () => {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No High Risk Tasks
             </h3>
-            <p style={{ fontSize: "1rem", color: "#697565" }}>
+            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
               Your project is on track!
             </p>
           </div>
@@ -330,8 +331,9 @@ const RiskDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#ECDFCC",
                 marginBottom: "1rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               High Risk Tasks
@@ -346,7 +348,8 @@ const RiskDashboard: React.FC = () => {
                   style={{
                     padding: "1.5rem",
                     background: "rgba(239, 68, 68, 0.15)",
-                    border: "1px solid #ef4444",
+                    backdropFilter: "blur(15px)",
+                    border: "1px solid rgba(239, 68, 68, 0.4)",
                   }}
                 >
                   <div
@@ -384,8 +387,9 @@ const RiskDashboard: React.FC = () => {
                         style={{
                           fontSize: "1.125rem",
                           fontWeight: "700",
-                          color: "#181C14",
+                          color: "#ECDFCC",
                           marginBottom: "0.75rem",
+                          textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                         }}
                       >
                         {task.title}
@@ -395,7 +399,7 @@ const RiskDashboard: React.FC = () => {
                           display: "flex",
                           gap: "1.5rem",
                           fontSize: "0.875rem",
-                          color: "#697565",
+                          color: "#ECDFCC",
                         }}
                       >
                         {task.due_date && (

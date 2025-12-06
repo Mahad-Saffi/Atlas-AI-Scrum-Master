@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 import OrganizationInfo from "./OrganizationInfo";
 
 interface User {
@@ -91,21 +92,24 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                 borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                overflow: "hidden",
               }}
             >
-              🤖
+              <img
+                src={logo}
+                alt="Atlas AI"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
             <h1
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "var(--color-text-primary)",
+                color: "#ECDFCC",
               }}
             >
               Atlas AI
