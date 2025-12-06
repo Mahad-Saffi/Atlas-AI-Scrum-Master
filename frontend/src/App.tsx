@@ -8,6 +8,7 @@ import TaskBoardPage from "./pages/TaskBoardPage";
 import ProjectDashboard from "./pages/ProjectDashboard";
 import ChatPage from "./pages/ChatPage";
 import DebugAuth from "./pages/DebugAuth";
+import OrganizationSetup from "./pages/OrganizationSetup";
 import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
@@ -41,6 +42,10 @@ function App() {
           <Route path="/github-login" element={<SignIn />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/debug-auth" element={<DebugAuth />} />
+          <Route
+            path="/organization-setup"
+            element={isAuthenticated ? <OrganizationSetup /> : <SimpleLogin />}
+          />
           <Route
             path="/create-project"
             element={isAuthenticated ? <ProjectCreation /> : <SimpleLogin />}

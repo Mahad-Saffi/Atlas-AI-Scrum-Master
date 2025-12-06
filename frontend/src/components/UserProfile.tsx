@@ -117,6 +117,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             }}
           >
             <button
+              onClick={() => navigate("/organization-setup")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <span>👥</span>
+              <span>Team</span>
+            </button>
+
+            <button
               onClick={() => navigate("/create-project")}
               className="btn-primary"
               style={{
@@ -192,59 +205,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           zIndex: 1,
         }}
       >
-        {/* Welcome Section */}
-        <div
-          className="card"
-          style={{
-            padding: "2rem",
-            marginBottom: "2rem",
-            background: "rgba(236, 223, 204, 0.95)",
-            border: "2px solid #697565",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "1rem",
-            }}
-          >
-            <div>
-              <h2
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#181C14",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                Welcome back, {user.username}! 👋
-              </h2>
-              <p
-                style={{
-                  fontSize: "1rem",
-                  color: "#3C3D37",
-                  lineHeight: "1.5",
-                }}
-              >
-                Manage your projects and track progress with AI-powered insights
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/create-project")}
-              className="btn-primary"
-              style={{
-                padding: "0.875rem 1.5rem",
-                fontSize: "1rem",
-              }}
-            >
-              + Create New Project
-            </button>
-          </div>
-        </div>
-
         {/* Stats Section */}
         <div
           style={{
