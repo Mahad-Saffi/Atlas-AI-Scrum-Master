@@ -192,34 +192,114 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           zIndex: 1,
         }}
       >
+        {/* Welcome Section */}
+        <div
+          className="card"
+          style={{
+            padding: "2rem",
+            marginBottom: "2rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            border: "2px solid #697565",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <div>
+              <h2
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#181C14",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Welcome back, {user.username}! 👋
+              </h2>
+              <p
+                style={{
+                  fontSize: "1rem",
+                  color: "#3C3D37",
+                  lineHeight: "1.5",
+                }}
+              >
+                Manage your projects and track progress with AI-powered insights
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/create-project")}
+              className="btn-primary"
+              style={{
+                padding: "0.875rem 1.5rem",
+                fontSize: "1rem",
+              }}
+            >
+              + Create New Project
+            </button>
+          </div>
+        </div>
+
         {/* Stats Section */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
             gap: "1.25rem",
-            marginBottom: "2rem",
+            marginBottom: "2.5rem",
           }}
         >
           <div
             className="card"
             style={{
               padding: "1.5rem",
+              background: "rgba(236, 223, 204, 0.9)",
+              border: "2px solid #697565",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.borderColor = "#3C3D37";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
-                marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "1rem",
               }}
             >
-              📊
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  background:
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                  borderRadius: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "1.5rem",
+                }}
+              >
+                📊
+              </div>
             </div>
             <div
               style={{
-                fontSize: "2rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontSize: "2.25rem",
+                fontWeight: "700",
+                color: "#181C14",
                 marginBottom: "0.25rem",
               }}
             >
@@ -227,8 +307,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </div>
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.9375rem",
+                color: "#3C3D37",
+                fontWeight: "500",
               }}
             >
               Total Projects
@@ -239,21 +320,48 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             className="card"
             style={{
               padding: "1.5rem",
+              background: "rgba(236, 223, 204, 0.9)",
+              border: "2px solid #697565",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.borderColor = "#3C3D37";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
-                marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "1rem",
               }}
             >
-              ✅
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  background:
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                  borderRadius: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "1.5rem",
+                }}
+              >
+                ✅
+              </div>
             </div>
             <div
               style={{
-                fontSize: "2rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontSize: "2.25rem",
+                fontWeight: "700",
+                color: "#181C14",
                 marginBottom: "0.25rem",
               }}
             >
@@ -261,8 +369,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </div>
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.9375rem",
+                color: "#3C3D37",
+                fontWeight: "500",
               }}
             >
               Tasks Completed
@@ -273,21 +382,48 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             className="card"
             style={{
               padding: "1.5rem",
+              background: "rgba(236, 223, 204, 0.9)",
+              border: "2px solid #697565",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-8px)";
+              e.currentTarget.style.borderColor = "#3C3D37";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "#697565";
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
-                marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "1rem",
               }}
             >
-              ⚡
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  background:
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                  borderRadius: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "1.5rem",
+                }}
+              >
+                ⚡
+              </div>
             </div>
             <div
               style={{
-                fontSize: "2rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
+                fontSize: "2.25rem",
+                fontWeight: "700",
+                color: "#181C14",
                 marginBottom: "0.25rem",
               }}
             >
@@ -295,8 +431,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </div>
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "var(--color-text-secondary)",
+                fontSize: "0.9375rem",
+                color: "#3C3D37",
+                fontWeight: "500",
               }}
             >
               In Progress
@@ -311,17 +448,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
           }}
         >
           <h2
             style={{
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              color: "white",
-              textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+              fontSize: "1.75rem",
+              fontWeight: "700",
+              color: "#ECDFCC",
+              textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
             }}
           >
-            Projects
+            Your Projects
           </h2>
           <div
             style={{
@@ -333,13 +472,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               className="btn-secondary"
               style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
             >
-              Sort by
+              📅 Sort by
             </button>
             <button
               className="btn-secondary"
               style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
             >
-              Filters
+              🔍 Filters
             </button>
           </div>
         </div>
@@ -364,41 +503,56 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
+              background: "rgba(236, 223, 204, 0.95)",
+              border: "2px dashed #697565",
             }}
           >
             <div
               style={{
-                fontSize: "4rem",
-                marginBottom: "1rem",
+                width: "80px",
+                height: "80px",
+                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "3rem",
+                margin: "0 auto 1.5rem",
               }}
             >
               📋
             </div>
             <h3
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "var(--color-text-primary)",
-                marginBottom: "0.5rem",
+                fontSize: "1.5rem",
+                fontWeight: "700",
+                color: "#181C14",
+                marginBottom: "0.75rem",
               }}
             >
               No projects yet
             </h3>
             <p
               style={{
-                fontSize: "0.9375rem",
-                color: "var(--color-text-secondary)",
-                marginBottom: "1.5rem",
+                fontSize: "1rem",
+                color: "#3C3D37",
+                marginBottom: "2rem",
+                maxWidth: "500px",
+                margin: "0 auto 2rem",
               }}
             >
               Create your first project to get started with AI-powered project
-              management
+              management and collaboration
             </p>
             <button
               onClick={() => navigate("/create-project")}
               className="btn-primary"
+              style={{
+                padding: "0.875rem 2rem",
+                fontSize: "1rem",
+              }}
             >
-              Create Project
+              🚀 Create Your First Project
             </button>
           </div>
         ) : (
@@ -416,28 +570,61 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{
                   padding: "1.5rem",
                   cursor: "pointer",
+                  background: "rgba(236, 223, 204, 0.9)",
+                  border: "2px solid #697565",
+                  transition: "all 0.3s ease",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
                 onClick={() => navigate(`/project/${project.id}`)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-8px)";
+                  e.currentTarget.style.borderColor = "#3C3D37";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.borderColor = "#697565";
+                }}
               >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem",
+                    width: "40px",
+                    height: "40px",
+                    background:
+                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.25rem",
+                  }}
+                >
+                  📁
+                </div>
                 <h3
                   style={{
-                    fontSize: "1.125rem",
-                    fontWeight: "600",
-                    color: "var(--color-text-primary)",
-                    marginBottom: "0.5rem",
+                    fontSize: "1.25rem",
+                    fontWeight: "700",
+                    color: "#181C14",
+                    marginBottom: "0.75rem",
+                    paddingRight: "3rem",
                   }}
                 >
                   {project.name}
                 </h3>
                 <p
                   style={{
-                    fontSize: "0.875rem",
-                    color: "var(--color-text-secondary)",
-                    marginBottom: "1rem",
-                    lineHeight: "1.5",
+                    fontSize: "0.9375rem",
+                    color: "#3C3D37",
+                    marginBottom: "1.25rem",
+                    lineHeight: "1.6",
+                    minHeight: "3rem",
                   }}
                 >
-                  {project.description || "No description"}
+                  {project.description || "No description provided"}
                 </p>
                 <div
                   style={{
@@ -445,17 +632,27 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingTop: "1rem",
-                    borderTop: "1px solid rgba(0, 0, 0, 0.05)",
+                    borderTop: "2px solid #697565",
                   }}
                 >
-                  <span
+                  <div
                     style={{
-                      fontSize: "0.8125rem",
-                      color: "var(--color-text-muted)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
                     }}
                   >
-                    {new Date(project.created_at).toLocaleDateString()}
-                  </span>
+                    <span style={{ fontSize: "0.875rem" }}>📅</span>
+                    <span
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#697565",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {new Date(project.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
                   <button
                     className="btn-secondary"
                     style={{
@@ -467,7 +664,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                       navigate(`/task-board`);
                     }}
                   >
-                    View Tasks
+                    View Tasks →
                   </button>
                 </div>
               </div>

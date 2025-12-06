@@ -47,7 +47,7 @@
 
 .auth-container button {
   border-radius: 20px;
-  border: 2px solid #3c3d37;
+  border: 2px solid #8e9180;
 background: linear-gradient(145deg, #ecdfcc, #d4c7b4) ;
   color: #181c14;
   font-size: 12px;
@@ -103,7 +103,7 @@ background: linear-gradient(145deg, #ecdfcc, #d4c7b4) ;
 .demo-btn {
   background: linear-gradient(145deg, #ecdfcc, #d4c7b4) !important;
   color: #181c14 !important;
-  border: 2px solid #3c3d37 !important;
+  border: 2px solid #8e9180 !important;
   margin-bottom: 10px;
 }
 
