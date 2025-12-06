@@ -259,32 +259,49 @@ body::before {
   transform: translateY(0);
 }
 
-/* Input Styles - Glassmorphism */
-.input-modern {
+/* Input Styles - Neumorphic Design */
+.input-modern,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  padding: 1em;
   font-size: 0.9375rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  background-color: #ccc;
+  box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+  transition: 300ms ease-in-out;
   font-family: inherit;
   color: var(--color-text-primary);
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.1);
 }
 
-.input-modern:focus {
-  outline: none;
-  border-color: rgba(102, 126, 234, 0.6);
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 16px 0 rgba(102, 126, 234, 0.2);
-  transform: translateY(-1px);
+.input-modern:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+select:focus {
+  background-color: rgb(242, 240, 240);
+  transform: scale(1);
+  /* box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff; */
 }
 
-.input-modern::placeholder {
+.input-modern::placeholder,
+input::placeholder {
   color: var(--color-text-muted);
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1em center;
+  padding-right: 2.5em;
 }
 
 /* Card Styles - Glassmorphism */
