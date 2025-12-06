@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { notificationService, type Notification } from '../services/notificationService';
+import React, { useState, useEffect } from "react";
+import {
+  notificationService,
+  type Notification,
+} from "../services/notificationService";
 
 const NotificationBell: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -12,7 +15,7 @@ const NotificationBell: React.FC = () => {
       const count = await notificationService.getUnreadCount();
       setUnreadCount(count);
     } catch (error) {
-      console.error('Error fetching unread count:', error);
+      console.error("Error fetching unread count:", error);
     }
   };
 
@@ -22,7 +25,7 @@ const NotificationBell: React.FC = () => {
       const notifs = await notificationService.getNotifications();
       setNotifications(notifs);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -45,35 +48,37 @@ const NotificationBell: React.FC = () => {
   const handleMarkAsRead = async (notificationId: number) => {
     try {
       await notificationService.markAsRead(notificationId);
-      setNotifications(notifications.map(n => 
-        n.id === notificationId ? { ...n, read: true } : n
-      ));
+      setNotifications(
+        notifications.map((n) =>
+          n.id === notificationId ? { ...n, read: true } : n
+        )
+      );
       setUnreadCount(Math.max(0, unreadCount - 1));
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await notificationService.markAllAsRead();
-      setNotifications(notifications.map(n => ({ ...n, read: true })));
+      setNotifications(notifications.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      console.error("Error marking all as read:", error);
     }
   };
 
   const handleDelete = async (notificationId: number) => {
     try {
       await notificationService.deleteNotification(notificationId);
-      const deletedNotif = notifications.find(n => n.id === notificationId);
-      setNotifications(notifications.filter(n => n.id !== notificationId));
+      const deletedNotif = notifications.find((n) => n.id === notificationId);
+      setNotifications(notifications.filter((n) => n.id !== notificationId));
       if (deletedNotif && !deletedNotif.read) {
         setUnreadCount(Math.max(0, unreadCount - 1));
       }
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
@@ -82,101 +87,94 @@ const NotificationBell: React.FC = () => {
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-    if (seconds < 60) return 'just now';
+    if (seconds < 60) return "just now";
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
     return `${Math.floor(seconds / 86400)}d ago`;
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       {/* Bell Button */}
       <button
         onClick={handleToggle}
+        className="btn-secondary"
         style={{
-          position: 'relative',
-          backgroundColor: 'white',
-          border: '2px solid #1a1a1a',
-          padding: '10px 14px',
-          fontSize: '20px',
-          cursor: 'pointer',
-          boxShadow: '3px 3px 0 #1a1a1a',
-          transition: 'all 0.2s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translate(1px, 1px)';
-          e.currentTarget.style.boxShadow = '2px 2px 0 #1a1a1a';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translate(0, 0)';
-          e.currentTarget.style.boxShadow = '3px 3px 0 #1a1a1a';
+          position: "relative",
+          padding: "10px 14px",
+          fontSize: "20px",
         }}
       >
         🔔
         {unreadCount > 0 && (
-          <span style={{
-            position: 'absolute',
-            top: '-8px',
-            right: '-8px',
-            backgroundColor: '#1a1a1a',
-            color: 'white',
-            borderRadius: '50%',
-            width: '24px',
-            height: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            border: '2px solid white',
-          }}>
-            {unreadCount > 9 ? '9+' : unreadCount}
+          <span
+            style={{
+              position: "absolute",
+              top: "-8px",
+              right: "-8px",
+              backgroundColor: "#ef4444",
+              color: "#ECDFCC",
+              borderRadius: "50%",
+              width: "24px",
+              height: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              fontWeight: "bold",
+              border: "2px solid #ECDFCC",
+            }}
+          >
+            {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div style={{
-          position: 'absolute',
-          top: '60px',
-          right: '0',
-          width: '400px',
-          maxHeight: '500px',
-          backgroundColor: 'white',
-          border: '3px solid #1a1a1a',
-          boxShadow: '6px 6px 0 #1a1a1a',
-          zIndex: 1000,
-          fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
-        }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "60px",
+            right: "0",
+            width: "400px",
+            maxHeight: "500px",
+            background: "rgba(236, 223, 204, 0.98)",
+            backdropFilter: "blur(20px)",
+            border: "2px solid #697565",
+            borderRadius: "12px",
+            zIndex: 1000,
+            overflow: "hidden",
+          }}
+        >
           {/* Header */}
-          <div style={{
-            padding: '16px',
-            borderBottom: '2px solid #1a1a1a',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-            <h3 style={{
-              margin: 0,
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: '#1a1a1a',
-            }}>
+          <div
+            style={{
+              padding: "16px",
+              borderBottom: "2px solid #697565",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: "rgba(105, 117, 101, 0.1)",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#181C14",
+              }}
+            >
               🔔 Notifications
             </h3>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
+                className="btn-secondary"
                 style={{
-                  backgroundColor: 'white',
-                  border: '2px solid #1a1a1a',
-                  padding: '6px 12px',
-                  fontSize: '12px',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  boxShadow: '2px 2px 0 #1a1a1a',
-                  fontFamily: 'inherit',
+                  padding: "6px 12px",
+                  fontSize: "12px",
                 }}
               >
                 Mark all read
@@ -185,36 +183,88 @@ const NotificationBell: React.FC = () => {
           </div>
 
           {/* Notifications List */}
-          <div style={{
-            maxHeight: '400px',
-            overflowY: 'auto',
-          }}>
+          <div
+            style={{
+              maxHeight: "400px",
+              overflowY: "auto",
+            }}
+          >
             {loading ? (
-              <div style={{
-                padding: '40px',
-                textAlign: 'center',
-                color: '#4a4a4a',
-              }}>
-                Loading...
+              <div
+                style={{
+                  padding: "40px",
+                  textAlign: "center",
+                  color: "#3C3D37",
+                }}
+              >
+                <div
+                  className="spinner"
+                  style={{ width: "32px", height: "32px", margin: "0 auto" }}
+                />
               </div>
             ) : notifications.length === 0 ? (
-              <div style={{
-                padding: '40px',
-                textAlign: 'center',
-                color: '#4a4a4a',
-              }}>
-                <div style={{ fontSize: '32px', marginBottom: '8px' }}>📭</div>
-                <div>No notifications yet</div>
+              <div
+                style={{
+                  padding: "40px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    background:
+                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "32px",
+                    margin: "0 auto 16px",
+                  }}
+                >
+                  📭
+                </div>
+                <div
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    color: "#181C14",
+                    marginBottom: "8px",
+                  }}
+                >
+                  No notifications yet
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    color: "#697565",
+                  }}
+                >
+                  You're all caught up!
+                </div>
               </div>
             ) : (
-              notifications.map(notif => (
+              notifications.map((notif) => (
                 <div
                   key={notif.id}
                   style={{
-                    padding: '16px',
-                    borderBottom: '1px dashed #1a1a1a',
-                    backgroundColor: notif.read ? 'white' : '#f5f5f5',
-                    cursor: notif.link ? 'pointer' : 'default',
+                    padding: "16px",
+                    borderBottom: "1px solid rgba(105, 117, 101, 0.3)",
+                    backgroundColor: notif.read
+                      ? "transparent"
+                      : "rgba(105, 117, 101, 0.1)",
+                    cursor: notif.link ? "pointer" : "default",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(105, 117, 101, 0.15)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = notif.read
+                      ? "transparent"
+                      : "rgba(105, 117, 101, 0.1)";
                   }}
                   onClick={() => {
                     if (!notif.read) {
@@ -225,18 +275,22 @@ const NotificationBell: React.FC = () => {
                     }
                   }}
                 >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: '8px',
-                  }}>
-                    <div style={{
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      color: '#1a1a1a',
-                      flex: 1,
-                    }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: "#181C14",
+                        flex: 1,
+                      }}
+                    >
                       {notif.title}
                     </div>
                     <button
@@ -245,28 +299,32 @@ const NotificationBell: React.FC = () => {
                         handleDelete(notif.id);
                       }}
                       style={{
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        fontSize: '16px',
-                        padding: '0 4px',
+                        backgroundColor: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "16px",
+                        padding: "0 4px",
                       }}
                       title="Delete"
                     >
                       ✕
                     </button>
                   </div>
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#4a4a4a',
-                    marginBottom: '8px',
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      color: "#3C3D37",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {notif.message}
                   </div>
-                  <div style={{
-                    fontSize: '11px',
-                    color: '#4a4a4a',
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#697565",
+                    }}
+                  >
                     {getTimeAgo(notif.created_at)}
                   </div>
                 </div>
@@ -281,7 +339,7 @@ const NotificationBell: React.FC = () => {
         <div
           onClick={() => setIsOpen(false)}
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,

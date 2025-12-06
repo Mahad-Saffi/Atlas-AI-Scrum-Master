@@ -9,6 +9,7 @@ import ProjectDashboard from "./pages/ProjectDashboard";
 import ChatPage from "./pages/ChatPage";
 import DebugAuth from "./pages/DebugAuth";
 import OrganizationSetup from "./pages/OrganizationSetup";
+import IssuesPage from "./pages/IssuesPage";
 import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
@@ -57,6 +58,10 @@ function App() {
           <Route
             path="/project/:projectId"
             element={isAuthenticated ? <ProjectDashboard /> : <SimpleLogin />}
+          />
+          <Route
+            path="/project/:projectId/issues"
+            element={isAuthenticated ? <IssuesPage /> : <SimpleLogin />}
           />
           <Route
             path="/chat"

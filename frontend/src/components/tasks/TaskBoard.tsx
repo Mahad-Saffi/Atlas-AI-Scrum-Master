@@ -29,9 +29,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
       if (onTaskUpdate) {
         onTaskUpdate();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to complete task:", error);
-      alert("Failed to complete task. Please try again.");
+      const errorMessage =
+        error.response?.data?.detail || error.message || "Unknown error";
+      alert(`Failed to complete task: ${errorMessage}`);
     } finally {
       setCompletingTaskId(null);
     }
