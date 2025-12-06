@@ -67,19 +67,25 @@ body {
   width: 100%;
   min-height: 100vh;
   /* Animated diagonal stripe pattern */
-  background: #1a1a2e;
-  background: linear-gradient(
+  background-color: #121212;
+  background-image: linear-gradient(
     135deg,
-    #1a1a2e 25%,
-    #16213e 25%,
-    #16213e 50%,
-    #1a1a2e 50%,
-    #1a1a2e 75%,
-    #16213e 75%,
-    #16213e
+    #121212 25%,
+    #1a1a1a 25%,
+    #1a1a1a 50%,
+    #121212 50%,
+    #121212 75%,
+    #1a1a1a 75%,
+    #1a1a1a
   );
   background-size: 40px 40px;
   animation: move 4s linear infinite;
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes move {
