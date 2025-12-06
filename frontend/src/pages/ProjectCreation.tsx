@@ -9,15 +9,18 @@ const ProjectCreation: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--color-cream)",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Header */}
       <header
+        className="glass-header"
         style={{
-          background: "var(--color-white)",
-          borderBottom: "1px solid var(--color-border)",
           padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <div
@@ -38,12 +41,10 @@ const ProjectCreation: React.FC = () => {
           >
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                padding: "0.5rem 1rem",
                 fontSize: "1.25rem",
-                color: "var(--color-text-secondary)",
               }}
             >
               ←
@@ -52,7 +53,7 @@ const ProjectCreation: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "var(--color-text-primary)",
+                color: "#090909",
               }}
             >
               Create New Project
@@ -67,32 +68,45 @@ const ProjectCreation: React.FC = () => {
           maxWidth: "1200px",
           margin: "0 auto",
           padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Info Card */}
         <div
           className="card"
           style={{
-            padding: "1.5rem",
+            padding: "2rem",
             marginBottom: "1.5rem",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "white",
-            border: "none",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            textAlign: "center",
           }}
         >
+          <div
+            style={{
+              fontSize: "3rem",
+              marginBottom: "1rem",
+              animation: "float 3s ease-in-out infinite",
+            }}
+          >
+            🤖
+          </div>
           <h2
             style={{
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              marginBottom: "0.5rem",
+              fontSize: "1.75rem",
+              fontWeight: "700",
+              marginBottom: "0.75rem",
+              color: "#090909",
             }}
           >
             Let's create your project together
           </h2>
           <p
             style={{
-              fontSize: "0.9375rem",
-              opacity: 0.95,
+              fontSize: "1rem",
+              color: "#666",
+              lineHeight: "1.6",
             }}
           >
             Tell me about your project goals, timeline, and team. I'll help you
@@ -114,28 +128,47 @@ const ProjectCreation: React.FC = () => {
 
         {/* Tips */}
         <div
+          className="card"
           style={{
             marginTop: "1.5rem",
-            padding: "1rem",
-            background: "var(--color-light-gray)",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--color-border)",
+            padding: "1.25rem",
+            background: "rgba(255, 255, 255, 0.9)",
+            backdropFilter: "blur(15px)",
           }}
         >
           <div
             style={{
-              fontSize: "0.875rem",
-              color: "var(--color-text-secondary)",
+              fontSize: "0.9375rem",
+              color: "#666",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.5rem",
             }}
           >
-            <strong style={{ color: "var(--color-text-primary)" }}>
-              💡 Tips:
-            </strong>{" "}
-            Be specific about your project scope, timeline, and team size. The
-            more details you provide, the better I can help you plan.
+            <span style={{ fontSize: "1.25rem" }}>💡</span>
+            <div>
+              <strong
+                style={{
+                  color: "#090909",
+                  display: "block",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Pro Tips:
+              </strong>
+              Be specific about your project scope, timeline, and team size. The
+              more details you provide, the better I can help you plan.
+            </div>
           </div>
         </div>
       </main>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
     </div>
   );
 };
