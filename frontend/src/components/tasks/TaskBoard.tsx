@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { taskService } from "../../services/taskService";
+import { useToast } from "../Toast";
 
 interface Task {
   id: string;
@@ -21,11 +22,13 @@ interface TaskBoardProps {
 
 const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
   const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const handleCompleteTask = async (taskId: string) => {
     try {
       setCompletingTaskId(taskId);
       await taskService.completeTask(taskId);
+      showToast("Task completed successfully!", "success");
       if (onTaskUpdate) {
         onTaskUpdate();
       }
@@ -33,7 +36,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
       console.error("Failed to complete task:", error);
       const errorMessage =
         error.response?.data?.detail || error.message || "Unknown error";
-      alert(`Failed to complete task: ${errorMessage}`);
+      showToast(`Failed to complete task: ${errorMessage}`, "error");
     } finally {
       setCompletingTaskId(null);
     }

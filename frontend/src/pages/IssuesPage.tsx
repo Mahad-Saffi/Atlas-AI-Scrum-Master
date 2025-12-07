@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../components/Toast";
 
 interface Issue {
   id: number;
@@ -30,6 +31,7 @@ interface TeamMember {
 const IssuesPage: React.FC = () => {
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
+  const { showToast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +50,13 @@ const IssuesPage: React.FC = () => {
     if (projectId) {
       fetchIssues();
       fetchTeamMembers();
+
+      // Auto-refresh every 15 seconds
+      const interval = setInterval(() => {
+        fetchIssues();
+      }, 15000);
+
+      return () => clearInterval(interval);
     }
   }, [projectId, filterStatus]);
 
@@ -104,17 +113,28 @@ const IssuesPage: React.FC = () => {
 
     try {
       const token = localStorage.getItem("jwt");
+
+      // Build request body, only include task_id if it has a value
+      const requestBody: any = {
+        project_id: projectId,
+        title: issueForm.title,
+        description: issueForm.description,
+        issue_type: issueForm.issue_type,
+        priority: issueForm.priority,
+      };
+
+      // Only add task_id if it's not empty
+      if (issueForm.task_id && issueForm.task_id.trim()) {
+        requestBody.task_id = issueForm.task_id;
+      }
+
       const response = await fetch("http://localhost:8000/api/v1/issues", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          project_id: projectId,
-          ...issueForm,
-          task_id: issueForm.task_id || null,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {
@@ -126,6 +146,7 @@ const IssuesPage: React.FC = () => {
           task_id: "",
         });
         setShowCreateForm(false);
+        showToast("Issue created successfully!", "success");
         fetchIssues();
       } else {
         const error = await response.json();
@@ -133,12 +154,12 @@ const IssuesPage: React.FC = () => {
           typeof error.detail === "string"
             ? error.detail
             : JSON.stringify(error.detail) || "Failed to create issue";
-        alert(errorMessage);
+        showToast(errorMessage, "error");
       }
     } catch (error: any) {
       console.error("Error creating issue:", error);
       const errorMessage = error?.message || "Failed to create issue";
-      alert(errorMessage);
+      showToast(errorMessage, "error");
     } finally {
       setLoading(false);
     }
@@ -160,10 +181,12 @@ const IssuesPage: React.FC = () => {
       );
 
       if (response.ok) {
+        showToast("Issue assigned successfully!", "success");
         fetchIssues();
       }
     } catch (error) {
       console.error("Error assigning issue:", error);
+      showToast("Failed to assign issue", "error");
     }
   };
 
@@ -186,10 +209,12 @@ const IssuesPage: React.FC = () => {
       );
 
       if (response.ok) {
+        showToast("Issue resolved successfully!", "success");
         fetchIssues();
       }
     } catch (error) {
       console.error("Error resolving issue:", error);
+      showToast("Failed to resolve issue", "error");
     }
   };
 

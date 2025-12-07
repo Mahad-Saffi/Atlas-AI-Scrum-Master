@@ -38,6 +38,23 @@ const TaskBoardPage: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".dropdown-container")) {
+        setShowSortMenu(false);
+        setShowFilterMenu(false);
+      }
+    };
+
+    if (showSortMenu || showFilterMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showSortMenu, showFilterMenu]);
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -61,11 +78,13 @@ const TaskBoardPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchTasks = async (isInitialLoad = false) => {
       if (!selectedProjectId) return;
 
       try {
-        setLoading(true);
+        if (isInitialLoad) {
+          setLoading(true);
+        }
         const fetchedTasks = await taskService.getTasks(selectedProjectId);
         setTasks(fetchedTasks);
         setError(null);
@@ -73,11 +92,22 @@ const TaskBoardPage: React.FC = () => {
         console.error("Error fetching tasks:", err);
         setError("Failed to fetch tasks");
       } finally {
-        setLoading(false);
+        if (isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchTasks();
+    fetchTasks(true);
+
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      if (selectedProjectId) {
+        fetchTasks(false);
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [selectedProjectId]);
 
   const handleTaskUpdate = async () => {
@@ -461,6 +491,12 @@ const TaskBoardPage: React.FC = () => {
               <select
                 value={selectedProjectId || ""}
                 onChange={(e) => setSelectedProjectId(e.target.value)}
+                style={{
+                  padding: "0.625rem 1rem",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  minWidth: "200px",
+                }}
               >
                 {projects.map((project) => (
                   <option key={project.id} value={project.id}>
@@ -469,165 +505,6 @@ const TaskBoardPage: React.FC = () => {
                 ))}
               </select>
             )}
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              position: "relative",
-            }}
-          >
-            {/* Sort By Dropdown */}
-            <div style={{ position: "relative" }}>
-              <button
-                className="btn-secondary"
-                style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
-                onClick={() => {
-                  setShowSortMenu(!showSortMenu);
-                  setShowFilterMenu(false);
-                }}
-              >
-                📊 Sort by
-              </button>
-              {showSortMenu && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 0.5rem)",
-                    right: 0,
-                    background: "rgba(236, 223, 204, 0.98)",
-                    border: "2px solid #697565",
-                    borderRadius: "8px",
-                    padding: "0.5rem",
-                    minWidth: "180px",
-                    zIndex: 1000,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  }}
-                >
-                  {[
-                    { value: "default", label: "Default" },
-                    { value: "title", label: "Title (A-Z)" },
-                    { value: "dueDate", label: "Due Date" },
-                    { value: "priority", label: "Priority" },
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSortBy(option.value);
-                        setShowSortMenu(false);
-                      }}
-                      style={{
-                        width: "100%",
-                        padding: "0.5rem 0.75rem",
-                        textAlign: "left",
-                        background:
-                          sortBy === option.value
-                            ? "rgba(105, 117, 101, 0.3)"
-                            : "transparent",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "0.875rem",
-                        color: "#181C14",
-                        fontWeight: sortBy === option.value ? "600" : "500",
-                        marginBottom: "0.25rem",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (sortBy !== option.value) {
-                          e.currentTarget.style.background =
-                            "rgba(105, 117, 101, 0.15)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (sortBy !== option.value) {
-                          e.currentTarget.style.background = "transparent";
-                        }
-                      }}
-                    >
-                      {sortBy === option.value ? "✓ " : ""}
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Filter Dropdown */}
-            <div style={{ position: "relative" }}>
-              <button
-                className="btn-secondary"
-                style={{ padding: "0.625rem 1rem", fontSize: "0.875rem" }}
-                onClick={() => {
-                  setShowFilterMenu(!showFilterMenu);
-                  setShowSortMenu(false);
-                }}
-              >
-                🔍 Filters
-              </button>
-              {showFilterMenu && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 0.5rem)",
-                    right: 0,
-                    background: "rgba(236, 223, 204, 0.98)",
-                    border: "2px solid #697565",
-                    borderRadius: "8px",
-                    padding: "0.5rem",
-                    minWidth: "180px",
-                    zIndex: 1000,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  }}
-                >
-                  {[
-                    { value: "all", label: "All Tasks" },
-                    { value: "To Do", label: "To Do" },
-                    { value: "In Progress", label: "In Progress" },
-                    { value: "Done", label: "Done" },
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setFilterStatus(option.value);
-                        setShowFilterMenu(false);
-                      }}
-                      style={{
-                        width: "100%",
-                        padding: "0.5rem 0.75rem",
-                        textAlign: "left",
-                        background:
-                          filterStatus === option.value
-                            ? "rgba(105, 117, 101, 0.3)"
-                            : "transparent",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "0.875rem",
-                        color: "#181C14",
-                        fontWeight:
-                          filterStatus === option.value ? "600" : "500",
-                        marginBottom: "0.25rem",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (filterStatus !== option.value) {
-                          e.currentTarget.style.background =
-                            "rgba(105, 117, 101, 0.15)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (filterStatus !== option.value) {
-                          e.currentTarget.style.background = "transparent";
-                        }
-                      }}
-                    >
-                      {filterStatus === option.value ? "✓ " : ""}
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
 

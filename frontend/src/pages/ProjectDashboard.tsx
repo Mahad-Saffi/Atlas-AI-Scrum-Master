@@ -35,9 +35,11 @@ const ProjectDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (isInitialLoad = false) => {
       try {
-        setLoading(true);
+        if (isInitialLoad) {
+          setLoading(true);
+        }
 
         const projects = await taskService.getProjects();
         const currentProject = projects.find(
@@ -76,11 +78,20 @@ const ProjectDashboard: React.FC = () => {
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
-        setLoading(false);
+        if (isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchData();
+    fetchData(true);
+
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      fetchData(false);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [projectId]);
 
   if (loading) {

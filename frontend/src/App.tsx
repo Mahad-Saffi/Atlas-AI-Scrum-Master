@@ -18,6 +18,7 @@ import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { ToastProvider } from "./components/Toast";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -41,64 +42,68 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<SimpleLogin />} />
-          <Route path="/github-login" element={<SignIn />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route path="/debug-auth" element={<DebugAuth />} />
-          <Route
-            path="/organization-setup"
-            element={isAuthenticated ? <OrganizationSetup /> : <SimpleLogin />}
-          />
-          <Route
-            path="/create-project"
-            element={isAuthenticated ? <ProjectCreation /> : <SimpleLogin />}
-          />
-          <Route
-            path="/task-board"
-            element={isAuthenticated ? <TaskBoardPage /> : <SimpleLogin />}
-          />
-          <Route
-            path="/project/:projectId"
-            element={isAuthenticated ? <ProjectDashboard /> : <SimpleLogin />}
-          />
-          <Route
-            path="/project/:projectId/issues"
-            element={isAuthenticated ? <IssuesPage /> : <SimpleLogin />}
-          />
-          <Route
-            path="/project/:projectId/risks"
-            element={isAuthenticated ? <ProjectRisks /> : <SimpleLogin />}
-          />
-          <Route
-            path="/project/:projectId/risk-dashboard"
-            element={isAuthenticated ? <RiskDashboard /> : <SimpleLogin />}
-          />
-          <Route
-            path="/project/:projectId/epics"
-            element={isAuthenticated ? <EpicView /> : <SimpleLogin />}
-          />
-          <Route
-            path="/team-members"
-            element={isAuthenticated ? <TeamMembers /> : <SimpleLogin />}
-          />
-          <Route
-            path="/chat"
-            element={isAuthenticated ? <ChatPage /> : <SimpleLogin />}
-          />
-          <Route
-            path="/"
-            element={
-              isAuthenticated && user ? (
-                <UserProfile user={user} onSignOut={handleSignOut} />
-              ) : (
-                <SimpleLogin />
-              )
-            }
-          />
-        </Routes>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<SimpleLogin />} />
+            <Route path="/github-login" element={<SignIn />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/debug-auth" element={<DebugAuth />} />
+            <Route
+              path="/organization-setup"
+              element={
+                isAuthenticated ? <OrganizationSetup /> : <SimpleLogin />
+              }
+            />
+            <Route
+              path="/create-project"
+              element={isAuthenticated ? <ProjectCreation /> : <SimpleLogin />}
+            />
+            <Route
+              path="/task-board"
+              element={isAuthenticated ? <TaskBoardPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId"
+              element={isAuthenticated ? <ProjectDashboard /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/issues"
+              element={isAuthenticated ? <IssuesPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/risks"
+              element={isAuthenticated ? <ProjectRisks /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/risk-dashboard"
+              element={isAuthenticated ? <RiskDashboard /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/epics"
+              element={isAuthenticated ? <EpicView /> : <SimpleLogin />}
+            />
+            <Route
+              path="/team-members"
+              element={isAuthenticated ? <TeamMembers /> : <SimpleLogin />}
+            />
+            <Route
+              path="/chat"
+              element={isAuthenticated ? <ChatPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/"
+              element={
+                isAuthenticated && user ? (
+                  <UserProfile user={user} onSignOut={handleSignOut} />
+                ) : (
+                  <SimpleLogin />
+                )
+              }
+            />
+          </Routes>
+        </Router>
+      </ToastProvider>
     </ErrorBoundary>
   );
 }

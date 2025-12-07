@@ -37,6 +37,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
   useEffect(() => {
     fetchProjects();
     fetchTaskStats();
+
+    // Auto-refresh every 15 seconds
+    const interval = setInterval(() => {
+      fetchProjects();
+      fetchTaskStats();
+    }, 15000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchProjects = async () => {
@@ -77,7 +85,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         for (const project of projectsData) {
           try {
             const tasksResponse = await fetch(
-              `http://localhost:8000/api/v1/tasks/?project_id=${project.id}`,
+              `http://localhost:8000/api/v1/projects/${project.id}/tasks`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -408,7 +416,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                0
+                {taskStats.inProgress}
               </div>
               <div
                 style={{

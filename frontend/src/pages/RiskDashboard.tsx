@@ -26,6 +26,13 @@ const RiskDashboard: React.FC = () => {
   useEffect(() => {
     if (projectId) {
       fetchRisks();
+
+      // Auto-refresh every 15 seconds
+      const interval = setInterval(() => {
+        fetchRisks();
+      }, 15000);
+
+      return () => clearInterval(interval);
     }
   }, [projectId]);
 

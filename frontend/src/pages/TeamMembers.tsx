@@ -21,6 +21,13 @@ const TeamMembers: React.FC = () => {
   useEffect(() => {
     fetchMembers();
     fetchCurrentUser();
+
+    // Auto-refresh every 20 seconds
+    const interval = setInterval(() => {
+      fetchMembers();
+    }, 20000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchCurrentUser = () => {

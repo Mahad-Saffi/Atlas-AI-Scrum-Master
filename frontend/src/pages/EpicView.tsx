@@ -38,6 +38,13 @@ const EpicView: React.FC = () => {
   useEffect(() => {
     if (projectId) {
       fetchEpics();
+
+      // Auto-refresh every 15 seconds
+      const interval = setInterval(() => {
+        fetchEpics();
+      }, 15000);
+
+      return () => clearInterval(interval);
     }
   }, [projectId]);
 
@@ -55,11 +62,18 @@ const EpicView: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Fetched epics data:", data); // Debug log
         setEpics(data);
-        // Expand first epic by default
-        if (data.length > 0) {
+        // Expand first epic by default only on initial load
+        if (data.length > 0 && expandedEpics.size === 0) {
           setExpandedEpics(new Set([data[0].id]));
         }
+      } else {
+        console.error(
+          "Failed to fetch epics:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("Error fetching epics:", error);
@@ -114,19 +128,23 @@ const EpicView: React.FC = () => {
   const calculateEpicProgress = (epic: Epic) => {
     const allTasks = epic.stories.flatMap((s) => s.tasks);
     if (allTasks.length === 0) return 0;
-    const totalProgress = allTasks.reduce(
-      (sum, t) => sum + t.progress_percentage,
-      0
-    );
+    const totalProgress = allTasks.reduce((sum, t) => {
+      // If task is Done, count as 100%, otherwise use progress_percentage
+      const taskProgress =
+        t.status === "Done" ? 100 : t.progress_percentage || 0;
+      return sum + taskProgress;
+    }, 0);
     return Math.round(totalProgress / allTasks.length);
   };
 
   const calculateStoryProgress = (story: Story) => {
     if (story.tasks.length === 0) return 0;
-    const totalProgress = story.tasks.reduce(
-      (sum, t) => sum + t.progress_percentage,
-      0
-    );
+    const totalProgress = story.tasks.reduce((sum, t) => {
+      // If task is Done, count as 100%, otherwise use progress_percentage
+      const taskProgress =
+        t.status === "Done" ? 100 : t.progress_percentage || 0;
+      return sum + taskProgress;
+    }, 0);
     return Math.round(totalProgress / story.tasks.length);
   };
 
@@ -189,6 +207,21 @@ const EpicView: React.FC = () => {
               Epics & Stories
             </h1>
           </div>
+          <button
+            onClick={() => {
+              setLoading(true);
+              fetchEpics();
+            }}
+            className="btn-secondary"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <span>🔄</span>
+            <span>Refresh</span>
+          </button>
         </div>
       </header>
 
