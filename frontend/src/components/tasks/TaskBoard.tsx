@@ -90,7 +90,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
           <div
             style={{
               padding: "0.75rem 1rem",
-              background: "var(--color-light-gray)",
+              background: "rgba(236, 223, 204, 0.2)",
               borderRadius: "var(--radius-md)",
               marginBottom: "1rem",
               display: "flex",
@@ -102,7 +102,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
               style={{
                 fontSize: "0.9375rem",
                 fontWeight: "600",
-                color: "var(--color-text-primary)",
+                color: "#ECDFCC",
                 margin: 0,
               }}
             >
@@ -112,8 +112,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
               style={{
                 fontSize: "0.8125rem",
                 fontWeight: "500",
-                color: "var(--color-text-secondary)",
-                background: "var(--color-white)",
+                color: "#ECDFCC",
+                background: "rgba(236, 223, 204, 0.3)",
                 padding: "0.25rem 0.625rem",
                 borderRadius: "var(--radius-sm)",
               }}
@@ -136,11 +136,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                 style={{
                   padding: "2rem 1rem",
                   textAlign: "center",
-                  color: "var(--color-text-muted)",
+                  color: "#ECDFCC",
                   fontSize: "0.875rem",
-                  background: "var(--color-light-gray)",
+                  background: "rgba(236, 223, 204, 0.1)",
                   borderRadius: "var(--radius-md)",
-                  border: "1px dashed var(--color-border)",
+                  border: "1px dashed rgba(236, 223, 204, 0.3)",
                 }}
               >
                 No tasks
@@ -306,11 +306,12 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                       style={{
                         padding: "0.5rem",
                         textAlign: "center",
-                        background: "#d1fae5",
+                        background: "rgba(16, 185, 129, 0.2)",
                         borderRadius: "var(--radius-sm)",
                         fontSize: "0.8125rem",
-                        fontWeight: "500",
-                        color: "#065f46",
+                        fontWeight: "600",
+                        color: "#ECDFCC",
+                        border: "1px solid rgba(16, 185, 129, 0.4)",
                       }}
                     >
                       ✓ Completed

@@ -231,7 +231,7 @@ const RiskDashboard: React.FC = () => {
                   style={{
                     fontSize: "1.75rem",
                     fontWeight: "700",
-                    color: "#d97706",
+                    color: "#ECDFCC",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
                     textShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -242,7 +242,7 @@ const RiskDashboard: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.875rem",
-                    color: "#d97706",
+                    color: "#ECDFCC",
                     fontWeight: "500",
                   }}
                 >

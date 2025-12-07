@@ -199,6 +199,22 @@ const EnhancedChatPanel: React.FC = () => {
   const sendMessage = () => {
     if (!inputValue.trim() || !wsRef.current || !isConnected) return;
 
+    const token = localStorage.getItem("jwt");
+    let currentUserId = 0;
+
+    // Get current user ID from token
+    try {
+      if (token) {
+        const parts = token.split(".");
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          currentUserId = payload.id;
+        }
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+
     const messageData = {
       type: "message",
       content: inputValue,
@@ -206,6 +222,15 @@ const EnhancedChatPanel: React.FC = () => {
       recipient_id: selectedUser,
     };
 
+    // Optimistically add message to UI
+    const optimisticMessage: Message = {
+      id: Date.now(), // Temporary ID
+      sender_id: currentUserId,
+      content: inputValue,
+      created_at: new Date().toISOString(),
+    };
+
+    setMessages((prev) => [...prev, optimisticMessage]);
     wsRef.current.send(JSON.stringify(messageData));
     setInputValue("");
   };
@@ -236,12 +261,17 @@ const EnhancedChatPanel: React.FC = () => {
 
   return (
     <div
-      className="card-glass-solid"
       style={{
         display: "flex",
         height: "calc(100vh - 135px)",
         maxHeight: "850px",
         overflow: "hidden",
+        background: "rgba(236, 223, 204, 0.25)",
+        backdropFilter: "blur(25px)",
+        border: "1px solid rgba(236, 223, 204, 0.35)",
+        borderRadius: "var(--radius-lg)",
+        boxShadow:
+          "0 8px 32px 0 rgba(24, 28, 20, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)",
       }}
     >
       {/* Sidebar */}
@@ -251,7 +281,7 @@ const EnhancedChatPanel: React.FC = () => {
           borderRight: "1px solid rgba(236, 223, 204, 0.3)",
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.15)",
+          background: "rgba(236, 223, 204, 0.1)",
           backdropFilter: "blur(15px)",
         }}
       >
@@ -337,6 +367,18 @@ const EnhancedChatPanel: React.FC = () => {
                     setSelectedChannel(channel.id);
                     setSelectedUser(null);
                   }}
+                  onMouseEnter={(e) => {
+                    if (selectedChannel !== channel.id) {
+                      e.currentTarget.style.background =
+                        "rgba(236, 223, 204, 0.18)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedChannel !== channel.id) {
+                      e.currentTarget.style.background =
+                        "rgba(236, 223, 204, 0.1)";
+                    }
+                  }}
                   style={{
                     padding: "0.75rem",
                     marginBottom: "0.5rem",
@@ -398,6 +440,18 @@ const EnhancedChatPanel: React.FC = () => {
                     setSelectedUser(user.id);
                     setSelectedChannel(null);
                   }}
+                  onMouseEnter={(e) => {
+                    if (selectedUser !== user.id) {
+                      e.currentTarget.style.background =
+                        "rgba(236, 223, 204, 0.18)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedUser !== user.id) {
+                      e.currentTarget.style.background =
+                        "rgba(236, 223, 204, 0.1)";
+                    }
+                  }}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -450,15 +504,15 @@ const EnhancedChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.08)",
+          background: "rgba(236, 223, 204, 0.05)",
         }}
       >
         {/* Header with Search */}
         <div
           style={{
-            padding: "0.75rem 1.25rem",
-            borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
-            background: "rgba(236, 223, 204, 0.15)",
+            padding: "1rem 1.25rem",
+            borderBottom: "1px solid rgba(236, 223, 204, 0.25)",
+            background: "rgba(236, 223, 204, 0.12)",
             backdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
@@ -494,11 +548,11 @@ const EnhancedChatPanel: React.FC = () => {
         <div
           style={{
             flex: 1,
-            padding: "1.25rem",
+            padding: "1rem",
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
-            gap: "0.75rem",
+            gap: "0.625rem",
           }}
         >
           {messages.length === 0 ? (
@@ -521,31 +575,79 @@ const EnhancedChatPanel: React.FC = () => {
               <div
                 key={index}
                 style={{
-                  padding: "1rem",
+                  padding: "0.75rem 0.875rem",
                   background: "rgba(236, 223, 204, 0.15)",
-                  backdropFilter: "blur(15px)",
+                  backdropFilter: "blur(10px)",
                   border: "1px solid rgba(236, 223, 204, 0.25)",
                   borderRadius: "var(--radius-md)",
-                  boxShadow: "0 2px 8px rgba(24, 28, 20, 0.15)",
                   transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(236, 223, 204, 0.2)";
+                  e.currentTarget.style.borderColor =
+                    "rgba(236, 223, 204, 0.35)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    "rgba(236, 223, 204, 0.15)";
+                  e.currentTarget.style.borderColor =
+                    "rgba(236, 223, 204, 0.25)";
                 }}
               >
                 <div
                   style={{
-                    fontSize: "0.75rem",
-                    color: "#ECDFCC",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
                     marginBottom: "0.5rem",
-                    fontWeight: "600",
-                    opacity: 0.8,
                   }}
                 >
-                  User #{msg.sender_id}
+                  <div
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.75rem",
+                      color: "#ECDFCC",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {msg.sender_id}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "0.8125rem",
+                      color: "#ECDFCC",
+                      fontWeight: "600",
+                    }}
+                  >
+                    User #{msg.sender_id}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.6875rem",
+                      color: "#ECDFCC",
+                      opacity: 0.6,
+                      marginLeft: "auto",
+                    }}
+                  >
+                    {new Date(msg.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
                 <div
                   style={{
                     fontSize: "0.9375rem",
                     color: "#ECDFCC",
                     lineHeight: "1.5",
+                    paddingLeft: "2rem",
                   }}
                 >
                   {msg.content}
@@ -559,9 +661,9 @@ const EnhancedChatPanel: React.FC = () => {
         {/* Input Area */}
         <div
           style={{
-            padding: "1.25rem",
-            borderTop: "1px solid rgba(236, 223, 204, 0.3)",
-            background: "rgba(236, 223, 204, 0.15)",
+            padding: "1rem 1.25rem",
+            borderTop: "1px solid rgba(236, 223, 204, 0.25)",
+            background: "rgba(236, 223, 204, 0.12)",
             backdropFilter: "blur(15px)",
             display: "flex",
             gap: "0.75rem",

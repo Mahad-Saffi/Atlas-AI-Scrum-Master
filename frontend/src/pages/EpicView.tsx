@@ -92,21 +92,21 @@ const EpicView: React.FC = () => {
     switch (status) {
       case "Done":
         return {
-          bg: "rgba(16, 185, 129, 0.15)",
-          border: "#10b981",
-          text: "#059669",
+          bg: "rgba(16, 185, 129, 0.2)",
+          border: "rgba(16, 185, 129, 0.4)",
+          text: "#ECDFCC",
         };
       case "In Progress":
         return {
-          bg: "rgba(245, 158, 11, 0.15)",
-          border: "#f59e0b",
-          text: "#d97706",
+          bg: "rgba(245, 158, 11, 0.2)",
+          border: "rgba(245, 158, 11, 0.4)",
+          text: "#ECDFCC",
         };
       default:
         return {
-          bg: "rgba(105, 117, 101, 0.15)",
-          border: "#697565",
-          text: "#697565",
+          bg: "rgba(236, 223, 204, 0.2)",
+          border: "rgba(236, 223, 204, 0.3)",
+          text: "#ECDFCC",
         };
     }
   };

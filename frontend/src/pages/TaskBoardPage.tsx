@@ -395,7 +395,7 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#f59e0b",
+                color: "#ECDFCC",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
@@ -426,7 +426,7 @@ const TaskBoardPage: React.FC = () => {
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#10b981",
+                color: "#ECDFCC",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >

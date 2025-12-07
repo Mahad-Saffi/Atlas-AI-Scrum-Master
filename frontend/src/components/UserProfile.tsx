@@ -29,9 +29,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<string>("default");
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [taskStats, setTaskStats] = useState({
+    completed: 0,
+    inProgress: 0,
+  });
 
   useEffect(() => {
     fetchProjects();
+    fetchTaskStats();
   }, []);
 
   const fetchProjects = async () => {
@@ -51,6 +56,59 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
       console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTaskStats = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch("http://localhost:8000/api/v1/projects/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const projectsData = await response.json();
+        let totalCompleted = 0;
+        let totalInProgress = 0;
+
+        // Fetch tasks for each project
+        for (const project of projectsData) {
+          try {
+            const tasksResponse = await fetch(
+              `http://localhost:8000/api/v1/tasks/?project_id=${project.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (tasksResponse.ok) {
+              const tasks = await tasksResponse.json();
+              totalCompleted += tasks.filter(
+                (t: any) => t.status === "Done"
+              ).length;
+              totalInProgress += tasks.filter(
+                (t: any) => t.status === "In Progress"
+              ).length;
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching tasks for project ${project.id}:`,
+              error
+            );
+          }
+        }
+
+        setTaskStats({
+          completed: totalCompleted,
+          inProgress: totalInProgress,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching task stats:", error);
     }
   };
 
@@ -308,7 +366,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                0
+                {taskStats.completed}
               </div>
               <div
                 style={{

@@ -255,7 +255,7 @@ const ProjectRisks: React.FC = () => {
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#ef4444",
+                    color: "#ECDFCC",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -288,7 +288,7 @@ const ProjectRisks: React.FC = () => {
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#f59e0b",
+                    color: "#ECDFCC",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -321,7 +321,7 @@ const ProjectRisks: React.FC = () => {
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#10b981",
+                    color: "#ECDFCC",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -557,7 +557,7 @@ const ProjectRisks: React.FC = () => {
                           {task.estimated_delay_days !== undefined &&
                             task.estimated_delay_days > 0 && (
                               <div
-                                style={{ color: "#ef4444", fontWeight: "600" }}
+                                style={{ color: "#ECDFCC", fontWeight: "600" }}
                               >
                                 ⚠️ Estimated Delay: {task.estimated_delay_days}{" "}
                                 days

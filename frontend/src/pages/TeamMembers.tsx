@@ -24,10 +24,18 @@ const TeamMembers: React.FC = () => {
   }, []);
 
   const fetchCurrentUser = () => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      setCurrentUserId(payload.id);
+    try {
+      const token = localStorage.getItem("jwt");
+      if (token) {
+        const parts = token.split(".");
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          setCurrentUserId(payload.id);
+        }
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      // If token is invalid, user might need to re-login
     }
   };
 

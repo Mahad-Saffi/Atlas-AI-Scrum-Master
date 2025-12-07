@@ -129,11 +129,16 @@ const IssuesPage: React.FC = () => {
         fetchIssues();
       } else {
         const error = await response.json();
-        alert(error.detail || "Failed to create issue");
+        const errorMessage =
+          typeof error.detail === "string"
+            ? error.detail
+            : JSON.stringify(error.detail) || "Failed to create issue";
+        alert(errorMessage);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating issue:", error);
-      alert("Failed to create issue");
+      const errorMessage = error?.message || "Failed to create issue";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -665,7 +670,7 @@ const IssuesPage: React.FC = () => {
                           style={{
                             fontSize: "0.8125rem",
                             fontWeight: "600",
-                            color: "#10b981",
+                            color: "#ECDFCC",
                             marginBottom: "0.25rem",
                           }}
                         >
