@@ -73,3 +73,9 @@ async def detect_delays(current_user: dict = Depends(get_current_user)):
     """Manually trigger delay detection (normally runs on schedule)"""
     result = await risk_service.detect_delays_and_update_risks()
     return result
+
+@router.get("/{project_id}/epics")
+async def get_project_epics(project_id: str, current_user: dict = Depends(get_current_user)):
+    """Get all epics with stories and tasks for a project"""
+    epics = await project_service.get_project_epics(project_id)
+    return epics

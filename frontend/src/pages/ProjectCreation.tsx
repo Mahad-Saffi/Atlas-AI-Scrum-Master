@@ -1,123 +1,185 @@
-import React from 'react';
-import ChatInterface from '../components/chat/ChatInterface';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import ChatInterface from "../components/chat/ChatInterface";
 
 const ProjectCreation: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#fefefe',
-      padding: '40px 20px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}>
-      {/* Header with hand-drawn style */}
-      <div style={{
-        textAlign: 'center',
-        marginBottom: '40px',
-        maxWidth: '800px',
-      }}>
-        <h1 style={{
-          fontSize: '48px',
-          fontWeight: 'bold',
-          color: '#1a1a1a',
-          marginBottom: '16px',
-          fontFamily: '"Segoe Print", "Comic Sans MS", cursive',
-          textShadow: '3px 3px 0 rgba(0,0,0,0.1)',
-        }}>
-          ✨ Create Your Project
-        </h1>
-        <p style={{
-          fontSize: '20px',
-          color: '#4a4a4a',
-          fontFamily: '"Segoe Print", cursive',
-          lineHeight: '1.6',
-        }}>
-          Tell me about your project, and I'll help you build a complete plan!
-        </p>
-        
-        {/* Decorative hand-drawn line */}
-        <svg width="200" height="20" style={{ margin: '20px auto', display: 'block' }}>
-          <path
-            d="M 10 10 Q 50 5, 100 10 T 190 10"
-            stroke="#1a1a1a"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
+      {/* Header */}
+      <header
+        className="glass-header"
+        style={{
+          padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <button
+              onClick={() => navigate("/")}
+              className="btn-secondary"
+              style={{
+                padding: "0.5rem 1rem",
+                fontSize: "1.25rem",
+              }}
+            >
+              ←
+            </button>
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "var(--radius-md)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src={logo}
+                alt="Atlas AI"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+            <h1
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
+              }}
+            >
+              Create New Project
+            </h1>
+          </div>
+        </div>
+      </header>
 
-      {/* Chat Interface Container */}
-      <div style={{
-        width: '100%',
-        maxWidth: '900px',
-        height: '600px',
-        border: '3px solid #1a1a1a',
-        backgroundColor: 'white',
-        boxShadow: '8px 8px 0 #1a1a1a',
-        padding: '20px',
-        position: 'relative',
-      }}>
-        {/* Corner decorations */}
-        <div style={{
-          position: 'absolute',
-          top: '-3px',
-          left: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderRight: 'none',
-          borderBottom: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '-3px',
-          right: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderLeft: 'none',
-          borderBottom: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-3px',
-          left: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderRight: 'none',
-          borderTop: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-3px',
-          right: '-3px',
-          width: '20px',
-          height: '20px',
-          border: '3px solid #1a1a1a',
-          borderLeft: 'none',
-          borderTop: 'none',
-          backgroundColor: '#fefefe',
-        }} />
-        
-        <ChatInterface />
-      </div>
+      {/* Main Content */}
+      <main
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "2rem",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {/* Info Card
+        <div
+          className="card"
+          style={{
+            padding: "1.25rem",
+            marginBottom: "1.5rem",
+            background: "rgba(236, 223, 204, 0.95)",
+            backdropFilter: "blur(20px)",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "700",
+              marginBottom: "0.5rem",
+              color: "#181C14",
+            }}
+          >
+            Let's create your project together
+          </h2>
+          <p
+            style={{
+              fontSize: "0.875rem",
+              color: "#3C3D37",
+              lineHeight: "1.5",
+            }}
+          >
+            Tell me about your project goals, timeline, and team. I'll help you
+            build a complete plan with tasks, milestones, and assignments.
+          </p>
+        </div> */}
 
-      {/* Footer note */}
-      <div style={{
-        marginTop: '30px',
-        textAlign: 'center',
-        color: '#4a4a4a',
-        fontSize: '14px',
-        fontFamily: '"Segoe Print", cursive',
-      }}>
-        <p>💡 Tip: Be as detailed as you like - I'll ask questions if I need more info!</p>
-      </div>
+        {/* Chat Interface */}
+        <div
+          className="card"
+          style={{
+            padding: "0",
+            height: "calc(100vh - 145px)",
+            maxHeight: "600px",
+            minHeight: "400px",
+            overflow: "hidden",
+          }}
+        >
+          <ChatInterface />
+        </div>
+
+        {/* Tips */}
+        {/* <div
+          className="card"
+          style={{
+            marginTop: "1.5rem",
+            padding: "1rem",
+            background: "rgba(236, 223, 204, 0.9)",
+            backdropFilter: "blur(15px)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "0.875rem",
+              color: "#3C3D37",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.5rem",
+            }}
+          >
+            <span style={{ fontSize: "1rem" }}>💡</span>
+            <div>
+              <strong
+                style={{
+                  color: "#181C14",
+                  display: "block",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Pro Tips:
+              </strong>
+              Be specific about your project scope, timeline, and team size. The
+              more details you provide, the better I can help you plan.
+            </div>
+          </div>
+        </div> */}
+      </main>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
     </div>
   );
 };

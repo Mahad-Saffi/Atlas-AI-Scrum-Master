@@ -1,23 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { aiService } from '../../services/aiService';
+import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import { aiService } from "../../services/aiService";
 
 interface Message {
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
   text: string;
 }
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { sender: 'ai', text: '👋 Hey there! What project are you thinking of building today?' },
+    {
+      sender: "ai",
+      text: "👋 Hey there! What project are you thinking of building today?",
+    },
   ]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -25,90 +28,101 @@ const ChatInterface: React.FC = () => {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() === '') return;
+    if (inputValue.trim() === "") return;
 
-    const userMessage = { sender: 'user' as const, text: inputValue };
-    setMessages(prevMessages => [...prevMessages, userMessage]);
-    setInputValue('');
+    const userMessage = { sender: "user" as const, text: inputValue };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInputValue("");
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem("jwt");
       if (!token) {
-        throw new Error('Authentication token not found.');
+        throw new Error("Authentication token not found.");
       }
       const aiResponse = await aiService.discover(inputValue, token);
-      setMessages(prevMessages => [...prevMessages, { sender: 'ai', text: aiResponse.text }]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "ai", text: aiResponse.text },
+      ]);
       if (aiResponse.text === "Project created successfully!") {
         setProjectCreated(true);
       }
     } catch (error) {
-      console.error('Error getting AI response:', error);
-      setMessages(prevMessages => [...prevMessages, { sender: 'ai', text: '😅 Oops! Something went wrong. Mind trying that again?' }]);
+      console.error("Error getting AI response:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: "ai",
+          text: "😅 Oops! Something went wrong. Mind trying that again?",
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#fefefe',
-      display: 'flex',
-      flexDirection: 'column',
-    }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        background: "rgba(236, 223, 204, 0.3)",
+        backdropFilter: "blur(15px)",
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "var(--radius-xl)",
+      }}
+    >
       {/* Messages Area */}
-      <div style={{ 
-        flex: '1', 
-        padding: '20px', 
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      }}>
+      <div
+        style={{
+          flex: "1",
+          padding: "1.25rem",
+          overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
         {messages.map((msg, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             style={{
-              display: 'flex',
-              justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-              animation: 'slideIn 0.3s ease-out',
+              display: "flex",
+              justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
+              animation: "slideIn 0.3s ease-out",
             }}
           >
-            <div style={{
-              maxWidth: '75%',
-              padding: '14px 18px',
-              border: '2px solid #1a1a1a',
-              backgroundColor: msg.sender === 'user' ? '#f5f5f5' : 'white',
-              boxShadow: '4px 4px 0 #1a1a1a',
-              position: 'relative',
-              fontFamily: '"Segoe Print", cursive',
-              fontSize: '15px',
-              lineHeight: '1.6',
-              color: '#1a1a1a',
-            }}>
-              {/* Speech bubble tail */}
-              <div style={{
-                position: 'absolute',
-                bottom: '-2px',
-                [msg.sender === 'user' ? 'right' : 'left']: '20px',
-                width: '0',
-                height: '0',
-                borderLeft: msg.sender === 'user' ? '15px solid transparent' : '15px solid #1a1a1a',
-                borderRight: msg.sender === 'user' ? '15px solid #1a1a1a' : '15px solid transparent',
-                borderTop: '15px solid #1a1a1a',
-              }} />
-              
-              <div style={{ 
-                fontWeight: 'bold', 
-                marginBottom: '6px',
-                fontSize: '13px',
-                color: '#4a4a4a',
-              }}>
-                {msg.sender === 'ai' ? '🤖 Atlas AI' : '👤 You'}
+            <div
+              style={{
+                maxWidth: "75%",
+                padding: "1rem 1.25rem",
+                borderRadius: "var(--radius-lg)",
+                background:
+                  msg.sender === "user"
+                    ? "linear-gradient(145deg, #ECDFCC, #D4C7B4)"
+                    : "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(15px)",
+                border: "1px solid rgba(236, 223, 204, 0.4)",
+                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                fontFamily: "inherit",
+                fontSize: "0.9375rem",
+                lineHeight: "1.6",
+                color: "#181C14",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: "600",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.8125rem",
+                  color: msg.sender === "user" ? "#3C3D37" : "#697565",
+                }}
+              >
+                {msg.sender === "ai" ? "🤖 Atlas AI" : "👤 You"}
               </div>
-              {msg.sender === 'ai' ? (
+              {msg.sender === "ai" ? (
                 <ReactMarkdown>{msg.text}</ReactMarkdown>
               ) : (
                 <div>{msg.text}</div>
@@ -116,55 +130,50 @@ const ChatInterface: React.FC = () => {
             </div>
           </div>
         ))}
-        
+
         {isLoading && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-          }}>
-            <div style={{
-              padding: '14px 18px',
-              border: '2px solid #1a1a1a',
-              backgroundColor: 'white',
-              boxShadow: '4px 4px 0 #1a1a1a',
-              fontFamily: '"Segoe Print", cursive',
-              color: '#4a4a4a',
-              fontSize: '15px',
-            }}>
-              <span style={{ animation: 'pulse 1.5s ease-in-out infinite' }}>
-                🤔 Thinking...
-              </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
+            <div
+              style={{
+                padding: "1rem 1.25rem",
+                borderRadius: "var(--radius-lg)",
+                background: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(15px)",
+                border: "1px solid rgba(236, 223, 204, 0.4)",
+                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                fontFamily: "inherit",
+                color: "#697565",
+                fontSize: "0.9375rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <span className="spinner"></span>
+              <span>Thinking...</span>
             </div>
           </div>
         )}
-        
+
         {projectCreated && (
-          <div style={{ 
-            textAlign: 'center', 
-            marginTop: '20px',
-            animation: 'bounceIn 0.5s ease-out',
-          }}>
-            <button 
-              onClick={() => window.location.href = '/task-board'}
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "1.25rem",
+              animation: "bounceIn 0.5s ease-out",
+            }}
+          >
+            <button
+              onClick={() => (window.location.href = "/task-board")}
+              className="btn-primary"
               style={{
-                backgroundColor: 'white',
-                color: '#1a1a1a',
-                border: '3px solid #1a1a1a',
-                padding: '14px 32px',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                boxShadow: '5px 5px 0 #1a1a1a',
-                fontFamily: '"Segoe Print", cursive',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translate(2px, 2px)';
-                e.currentTarget.style.boxShadow = '3px 3px 0 #1a1a1a';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translate(0, 0)';
-                e.currentTarget.style.boxShadow = '5px 5px 0 #1a1a1a';
+                fontSize: "1rem",
+                padding: "0.875rem 2rem",
               }}
             >
               🎉 View Your Project!
@@ -175,68 +184,53 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div style={{ 
-        padding: '20px', 
-        borderTop: '2px solid #1a1a1a',
-        display: 'flex',
-        gap: '12px',
-        backgroundColor: '#fefefe',
-      }}>
+      <div
+        style={{
+          padding: "1.25rem",
+          borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+          display: "flex",
+          gap: "0.75rem",
+          background: "rgba(236, 223, 204, 0.5)",
+          backdropFilter: "blur(10px)",
+          borderBottomLeftRadius: "var(--radius-xl)",
+          borderBottomRightRadius: "var(--radius-xl)",
+        }}
+      >
         <input
           type="text"
           placeholder="Type your message here..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+          onKeyPress={(e) =>
+            e.key === "Enter" && !isLoading && handleSendMessage()
+          }
+          className="input-modern"
           style={{
-            flex: '1',
-            padding: '12px 16px',
-            border: '2px solid #1a1a1a',
-            backgroundColor: 'white',
-            color: '#1a1a1a',
-            fontSize: '16px',
-            fontFamily: '"Segoe Print", cursive',
-            boxShadow: '3px 3px 0 #4a4a4a',
-            transition: 'all 0.2s ease',
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.boxShadow = '4px 4px 0 #2563eb';
-            e.currentTarget.style.borderColor = '#2563eb';
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.boxShadow = '3px 3px 0 #4a4a4a';
-            e.currentTarget.style.borderColor = '#1a1a1a';
+            flex: "1",
           }}
           disabled={isLoading || projectCreated}
         />
-        <button 
+        <button
           onClick={handleSendMessage}
-          style={{
-            backgroundColor: 'white',
-            color: '#1a1a1a',
-            border: '2px solid #1a1a1a',
-            padding: '12px 28px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: (isLoading || projectCreated) ? 'not-allowed' : 'pointer',
-            boxShadow: '3px 3px 0 #1a1a1a',
-            fontFamily: '"Segoe Print", cursive',
-            opacity: (isLoading || projectCreated) ? 0.5 : 1,
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            if (!isLoading && !projectCreated) {
-              e.currentTarget.style.transform = 'translate(1px, 1px)';
-              e.currentTarget.style.boxShadow = '2px 2px 0 #1a1a1a';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translate(0, 0)';
-            e.currentTarget.style.boxShadow = '3px 3px 0 #1a1a1a';
-          }}
+          className="btn-primary"
           disabled={isLoading || projectCreated}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
         >
-          {isLoading ? '⏳ Sending...' : '📤 Send'}
+          {isLoading ? (
+            <>
+              <span className="spinner"></span>
+              <span>Sending...</span>
+            </>
+          ) : (
+            <>
+              <span>📤</span>
+              <span>Send</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -252,22 +246,13 @@ const ChatInterface: React.FC = () => {
           }
         }
 
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-
         @keyframes bounceIn {
           0% {
             opacity: 0;
-            transform: scale(0.3);
+            transform: scale(0.9);
           }
           50% {
-            transform: scale(1.05);
+            transform: scale(1.02);
           }
           100% {
             opacity: 1;
