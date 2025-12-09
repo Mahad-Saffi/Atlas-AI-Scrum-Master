@@ -21,12 +21,30 @@ interface TaskBoardProps {
 }
 
 const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
-  const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
+  const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
   const { showToast } = useToast();
+
+  const handleStartTask = async (taskId: string) => {
+    try {
+      setUpdatingTaskId(taskId);
+      await taskService.updateTask(taskId, { status: "In Progress" });
+      showToast("Task started!", "success");
+      if (onTaskUpdate) {
+        onTaskUpdate();
+      }
+    } catch (error: any) {
+      console.error("Failed to start task:", error);
+      const errorMessage =
+        error.response?.data?.detail || error.message || "Unknown error";
+      showToast(`Failed to start task: ${errorMessage}`, "error");
+    } finally {
+      setUpdatingTaskId(null);
+    }
+  };
 
   const handleCompleteTask = async (taskId: string) => {
     try {
-      setCompletingTaskId(taskId);
+      setUpdatingTaskId(taskId);
       await taskService.completeTask(taskId);
       showToast("Task completed successfully!", "success");
       if (onTaskUpdate) {
@@ -38,7 +56,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
         error.response?.data?.detail || error.message || "Unknown error";
       showToast(`Failed to complete task: ${errorMessage}`, "error");
     } finally {
-      setCompletingTaskId(null);
+      setUpdatingTaskId(null);
     }
   };
 
@@ -281,25 +299,46 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   </div>
 
                   {/* Action Button */}
-                  {status !== "Done" && (
+                  {status === "To Do" && (
                     <button
-                      onClick={() => handleCompleteTask(task.id)}
-                      disabled={completingTaskId === task.id}
+                      onClick={() => handleStartTask(task.id)}
+                      disabled={updatingTaskId === task.id}
                       className="btn-secondary"
                       style={{
                         width: "100%",
                         padding: "0.5rem",
                         fontSize: "0.8125rem",
-                        opacity: completingTaskId === task.id ? 0.6 : 1,
+                        opacity: updatingTaskId === task.id ? 0.6 : 1,
                         cursor:
-                          completingTaskId === task.id
+                          updatingTaskId === task.id
                             ? "not-allowed"
                             : "pointer",
                       }}
                     >
-                      {completingTaskId === task.id
+                      {updatingTaskId === task.id
+                        ? "Starting..."
+                        : "▶ Start Task"}
+                    </button>
+                  )}
+                  {status === "In Progress" && (
+                    <button
+                      onClick={() => handleCompleteTask(task.id)}
+                      disabled={updatingTaskId === task.id}
+                      className="btn-secondary"
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem",
+                        fontSize: "0.8125rem",
+                        opacity: updatingTaskId === task.id ? 0.6 : 1,
+                        cursor:
+                          updatingTaskId === task.id
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {updatingTaskId === task.id
                         ? "Completing..."
-                        : "Mark Complete"}
+                        : "✓ Mark Complete"}
                     </button>
                   )}
 

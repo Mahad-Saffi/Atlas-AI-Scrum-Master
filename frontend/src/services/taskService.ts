@@ -13,12 +13,12 @@ const getTasks = async (projectId: string) => {
   return response.data;
 };
 
-const completeTask = async (taskId: string) => {
+const updateTask = async (taskId: string, updates: any) => {
   const token = localStorage.getItem("jwt");
   try {
-    const response = await axios.post(
-      `${API_URL}/tasks/${taskId}/complete`,
-      {},
+    const response = await axios.patch(
+      `${API_URL}/tasks/${taskId}`,
+      updates,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,9 +28,37 @@ const completeTask = async (taskId: string) => {
     return response.data;
   } catch (error: any) {
     console.error(
-      "Complete task error:",
+      "Update task error:",
       error.response?.data || error.message
     );
+    throw error;
+  }
+};
+
+const completeTask = async (taskId: string) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    console.log("Completing task:", taskId);
+    console.log("API URL:", `${API_URL}/tasks/${taskId}/complete`);
+    const response = await axios.post(
+      `${API_URL}/tasks/${taskId}/complete`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("Complete task response:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Complete task error details:", {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+      url: `${API_URL}/tasks/${taskId}/complete`
+    });
     throw error;
   }
 };
@@ -47,6 +75,7 @@ const getProjects = async () => {
 
 export const taskService = {
   getTasks,
+  updateTask,
   completeTask,
   getProjects,
 };

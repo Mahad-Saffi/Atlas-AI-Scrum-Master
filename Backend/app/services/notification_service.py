@@ -16,18 +16,17 @@ class NotificationService:
     ) -> Notification:
         """Create a new notification for a user"""
         async with SessionLocal() as session:
-            async with session.begin():
-                notification = Notification(
-                    user_id=user_id,
-                    type=notification_type,
-                    title=title,
-                    message=message,
-                    link=link
-                )
-                session.add(notification)
-                await session.commit()
-                await session.refresh(notification)
-                return notification
+            notification = Notification(
+                user_id=user_id,
+                type=notification_type,
+                title=title,
+                message=message,
+                link=link
+            )
+            session.add(notification)
+            await session.commit()
+            await session.refresh(notification)
+            return notification
 
     async def get_user_notifications(
         self,
@@ -64,46 +63,44 @@ class NotificationService:
     async def mark_as_read(self, notification_id: int, user_id: int) -> bool:
         """Mark a notification as read"""
         async with SessionLocal() as session:
-            async with session.begin():
-                result = await session.execute(
-                    select(Notification).where(
-                        and_(
-                            Notification.id == notification_id,
-                            Notification.user_id == user_id
-                        )
+            result = await session.execute(
+                select(Notification).where(
+                    and_(
+                        Notification.id == notification_id,
+                        Notification.user_id == user_id
                     )
                 )
-                notification = result.scalars().first()
-                
-                if notification:
-                    notification.read = True
-                    notification.read_at = datetime.utcnow()
-                    await session.commit()
-                    return True
-                return False
+            )
+            notification = result.scalars().first()
+            
+            if notification:
+                notification.read = True
+                notification.read_at = datetime.utcnow()
+                await session.commit()
+                return True
+            return False
 
     async def mark_all_as_read(self, user_id: int) -> int:
         """Mark all notifications as read for a user"""
         async with SessionLocal() as session:
-            async with session.begin():
-                result = await session.execute(
-                    select(Notification).where(
-                        and_(
-                            Notification.user_id == user_id,
-                            Notification.read == False
-                        )
+            result = await session.execute(
+                select(Notification).where(
+                    and_(
+                        Notification.user_id == user_id,
+                        Notification.read == False
                     )
                 )
-                notifications = result.scalars().all()
-                
-                count = 0
-                for notification in notifications:
-                    notification.read = True
-                    notification.read_at = datetime.utcnow()
-                    count += 1
-                
-                await session.commit()
-                return count
+            )
+            notifications = result.scalars().all()
+            
+            count = 0
+            for notification in notifications:
+                notification.read = True
+                notification.read_at = datetime.utcnow()
+                count += 1
+            
+            await session.commit()
+            return count
 
     async def get_unread_count(self, user_id: int) -> int:
         """Get count of unread notifications"""
@@ -122,21 +119,20 @@ class NotificationService:
     async def delete_notification(self, notification_id: int, user_id: int) -> bool:
         """Delete a notification"""
         async with SessionLocal() as session:
-            async with session.begin():
-                result = await session.execute(
-                    select(Notification).where(
-                        and_(
-                            Notification.id == notification_id,
-                            Notification.user_id == user_id
-                        )
+            result = await session.execute(
+                select(Notification).where(
+                    and_(
+                        Notification.id == notification_id,
+                        Notification.user_id == user_id
                     )
                 )
-                notification = result.scalars().first()
-                
-                if notification:
-                    await session.delete(notification)
-                    await session.commit()
-                    return True
-                return False
+            )
+            notification = result.scalars().first()
+            
+            if notification:
+                await session.delete(notification)
+                await session.commit()
+                return True
+            return False
 
 notification_service = NotificationService()
