@@ -228,6 +228,21 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               <span>New Project</span>
             </button>
 
+            <button
+              onClick={() => navigate("/ai-assistant")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+              }}
+            >
+              <span>🤖</span>
+              <span>AI Assistant</span>
+            </button>
+
             <div
               style={{
                 display: "flex",

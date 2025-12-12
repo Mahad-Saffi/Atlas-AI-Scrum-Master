@@ -1,0 +1,346 @@
+{
+  "pages": {
+    "login": {
+      "url": "http://localhost:5173/login",
+      "identifiers": {
+        "title_contains": "Sign In",
+        "url_pattern": "^http://localhost:5173/$|/login",
+        "elements": ["button"]
+      },
+      "actions": {
+        "login": {
+          "description": "Log in to the application using Try Demo button",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "/html/body/div[1]/div[1]/div[1]/div[2]/form/button[1]",
+              "description": "Click Try Demo button"
+            },
+            {
+              "type": "wait",
+              "seconds": 2,
+              "description": "Wait for login to complete"
+            }
+          ],
+          "navigates_to": "dashboard"
+        }
+      }
+    },
+    "dashboard": {
+      "url": "http://localhost:5173/",
+      "identifiers": {
+        "url_pattern": "^http://localhost:5173/$",
+        "elements": [".dashboard", ".project-card", "button"]
+      },
+      "actions": {
+        "navigate_to_create_project": {
+          "description": "Navigate to project creation page",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'New Project')]",
+              "description": "Click New Project button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "project_creation"
+        },
+        "navigate_to_task_board": {
+          "description": "Navigate to task board",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'View Task Board')]",
+              "description": "Click View Task Board button from project"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "task_board"
+        },
+        "navigate_to_team_members": {
+          "description": "Navigate to team members page",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'Team')]",
+              "description": "Click Team button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "team_members"
+        },
+        "open_project": {
+          "description": "Open a project by name",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//h3[contains(text(), '{project_name}')]",
+              "description": "Click on project card"
+            },
+            {
+              "type": "wait",
+              "seconds": 2
+            }
+          ],
+          "navigates_to": "project_dashboard"
+        }
+      }
+    },
+    "project_creation": {
+      "url": "http://localhost:5173/create-project",
+      "identifiers": {
+        "url_pattern": "/create-project",
+        "title_contains": "Create",
+        "elements": ["input[placeholder*='message']", ".chat-interface"]
+      },
+      "actions": {
+        "create_project_with_description": {
+          "description": "Create a project using AI chat",
+          "steps": [
+            {
+              "type": "input",
+              "selector": "input[placeholder*='message']",
+              "param": "description",
+              "description": "Enter project description"
+            },
+            {
+              "type": "click",
+              "selector": "/html/body/div[1]/div[1]/main/div/div/div[2]/button",
+              "description": "Click send button"
+            },
+            {
+              "type": "wait",
+              "seconds": 5,
+              "description": "Wait for AI to generate project"
+            },
+            {
+              "type": "wait_for_text",
+              "text": "Project created",
+              "timeout": 30,
+              "description": "Wait for success message"
+            }
+          ],
+          "navigates_to": "dashboard"
+        }
+      }
+    },
+    "task_board": {
+      "url": "http://localhost:5173/task-board",
+      "identifiers": {
+        "url_pattern": "/task-board",
+        "title_contains": "Task Board",
+        "elements": [".task-card", ".kanban-column"]
+      },
+      "actions": {
+        "start_task_by_name": {
+          "description": "Start a specific task",
+          "steps": [
+            {
+              "type": "find_and_click",
+              "find_text": "{task_name}",
+              "then_click": "button",
+              "description": "Find task and click start button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ]
+        },
+        "complete_task_by_name": {
+          "description": "Complete a specific task",
+          "steps": [
+            {
+              "type": "find_and_click",
+              "find_text": "{task_name}",
+              "then_click": "button",
+              "description": "Find task and click complete button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ]
+        }
+      }
+    },
+    "team_members": {
+      "url": "http://localhost:5173/team-members",
+      "identifiers": {
+        "url_pattern": "/team-members",
+        "title_contains": "Team",
+        "elements": ["input[type='email']", "button"]
+      },
+      "actions": {
+        "add_team_member": {
+          "description": "Add a new team member",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'Add') or contains(., 'New')]",
+              "description": "Click add member button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            },
+            {
+              "type": "input",
+              "selector": "input[type='email']",
+              "param": "email",
+              "description": "Enter email"
+            },
+            {
+              "type": "input",
+              "selector": "input[name='username']",
+              "param": "username",
+              "description": "Enter username"
+            },
+            {
+              "type": "input",
+              "selector": "input[type='password']",
+              "param": "password",
+              "description": "Enter password"
+            },
+            {
+              "type": "select",
+              "selector": "select[name='role']",
+              "param": "role",
+              "description": "Select role"
+            },
+            {
+              "type": "click",
+              "selector": "button[type='submit']",
+              "description": "Click add button"
+            },
+            {
+              "type": "wait",
+              "seconds": 2
+            }
+          ]
+        }
+      }
+    },
+    "project_dashboard": {
+      "url": "http://localhost:5173/project/{project_id}",
+      "identifiers": {
+        "url_pattern": "/project/[^/]+$",
+        "elements": ["button", ".card"]
+      },
+      "actions": {
+        "navigate_to_task_board": {
+          "description": "Navigate to task board from project",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'View Task Board')]",
+              "description": "Click View Task Board button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "task_board"
+        },
+        "navigate_to_issues": {
+          "description": "Navigate to issues page",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "//button[contains(., 'Issues')]",
+              "description": "Click Issues button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "issues_page"
+        }
+      }
+    },
+    "issues_page": {
+      "url": "http://localhost:5173/project/{project_id}/issues",
+      "identifiers": {
+        "url_pattern": "/issues",
+        "title_contains": "Issues",
+        "elements": [".issue-card", "button:contains('Report Issue')"]
+      },
+      "actions": {
+        "create_issue": {
+          "description": "Create a new issue",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "button.btn-primary",
+              "description": "Click report issue button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            },
+            {
+              "type": "input",
+              "selector": "input[name='title']",
+              "param": "title",
+              "description": "Enter issue title"
+            },
+            {
+              "type": "input",
+              "selector": "textarea[name='description']",
+              "param": "description",
+              "description": "Enter issue description"
+            },
+            {
+              "type": "select",
+              "selector": "select[name='priority']",
+              "param": "priority",
+              "description": "Select priority"
+            },
+            {
+              "type": "click",
+              "selector": "button[type='submit']",
+              "description": "Click create button"
+            },
+            {
+              "type": "wait",
+              "seconds": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "common_actions": {
+    "navigate_back": {
+      "description": "Navigate back to previous page",
+      "steps": [
+        {
+          "type": "click",
+          "selector": "button.btn-secondary",
+          "description": "Click back button"
+        }
+      ]
+    },
+    "logout": {
+      "description": "Log out of the application",
+      "steps": [
+        {
+          "type": "click",
+          "selector": "button.btn-secondary",
+          "description": "Click logout button"
+        }
+      ]
+    }
+  }
+}

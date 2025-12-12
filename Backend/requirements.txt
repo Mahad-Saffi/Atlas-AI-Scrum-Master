@@ -13,3 +13,6 @@ openai
 bcrypt
 python-multipart
 email-validator
+selenium
+webdriver-manager
+pillow
