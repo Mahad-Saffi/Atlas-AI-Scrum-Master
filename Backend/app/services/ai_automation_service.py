@@ -146,8 +146,19 @@ User Task: "{task}"
 Application Map (available pages and actions):
 {json.dumps(self.app_map, indent=2)}
 
-Create a step-by-step plan to accomplish the user's task. 
-Each step should reference a page and action from the application map.
+Analyze the user's task and create a step-by-step plan to accomplish it.
+
+IMPORTANT RULES:
+1. If the user is asking a QUESTION (e.g., "how many projects?", "what tasks?"), you need to:
+   - Navigate to the relevant page
+   - Use "count_elements" action if available to count items
+   - The system will report the count back to the user
+
+2. If the user wants to PERFORM AN ACTION (e.g., "create project", "add member"), use the appropriate actions from the map
+
+3. Use ONLY pages and actions that exist in the application map
+4. Extract parameters from the user's task
+5. Be specific and sequential
 
 CRITICAL: Return ONLY valid JSON. NO comments, NO explanations, NO markdown.
 
@@ -163,14 +174,10 @@ Return this exact structure:
     ]
 }}
 
-Important:
-- Use ONLY pages and actions that exist in the application map
-- If user needs to navigate between pages, include navigation steps
-- Extract parameters from the user's task (e.g., project name, email, etc.)
-- Be specific and sequential
-- NO COMMENTS in JSON (no // or /* */)
-- If a parameter is not specified, use a reasonable default value
-- For passwords, use "defaultPassword123" if not specified
+Examples:
+- "How many projects?" → Navigate to dashboard, count_projects action
+- "Create a project called X" → Navigate to project_creation, create_project_with_ai action
+- "Open first project" → Navigate to dashboard, open_first_project action
 """
         
         response = await self.openai_client.chat.completions.create(
@@ -239,25 +246,28 @@ Important:
         try:
             if action_type == 'click':
                 selector = action_step['selector']
-                element = self._find_element(selector)
+                fallback_selectors = action_step.get('fallback_selectors', [])
+                element = self._find_element_with_fallback(selector, fallback_selectors)
                 element.click()
                 
             elif action_type == 'input':
                 selector = action_step['selector']
+                fallback_selectors = action_step.get('fallback_selectors', [])
                 param_name = action_step['param']
                 value = params.get(param_name, '')
                 
-                element = self._find_element(selector)
+                element = self._find_element_with_fallback(selector, fallback_selectors)
                 element.clear()
                 element.send_keys(value)
                 
             elif action_type == 'select':
                 selector = action_step['selector']
+                fallback_selectors = action_step.get('fallback_selectors', [])
                 param_name = action_step['param']
                 value = params.get(param_name, '')
                 
                 from selenium.webdriver.support.ui import Select
-                element = self._find_element(selector)
+                element = self._find_element_with_fallback(selector, fallback_selectors)
                 select = Select(element)
                 select.select_by_visible_text(value)
                 
@@ -271,6 +281,14 @@ Important:
                 WebDriverWait(self.driver, timeout).until(
                     EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{text}')]"))
                 )
+                
+            elif action_type == 'count_elements':
+                selector = action_step['selector']
+                fallback_selectors = action_step.get('fallback_selectors', [])
+                elements = self._find_elements_with_fallback(selector, fallback_selectors)
+                count = len(elements)
+                await self._send_update(websocket, f"  → Found {count} elements", "info")
+                return count
                 
             elif action_type == 'find_and_click':
                 find_text = action_step['find_text']
@@ -294,13 +312,14 @@ Important:
     
     def _find_element(self, selector: str, timeout: int = 10):
         """Find element with multiple selector strategies"""
-        # Try CSS selector first
-        try:
-            return WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, selector))
-            )
-        except:
-            pass
+        # Try CSS selector first (if it doesn't contain :contains)
+        if ':contains' not in selector:
+            try:
+                return WebDriverWait(self.driver, timeout).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+                )
+            except:
+                pass
         
         # Try XPath if selector contains :contains
         if ':contains' in selector:
@@ -310,9 +329,12 @@ Important:
                 tag = match.group(1) or '*'
                 text = match.group(2)
                 xpath = f"//{tag}[contains(text(), '{text}')]"
-                return WebDriverWait(self.driver, timeout).until(
-                    EC.presence_of_element_located((By.XPATH, xpath))
-                )
+                try:
+                    return WebDriverWait(self.driver, timeout).until(
+                        EC.presence_of_element_located((By.XPATH, xpath))
+                    )
+                except:
+                    pass
         
         # Try as XPath
         try:
@@ -322,6 +344,75 @@ Important:
         except:
             raise NoSuchElementException(f"Could not find element: {selector}")
     
+    def _find_element_with_fallback(self, selector: str, fallback_selectors: List[str], timeout: int = 10):
+        """Find element with fallback selectors"""
+        # Try primary selector first
+        try:
+            return self._find_element(selector, timeout=2)
+        except NoSuchElementException:
+            pass
+        
+        # Try fallback selectors
+        for fallback in fallback_selectors:
+            try:
+                return self._find_element(fallback, timeout=2)
+            except NoSuchElementException:
+                continue
+        
+        # If all fail, raise exception with all attempted selectors
+        all_selectors = [selector] + fallback_selectors
+        raise NoSuchElementException(f"Could not find element with any selector: {', '.join(all_selectors)}")
+    
+    def _find_elements_with_fallback(self, selector: str, fallback_selectors: List[str], timeout: int = 10):
+        """Find multiple elements with fallback selectors"""
+        # Try primary selector first
+        try:
+            if ':contains' not in selector:
+                try:
+                    WebDriverWait(self.driver, 2).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+                    )
+                    return self.driver.find_elements(By.CSS_SELECTOR, selector)
+                except:
+                    pass
+            
+            # Try as XPath
+            try:
+                WebDriverWait(self.driver, 2).until(
+                    EC.presence_of_element_located((By.XPATH, selector))
+                )
+                return self.driver.find_elements(By.XPATH, selector)
+            except:
+                pass
+        except:
+            pass
+        
+        # Try fallback selectors
+        for fallback in fallback_selectors:
+            try:
+                if ':contains' not in fallback:
+                    try:
+                        WebDriverWait(self.driver, 2).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, fallback))
+                        )
+                        return self.driver.find_elements(By.CSS_SELECTOR, fallback)
+                    except:
+                        pass
+                
+                # Try as XPath
+                try:
+                    WebDriverWait(self.driver, 2).until(
+                        EC.presence_of_element_located((By.XPATH, fallback))
+                    )
+                    return self.driver.find_elements(By.XPATH, fallback)
+                except:
+                    continue
+            except:
+                continue
+        
+        # If all fail, return empty list
+        return []
+    
     def _detect_current_page(self) -> str:
         """Detect which page we're currently on"""
         if not self.driver:
@@ -330,24 +421,39 @@ Important:
         current_url = self.driver.current_url
         page_title = self.driver.title
         
-        # Special case: root URL is login page if not authenticated
+        # Special case: root URL could be login or dashboard
         if current_url == "http://localhost:5173/" or current_url == "http://localhost:5173":
             # Check if we see login elements (Try Demo button)
             try:
-                self.driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/form/button[1]")
+                # Try multiple ways to detect login page
+                self.driver.find_element(By.XPATH, "//button[contains(text(), 'Try Demo')]")
                 return "login"
             except:
-                # If no login button, we're on dashboard
-                return "dashboard"
+                try:
+                    self.driver.find_element(By.XPATH, "//button[contains(text(), 'Login')]")
+                    return "login"
+                except:
+                    # If no login button, we're on dashboard
+                    return "dashboard"
         
+        # Check URL patterns for all pages
         for page_name, page_def in self.app_map['pages'].items():
-            # Check URL pattern
+            # Check URL pattern first (more specific)
             url_pattern = page_def['identifiers'].get('url_pattern', '')
             if url_pattern and re.search(url_pattern, current_url):
                 return page_name
-            
-            # Check if URL contains page URL
-            if page_def['url'] in current_url:
+        
+        # Fallback: check if URL contains page URL
+        for page_name, page_def in self.app_map['pages'].items():
+            page_url = page_def['url']
+            # Extract path from page URL
+            if '{' in page_url:
+                # Handle dynamic URLs like /project/{project_id}
+                url_template = page_url.replace('http://localhost:5173', '')
+                url_pattern = url_template.replace('{project_id}', '[a-f0-9-]+')
+                if re.search(url_pattern, current_url):
+                    return page_name
+            elif page_url in current_url:
                 return page_name
         
         return "unknown"
@@ -386,13 +492,26 @@ Important:
             # If we're on login page, login first
             if current_page == "login":
                 await self._send_update(websocket, "🔐 Detected login page, logging in...", "info")
-                await self._auto_login(websocket)
-                await asyncio.sleep(2)
-                
-                # Try the step again
-                await self._send_update(websocket, "🔄 Retrying step after login...", "info")
-                await self._execute_step(failed_step, websocket)
-                return True
+                try:
+                    await self._auto_login(websocket)
+                    await asyncio.sleep(2)
+                    
+                    # Re-detect page after login
+                    current_page = self._detect_current_page()
+                    await self._send_update(websocket, f"✅ Logged in, now on: {current_page}", "info")
+                    
+                    # If we need to be on a different page, navigate there
+                    if current_page != target_page and target_page != 'unknown':
+                        await self._navigate_to_page(target_page, websocket)
+                        await asyncio.sleep(2)
+                    
+                    # Try the step again
+                    await self._send_update(websocket, "🔄 Retrying step after login...", "info")
+                    await self._execute_step(failed_step, websocket)
+                    return True
+                except Exception as login_error:
+                    await self._send_update(websocket, f"❌ Login failed: {str(login_error)}", "error")
+                    return False
             
             # If we're not on the right page, navigate there
             if current_page != target_page and target_page != 'unknown':
@@ -401,13 +520,30 @@ Important:
                     f"🧭 Wrong page detected, navigating to {target_page}...", 
                     "info"
                 )
-                await self._navigate_to_page(target_page, websocket)
+                try:
+                    await self._navigate_to_page(target_page, websocket)
+                    await asyncio.sleep(2)
+                    
+                    # Try the step again
+                    await self._send_update(websocket, "🔄 Retrying step after navigation...", "info")
+                    await self._execute_step(failed_step, websocket)
+                    return True
+                except Exception as nav_error:
+                    await self._send_update(websocket, f"❌ Navigation failed: {str(nav_error)}", "error")
+                    # Continue to AI suggestion
+            
+            # If we're on the right page but element not found, wait and retry
+            if current_page == target_page:
+                await self._send_update(websocket, "⏳ Waiting for page to fully load...", "info")
                 await asyncio.sleep(2)
                 
-                # Try the step again
-                await self._send_update(websocket, "🔄 Retrying step after navigation...", "info")
-                await self._execute_step(failed_step, websocket)
-                return True
+                try:
+                    await self._send_update(websocket, "🔄 Retrying step after wait...", "info")
+                    await self._execute_step(failed_step, websocket)
+                    return True
+                except Exception as retry_error:
+                    await self._send_update(websocket, f"⚠️ Retry failed: {str(retry_error)}", "warning")
+                    # Continue to AI suggestion
             
             # If element not found, use GPT to find alternative
             await self._send_update(
@@ -440,7 +576,8 @@ Return JSON with: {{"possible": true/false, "suggestion": "what to do next"}}
                     {"role": "system", "content": "You are a helpful automation assistant. Always return valid JSON."},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.3
+                temperature=0.3,
+                response_format={"type": "json_object"}
             )
             
             content = response.choices[0].message.content.strip()
