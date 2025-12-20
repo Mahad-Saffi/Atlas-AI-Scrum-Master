@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from app.models.user import Base
 
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./test.db"
-os.environ["OPENAI_API_KEY"] = "dummy_key"
+os.environ["OPENAI_API_KEY"] = "test-api-key-for-testing"
 
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 engine = create_async_engine(SQLALCHEMY_DATABASE_URL)

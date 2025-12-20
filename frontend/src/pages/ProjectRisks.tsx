@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  ExclamationTriangleIcon,
+  ArrowPathIcon,
+  ChartBarIcon,
+  UserIcon,
+  CalendarIcon,
+  ClockIcon,
+} from "@heroicons/react/24/solid";
 
 interface Risk {
   task_id: string;
@@ -32,7 +40,6 @@ const ProjectRisks: React.FC = () => {
     if (projectId) {
       fetchRisks();
 
-      // Auto-refresh every 15 seconds
       const interval = setInterval(() => {
         fetchRisks();
       }, 15000);
@@ -72,22 +79,9 @@ const ProjectRisks: React.FC = () => {
       case "medium":
         return "#f59e0b";
       case "low":
-        return "#10b981";
+        return "#22c55e";
       default:
-        return "#697565";
-    }
-  };
-
-  const getRiskIcon = (level: string) => {
-    switch (level) {
-      case "high":
-        return "🔴";
-      case "medium":
-        return "🟡";
-      case "low":
-        return "🟢";
-      default:
-        return "⚪";
+        return "#64748b";
     }
   };
 
@@ -97,15 +91,42 @@ const ProjectRisks: React.FC = () => {
     ) || [];
 
   return (
-    <div style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#0a0a0f",
+        position: "relative",
+      }}
+    >
+      {/* Background Grid Pattern */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: "50px 50px",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+
       {/* Header */}
       <header
-        className="glass-header"
         style={{
-          padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
+          background: "rgba(17, 17, 24, 0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          padding: "1.25rem 2rem",
         }}
       >
         <div
@@ -117,55 +138,90 @@ const ProjectRisks: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
             <button
               onClick={() => navigate(`/project/${projectId}`)}
-              className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
-            >
-              ←
-            </button>
-            <div
               style={{
-                width: "32px",
-                height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1rem",
+                gap: "0.5rem",
+                padding: "0.75rem 1.25rem",
+                background: "rgba(220, 38, 38, 0.15)",
+                border: "1px solid rgba(220, 38, 38, 0.3)",
+                borderRadius: "12px",
+                color: "#dc2626",
+                fontSize: "0.9375rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(220, 38, 38, 0.25)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(220, 38, 38, 0.15)";
               }}
             >
-              ⚠️
+              ← Back to Project
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "12px",
+                  background: "linear-gradient(135deg, #f59e0b, #d97706)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ExclamationTriangleIcon
+                  style={{ width: "24px", height: "24px", color: "white" }}
+                />
+              </div>
+              <h1
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#f1f5f9",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Project Risks
+              </h1>
             </div>
-            <h1
-              style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
-              }}
-            >
-              Project Risks
-            </h1>
           </div>
           <button
             onClick={fetchRisks}
-            className="btn-primary"
-            style={{ padding: "0.75rem 1.5rem" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "0.75rem 1.5rem",
+              background: "linear-gradient(135deg, #dc2626, #991b1b)",
+              border: "none",
+              borderRadius: "12px",
+              color: "white",
+              fontSize: "0.9375rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
+            }}
           >
-            🔄 Refresh
+            <ArrowPathIcon style={{ width: "18px", height: "18px" }} />
+            Refresh
           </button>
         </div>
       </header>
 
       <main
         style={{
-          maxWidth: "1400px",
-          margin: "0 auto",
-          padding: "2rem",
           position: "relative",
           zIndex: 1,
+          maxWidth: "1400px",
+          margin: "0 auto",
+          padding: "3rem 2rem",
         }}
       >
         {loading ? (
@@ -178,25 +234,32 @@ const ProjectRisks: React.FC = () => {
             }}
           >
             <div
-              className="spinner"
-              style={{ width: "40px", height: "40px", borderWidth: "3px" }}
+              style={{
+                width: "48px",
+                height: "48px",
+                border: "3px solid #1a1a24",
+                borderTop: "3px solid #dc2626",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }}
             />
           </div>
         ) : !riskData ? (
           <div
-            className="card"
             style={{
-              padding: "4rem 2rem",
+              background: "rgba(17, 17, 24, 0.7)",
+              backdropFilter: "blur(16px)",
+              border: "2px dashed rgba(255, 255, 255, 0.12)",
+              borderRadius: "24px",
+              padding: "5rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px dashed #697565",
             }}
           >
             <h3
               style={{
-                fontSize: "1.5rem",
+                fontSize: "1.625rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: "#f1f5f9",
               }}
             >
               No risk data available
@@ -208,152 +271,244 @@ const ProjectRisks: React.FC = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
-                gap: "0.75rem",
-                marginBottom: "2rem",
+                gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                gap: "1.5rem",
+                marginBottom: "3rem",
               }}
             >
               <div
-                className="card"
                 style={{
-                  padding: "0.75rem",
-                  background: "rgba(236, 223, 204, 0.9)",
-                  border: "2px solid #697565",
-                  textAlign: "center",
+                  background: "rgba(17, 17, 24, 0.7)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "20px",
+                  padding: "2rem",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  📊
-                </div>
                 <div
-                  style={{
-                    fontSize: "1.25rem",
-                    fontWeight: "700",
-                    color: "#181C14",
-                    marginBottom: "0.25rem",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
                 >
-                  {riskData.total_tasks}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#181C14",
-                    fontWeight: "600",
-                  }}
-                >
-                  Total Tasks
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "14px",
+                      background: "rgba(100, 116, 139, 0.15)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ChartBarIcon
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        color: "#64748b",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "2.25rem",
+                        fontWeight: "700",
+                        color: "#f1f5f9",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {riskData.total_tasks}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.9375rem",
+                        color: "#94a3b8",
+                        marginTop: "0.25rem",
+                      }}
+                    >
+                      Total Tasks
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div
-                className="card"
                 style={{
-                  padding: "0.75rem",
-                  background: "rgba(239, 68, 68, 0.15)",
-                  border: "2px solid #ef4444",
-                  textAlign: "center",
+                  background: "rgba(239, 68, 68, 0.12)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                  borderRadius: "20px",
+                  padding: "2rem",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🔴
-                </div>
                 <div
-                  style={{
-                    fontSize: "1.25rem",
-                    fontWeight: "700",
-                    color: "#ECDFCC",
-                    marginBottom: "0.25rem",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
                 >
-                  {riskData.high_risk_count}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#181C14",
-                    fontWeight: "600",
-                  }}
-                >
-                  High Risk
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "14px",
+                      background: "rgba(239, 68, 68, 0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ExclamationTriangleIcon
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        color: "#ef4444",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "2.25rem",
+                        fontWeight: "700",
+                        color: "#f1f5f9",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {riskData.high_risk_count}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.9375rem",
+                        color: "#ef4444",
+                        marginTop: "0.25rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      High Risk
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div
-                className="card"
                 style={{
-                  padding: "0.75rem",
-                  background: "rgba(245, 158, 11, 0.15)",
-                  border: "2px solid #f59e0b",
-                  textAlign: "center",
+                  background: "rgba(245, 158, 11, 0.12)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(245, 158, 11, 0.3)",
+                  borderRadius: "20px",
+                  padding: "2rem",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🟡
-                </div>
                 <div
-                  style={{
-                    fontSize: "1.25rem",
-                    fontWeight: "700",
-                    color: "#ECDFCC",
-                    marginBottom: "0.25rem",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
                 >
-                  {riskData.medium_risk_count}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#181C14",
-                    fontWeight: "600",
-                  }}
-                >
-                  Medium Risk
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "14px",
+                      background: "rgba(245, 158, 11, 0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ExclamationTriangleIcon
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        color: "#f59e0b",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "2.25rem",
+                        fontWeight: "700",
+                        color: "#f1f5f9",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {riskData.medium_risk_count}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.9375rem",
+                        color: "#f59e0b",
+                        marginTop: "0.25rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Medium Risk
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div
-                className="card"
                 style={{
-                  padding: "0.75rem",
-                  background: "rgba(16, 185, 129, 0.15)",
-                  border: "2px solid #10b981",
-                  textAlign: "center",
+                  background: "rgba(34, 197, 94, 0.12)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(34, 197, 94, 0.3)",
+                  borderRadius: "20px",
+                  padding: "2rem",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🟢
-                </div>
                 <div
-                  style={{
-                    fontSize: "1.25rem",
-                    fontWeight: "700",
-                    color: "#ECDFCC",
-                    marginBottom: "0.25rem",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
                 >
-                  {riskData.low_risk_count}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#181C14",
-                    fontWeight: "600",
-                  }}
-                >
-                  Low Risk
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "14px",
+                      background: "rgba(34, 197, 94, 0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ChartBarIcon
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        color: "#22c55e",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "2.25rem",
+                        fontWeight: "700",
+                        color: "#f1f5f9",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {riskData.low_risk_count}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.9375rem",
+                        color: "#22c55e",
+                        marginTop: "0.25rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Low Risk
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Filter Bar */}
             <div
-              className="card"
               style={{
-                padding: "1rem",
+                background: "rgba(17, 17, 24, 0.7)",
+                backdropFilter: "blur(16px)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "16px",
+                padding: "1.5rem",
                 marginBottom: "2rem",
-                background: "rgba(236, 223, 204, 0.95)",
-                border: "2px solid #697565",
               }}
             >
               <div
@@ -364,21 +519,32 @@ const ProjectRisks: React.FC = () => {
                   flexWrap: "wrap",
                 }}
               >
-                <span style={{ fontWeight: "600", color: "#181C14" }}>
+                <span style={{ fontWeight: "600", color: "#f1f5f9" }}>
                   Filter by Risk:
                 </span>
                 {["all", "high", "medium", "low"].map((level) => (
                   <button
                     key={level}
                     onClick={() => setFilterLevel(level)}
-                    className={
-                      filterLevel === level ? "btn-primary" : "btn-secondary"
-                    }
-                    style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
+                    style={{
+                      padding: "0.625rem 1.25rem",
+                      background:
+                        filterLevel === level
+                          ? "linear-gradient(135deg, #dc2626, #991b1b)"
+                          : "rgba(255, 255, 255, 0.05)",
+                      border:
+                        filterLevel === level
+                          ? "none"
+                          : "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "12px",
+                      color: filterLevel === level ? "white" : "#f1f5f9",
+                      fontSize: "0.875rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}
                   >
-                    {level === "all"
-                      ? "All"
-                      : `${getRiskIcon(level)} ${level.toUpperCase()}`}
+                    {level === "all" ? "All" : level.toUpperCase()}
                   </button>
                 ))}
               </div>
@@ -387,54 +553,57 @@ const ProjectRisks: React.FC = () => {
             {/* At-Risk Tasks List */}
             {filteredTasks.length === 0 ? (
               <div
-                className="card"
                 style={{
-                  padding: "4rem 2rem",
+                  background: "rgba(17, 17, 24, 0.7)",
+                  backdropFilter: "blur(16px)",
+                  border: "2px dashed rgba(255, 255, 255, 0.12)",
+                  borderRadius: "24px",
+                  padding: "5rem 2rem",
                   textAlign: "center",
-                  background: "rgba(236, 223, 204, 0.95)",
-                  border: "2px dashed #697565",
                 }}
               >
                 <div
                   style={{
-                    width: "80px",
-                    height: "80px",
-                    background:
-                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                    borderRadius: "50%",
+                    width: "88px",
+                    height: "88px",
+                    borderRadius: "22px",
+                    background: "linear-gradient(135deg, #22c55e, #15803d)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "3rem",
-                    margin: "0 auto 1.5rem",
+                    margin: "0 auto 1.75rem",
+                    boxShadow: "0 12px 36px rgba(34, 197, 94, 0.35)",
                   }}
                 >
-                  ✅
+                  <ChartBarIcon
+                    style={{ width: "48px", height: "48px", color: "white" }}
+                  />
                 </div>
                 <h3
                   style={{
-                    fontSize: "1.5rem",
+                    fontSize: "1.625rem",
                     fontWeight: "700",
-                    color: "#181C14",
+                    color: "#f1f5f9",
                     marginBottom: "0.75rem",
                   }}
                 >
                   No {filterLevel !== "all" ? filterLevel : ""} risk tasks
                 </h3>
-                <p style={{ fontSize: "1rem", color: "#3C3D37" }}>
+                <p style={{ fontSize: "1.0625rem", color: "#94a3b8" }}>
                   All tasks are on track!
                 </p>
               </div>
             ) : (
-              <div style={{ display: "grid", gap: "1.25rem" }}>
+              <div style={{ display: "grid", gap: "1.5rem" }}>
                 {filteredTasks.map((task) => (
                   <div
                     key={task.task_id}
-                    className="card"
                     style={{
-                      padding: "1.5rem",
-                      background: "rgba(236, 223, 204, 0.9)",
-                      border: `2px solid ${getRiskColor(task.risk_level)}`,
+                      background: "rgba(17, 17, 24, 0.7)",
+                      backdropFilter: "blur(16px)",
+                      border: `1px solid ${getRiskColor(task.risk_level)}40`,
+                      borderRadius: "20px",
+                      padding: "2rem",
                       transition: "all 0.3s ease",
                     }}
                   >
@@ -456,14 +625,30 @@ const ProjectRisks: React.FC = () => {
                             marginBottom: "0.75rem",
                           }}
                         >
-                          <span style={{ fontSize: "1.5rem" }}>
-                            {getRiskIcon(task.risk_level)}
-                          </span>
+                          <div
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "12px",
+                              background: `${getRiskColor(task.risk_level)}20`,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <ExclamationTriangleIcon
+                              style={{
+                                width: "24px",
+                                height: "24px",
+                                color: getRiskColor(task.risk_level),
+                              }}
+                            />
+                          </div>
                           <h3
                             style={{
-                              fontSize: "1.125rem",
+                              fontSize: "1.25rem",
                               fontWeight: "700",
-                              color: "#181C14",
+                              color: "#f1f5f9",
                               flex: 1,
                             }}
                           >
@@ -471,12 +656,15 @@ const ProjectRisks: React.FC = () => {
                           </h3>
                           <span
                             style={{
-                              padding: "0.25rem 0.75rem",
-                              background: getRiskColor(task.risk_level),
-                              color: "#ECDFCC",
+                              padding: "0.375rem 0.875rem",
+                              background: `${getRiskColor(task.risk_level)}20`,
+                              color: getRiskColor(task.risk_level),
                               borderRadius: "12px",
                               fontSize: "0.75rem",
                               fontWeight: "600",
+                              border: `1px solid ${getRiskColor(
+                                task.risk_level
+                              )}40`,
                             }}
                           >
                             {task.risk_level.toUpperCase()} RISK
@@ -489,7 +677,7 @@ const ProjectRisks: React.FC = () => {
                             style={{
                               fontSize: "0.875rem",
                               fontWeight: "600",
-                              color: "#181C14",
+                              color: "#f1f5f9",
                               marginBottom: "0.5rem",
                             }}
                           >
@@ -506,12 +694,12 @@ const ProjectRisks: React.FC = () => {
                               <span
                                 key={index}
                                 style={{
-                                  padding: "0.25rem 0.75rem",
-                                  background: "rgba(105, 117, 101, 0.2)",
-                                  color: "#3C3D37",
+                                  padding: "0.375rem 0.875rem",
+                                  background: "rgba(100, 116, 139, 0.15)",
+                                  color: "#94a3b8",
                                   borderRadius: "8px",
                                   fontSize: "0.8125rem",
-                                  border: "1px solid #697565",
+                                  border: "1px solid rgba(100, 116, 139, 0.3)",
                                 }}
                               >
                                 {factor}
@@ -528,13 +716,22 @@ const ProjectRisks: React.FC = () => {
                               "repeat(auto-fit, minmax(150px, 1fr))",
                             gap: "1rem",
                             fontSize: "0.875rem",
-                            color: "#697565",
+                            color: "#94a3b8",
                           }}
                         >
                           {task.assignee_username && (
-                            <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              <UserIcon
+                                style={{ width: "16px", height: "16px" }}
+                              />
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{ fontWeight: "600", color: "#f1f5f9" }}
                               >
                                 Assignee:
                               </span>{" "}
@@ -542,19 +739,37 @@ const ProjectRisks: React.FC = () => {
                             </div>
                           )}
                           {task.due_date && (
-                            <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              <CalendarIcon
+                                style={{ width: "16px", height: "16px" }}
+                              />
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{ fontWeight: "600", color: "#f1f5f9" }}
                               >
-                                Due Date:
+                                Due:
                               </span>{" "}
                               {new Date(task.due_date).toLocaleDateString()}
                             </div>
                           )}
                           {task.progress_percentage !== undefined && (
-                            <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              <ChartBarIcon
+                                style={{ width: "16px", height: "16px" }}
+                              />
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{ fontWeight: "600", color: "#f1f5f9" }}
                               >
                                 Progress:
                               </span>{" "}
@@ -564,10 +779,18 @@ const ProjectRisks: React.FC = () => {
                           {task.estimated_delay_days !== undefined &&
                             task.estimated_delay_days > 0 && (
                               <div
-                                style={{ color: "#ECDFCC", fontWeight: "600" }}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "0.5rem",
+                                  color: "#ef4444",
+                                  fontWeight: "600",
+                                }}
                               >
-                                ⚠️ Estimated Delay: {task.estimated_delay_days}{" "}
-                                days
+                                <ClockIcon
+                                  style={{ width: "16px", height: "16px" }}
+                                />
+                                Delay: {task.estimated_delay_days} days
                               </div>
                             )}
                         </div>
@@ -579,8 +802,8 @@ const ProjectRisks: React.FC = () => {
                               style={{
                                 width: "100%",
                                 height: "8px",
-                                background: "rgba(105, 117, 101, 0.2)",
-                                borderRadius: "4px",
+                                background: "rgba(26, 26, 36, 0.9)",
+                                borderRadius: "20px",
                                 overflow: "hidden",
                               }}
                             >
@@ -588,7 +811,9 @@ const ProjectRisks: React.FC = () => {
                                 style={{
                                   width: `${task.progress_percentage}%`,
                                   height: "100%",
-                                  background: getRiskColor(task.risk_level),
+                                  background: `linear-gradient(90deg, ${getRiskColor(
+                                    task.risk_level
+                                  )}, ${getRiskColor(task.risk_level)}dd)`,
                                   transition: "width 0.3s ease",
                                 }}
                               />
@@ -604,6 +829,13 @@ const ProjectRisks: React.FC = () => {
           </>
         )}
       </main>
+
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };

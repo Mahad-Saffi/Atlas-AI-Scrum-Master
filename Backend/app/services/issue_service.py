@@ -46,27 +46,20 @@ class IssueService:
                 priority=priority
             )
             
-            session.add(issue)
-            await session.commit()
-            await session.refresh(issue)
-            
-            # Notify project lead (get project owner)
+            # Get project owner before committing
             from app.models.project import Project
             result = await session.execute(
                 select(Project).where(Project.id == project_uuid)
             )
             project = result.scalars().first()
+            project_owner_id = project.owner_id if project else None
             
-            if project and project.owner_id != reporter_id:
-                await notification_service.create_notification(
-                    user_id=project.owner_id,
-                    notification_type='new_issue',
-                    title=f'🚨 New {issue_type.title()}: {title}',
-                    message=f'Reported by user #{reporter_id}',
-                    link=f'/issues/{issue.id}'
-                )
+            session.add(issue)
+            await session.commit()
+            await session.refresh(issue)
             
-            return {
+            # Prepare return data
+            issue_data = {
                 'id': issue.id,
                 'title': issue.title,
                 'description': issue.description,
@@ -75,6 +68,21 @@ class IssueService:
                 'status': issue.status,
                 'created_at': issue.created_at.isoformat()
             }
+        
+        # Notify project lead (outside session context)
+        if project_owner_id and project_owner_id != reporter_id:
+            try:
+                await notification_service.create_notification(
+                    user_id=project_owner_id,
+                    notification_type='new_issue',
+                    title=f'🚨 New {issue_type.title()}: {title}',
+                    message=f'Reported by user #{reporter_id}',
+                    link=f'/issues/{issue_data["id"]}'
+                )
+            except Exception as e:
+                print(f"Error creating notification: {e}")
+        
+        return issue_data
 
     async def get_project_issues(self, project_id: str, status: str = None) -> list:
         """Get all issues for a project"""
@@ -126,23 +134,35 @@ class IssueService:
             issue.assignee_id = assignee_id
             issue.status = 'in_progress'
             
-            await session.commit()
-            await session.refresh(issue)
+            # Prepare data before committing
+            issue_data = {
+                'id': issue.id,
+                'assignee_id': assignee_id,
+                'status': 'in_progress',
+                'title': issue.title,
+                'issue_type': issue.issue_type,
+                'priority': issue.priority
+            }
             
-            # Notify assignee
+            await session.commit()
+        
+        # Notify assignee (outside session context)
+        try:
             await notification_service.create_notification(
                 user_id=assignee_id,
                 notification_type='issue_assigned',
-                title=f'📌 Issue Assigned: {issue.title}',
-                message=f'{issue.issue_type.title()} - Priority: {issue.priority}',
-                link=f'/issues/{issue.id}'
+                title=f'📌 Issue Assigned: {issue_data["title"]}',
+                message=f'{issue_data["issue_type"].title()} - Priority: {issue_data["priority"]}',
+                link=f'/issues/{issue_data["id"]}'
             )
-            
-            return {
-                'id': issue.id,
-                'assignee_id': issue.assignee_id,
-                'status': issue.status
-            }
+        except Exception as e:
+            print(f"Error creating notification: {e}")
+        
+        return {
+            'id': issue_data['id'],
+            'assignee_id': issue_data['assignee_id'],
+            'status': issue_data['status']
+        }
 
     async def resolve_issue(self, issue_id: int, resolution: str, resolver_id: int) -> dict:
         """Resolve an issue"""
@@ -157,26 +177,39 @@ class IssueService:
             
             issue.status = 'resolved'
             issue.resolution = resolution
-            issue.resolved_at = datetime.utcnow()
+            resolved_at = datetime.utcnow()
+            issue.resolved_at = resolved_at
+            
+            # Prepare data before committing
+            issue_data = {
+                'id': issue.id,
+                'status': 'resolved',
+                'resolution': resolution,
+                'resolved_at': resolved_at.isoformat(),
+                'title': issue.title,
+                'reporter_id': issue.reporter_id
+            }
             
             await session.commit()
-            await session.refresh(issue)
-            
-            # Notify reporter
-            if issue.reporter_id != resolver_id:
+        
+        # Notify reporter (outside session context)
+        if issue_data['reporter_id'] != resolver_id:
+            try:
                 await notification_service.create_notification(
-                    user_id=issue.reporter_id,
+                    user_id=issue_data['reporter_id'],
                     notification_type='issue_resolved',
-                    title=f'✅ Issue Resolved: {issue.title}',
+                    title=f'✅ Issue Resolved: {issue_data["title"]}',
                     message=resolution[:100],
-                    link=f'/issues/{issue.id}'
+                    link=f'/issues/{issue_data["id"]}'
                 )
-            
-            return {
-                'id': issue.id,
-                'status': issue.status,
-                'resolution': issue.resolution,
-                'resolved_at': issue.resolved_at.isoformat()
-            }
+            except Exception as e:
+                print(f"Error creating notification: {e}")
+        
+        return {
+            'id': issue_data['id'],
+            'status': issue_data['status'],
+            'resolution': issue_data['resolution'],
+            'resolved_at': issue_data['resolved_at']
+        }
 
 issue_service = IssueService()

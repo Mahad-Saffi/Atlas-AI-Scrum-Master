@@ -97,31 +97,32 @@ class TaskService:
                         "title": next_task.title
                     }
                 
+                # Prepare return data before committing
+                task_data = {
+                    "id": str(task.id),
+                    "title": task.title,
+                    "status": "Done",
+                    "next_task": next_task_info
+                }
+                
                 # Commit changes
                 await session.commit()
-                
-                # Refresh to get updated values
-                await session.refresh(task)
-                if next_task:
-                    await session.refresh(next_task)
-                
-                # Create notification for next task assignment
-                if next_task:
+            
+            # Create notification for next task assignment (outside session context)
+            if next_task_info:
+                try:
                     from app.services.notification_service import notification_service
                     await notification_service.create_notification(
                         user_id=user_id_int,
                         notification_type="task_assigned",
                         title="New Task Assigned",
-                        message=f"You've been assigned: {next_task.title}",
+                        message=f"You've been assigned: {next_task_info['title']}",
                         link=f"/task-board"
                     )
-                
-                return {
-                    "id": str(task.id),
-                    "title": task.title,
-                    "status": task.status,
-                    "next_task": next_task_info
-                }
+                except Exception as notif_error:
+                    print(f"Error creating notification: {notif_error}")
+            
+            return task_data
         except Exception as e:
             print(f"Error completing task: {e}")
             raise

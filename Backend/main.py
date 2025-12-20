@@ -101,3 +101,7 @@ from app.core.security import get_current_user
 async def get_user(current_user: dict = Depends(get_current_user)):
     """Get current authenticated user"""
     return current_user
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

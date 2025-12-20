@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { aiService } from "../../services/aiService";
+import {
+  PaperAirplaneIcon,
+  SparklesIcon,
+  UserCircleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
 
 interface Message {
   sender: "user" | "ai";
@@ -11,13 +17,29 @@ const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: "ai",
-      text: "👋 Hey there! What project are you thinking of building today?",
+      text: "Hey there! What project are you thinking of building today?",
     },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [projectCreated, setProjectCreated] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      setMessages([
+        {
+          sender: "ai",
+          text: "Please log in first to use the AI assistant. Redirecting to login page...",
+        },
+      ]);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,7 +60,18 @@ const ChatInterface: React.FC = () => {
     try {
       const token = localStorage.getItem("jwt");
       if (!token) {
-        throw new Error("Authentication token not found.");
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: "ai",
+            text: "Please log in first to use the AI assistant. Redirecting to login page...",
+          },
+        ]);
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+        setIsLoading(false);
+        return;
       }
       const aiResponse = await aiService.discover(inputValue, token);
       setMessages((prevMessages) => [
@@ -54,7 +87,7 @@ const ChatInterface: React.FC = () => {
         ...prevMessages,
         {
           sender: "ai",
-          text: "😅 Oops! Something went wrong. Mind trying that again?",
+          text: "Oops! Something went wrong. Mind trying that again?",
         },
       ]);
     } finally {
@@ -67,18 +100,19 @@ const ChatInterface: React.FC = () => {
       style={{
         width: "100%",
         height: "100%",
-        background: "rgba(236, 223, 204, 0.3)",
-        backdropFilter: "blur(15px)",
+        background: "rgba(17, 17, 24, 0.7)",
+        backdropFilter: "blur(16px)",
         display: "flex",
         flexDirection: "column",
-        borderRadius: "var(--radius-xl)",
+        borderRadius: "20px",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
       }}
     >
       {/* Messages Area */}
       <div
         style={{
           flex: "1",
-          padding: "1.25rem",
+          padding: "1.5rem",
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
@@ -98,18 +132,24 @@ const ChatInterface: React.FC = () => {
               style={{
                 maxWidth: "75%",
                 padding: "1rem 1.25rem",
-                borderRadius: "var(--radius-lg)",
+                borderRadius: "16px",
                 background:
                   msg.sender === "user"
-                    ? "linear-gradient(145deg, #ECDFCC, #D4C7B4)"
-                    : "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(15px)",
-                border: "1px solid rgba(236, 223, 204, 0.4)",
-                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                    ? "linear-gradient(135deg, #dc2626, #991b1b)"
+                    : "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
+                border:
+                  msg.sender === "user"
+                    ? "none"
+                    : "1px solid rgba(255, 255, 255, 0.1)",
+                boxShadow:
+                  msg.sender === "user"
+                    ? "0 4px 16px rgba(220, 38, 38, 0.3)"
+                    : "0 2px 8px rgba(0, 0, 0, 0.2)",
                 fontFamily: "inherit",
                 fontSize: "0.9375rem",
                 lineHeight: "1.6",
-                color: "#181C14",
+                color: msg.sender === "user" ? "white" : "#f1f5f9",
               }}
             >
               <div
@@ -117,13 +157,32 @@ const ChatInterface: React.FC = () => {
                   fontWeight: "600",
                   marginBottom: "0.5rem",
                   fontSize: "0.8125rem",
-                  color: msg.sender === "user" ? "#3C3D37" : "#697565",
+                  color:
+                    msg.sender === "user"
+                      ? "rgba(255, 255, 255, 0.9)"
+                      : "#94a3b8",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
                 }}
               >
-                {msg.sender === "ai" ? "🤖 Atlas AI" : "👤 You"}
+                {msg.sender === "ai" ? (
+                  <>
+                    <SparklesIcon style={{ width: "14px", height: "14px" }} />
+                    <span style={{ color: "#f1f5f9" }}>Ideal</span>{" "}
+                    <span style={{ color: "#dc2626" }}>Assistant</span>
+                  </>
+                ) : (
+                  <>
+                    <UserCircleIcon style={{ width: "14px", height: "14px" }} />
+                    You
+                  </>
+                )}
               </div>
               {msg.sender === "ai" ? (
-                <ReactMarkdown>{msg.text}</ReactMarkdown>
+                <div style={{ color: "#f1f5f9" }}>
+                  <ReactMarkdown>{msg.text}</ReactMarkdown>
+                </div>
               ) : (
                 <div>{msg.text}</div>
               )}
@@ -141,20 +200,29 @@ const ChatInterface: React.FC = () => {
             <div
               style={{
                 padding: "1rem 1.25rem",
-                borderRadius: "var(--radius-lg)",
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(15px)",
-                border: "1px solid rgba(236, 223, 204, 0.4)",
-                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                borderRadius: "16px",
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
                 fontFamily: "inherit",
-                color: "#697565",
+                color: "#94a3b8",
                 fontSize: "0.9375rem",
                 display: "flex",
                 alignItems: "center",
                 gap: "0.5rem",
               }}
             >
-              <span className="spinner"></span>
+              <div
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  border: "2px solid #94a3b8",
+                  borderTop: "2px solid transparent",
+                  borderRadius: "50%",
+                  animation: "spin 0.8s linear infinite",
+                }}
+              />
               <span>Thinking...</span>
             </div>
           </div>
@@ -170,13 +238,23 @@ const ChatInterface: React.FC = () => {
           >
             <button
               onClick={() => (window.location.href = "/task-board")}
-              className="btn-primary"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
                 fontSize: "1rem",
                 padding: "0.875rem 2rem",
+                background: "linear-gradient(135deg, #22c55e, #15803d)",
+                border: "none",
+                borderRadius: "12px",
+                color: "white",
+                fontWeight: 600,
+                cursor: "pointer",
+                boxShadow: "0 4px 16px rgba(34, 197, 94, 0.4)",
               }}
             >
-              🎉 View Your Project!
+              <CheckCircleIcon style={{ width: "20px", height: "20px" }} />
+              View Your Project!
             </button>
           </div>
         )}
@@ -187,13 +265,13 @@ const ChatInterface: React.FC = () => {
       <div
         style={{
           padding: "1.25rem",
-          borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
           display: "flex",
           gap: "0.75rem",
-          background: "rgba(236, 223, 204, 0.5)",
+          background: "rgba(10, 10, 15, 0.5)",
           backdropFilter: "blur(10px)",
-          borderBottomLeftRadius: "var(--radius-xl)",
-          borderBottomRightRadius: "var(--radius-xl)",
+          borderBottomLeftRadius: "20px",
+          borderBottomRightRadius: "20px",
         }}
       >
         <input
@@ -204,30 +282,56 @@ const ChatInterface: React.FC = () => {
           onKeyPress={(e) =>
             e.key === "Enter" && !isLoading && handleSendMessage()
           }
-          className="input-modern"
           style={{
             flex: "1",
+            padding: "0.875rem 1rem",
+            background: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "12px",
+            color: "#f1f5f9",
+            fontSize: "0.9375rem",
+            outline: "none",
           }}
           disabled={isLoading || projectCreated}
         />
         <button
           onClick={handleSendMessage}
-          className="btn-primary"
           disabled={isLoading || projectCreated}
           style={{
             display: "flex",
             alignItems: "center",
             gap: "0.5rem",
+            padding: "0.875rem 1.5rem",
+            background:
+              isLoading || projectCreated
+                ? "rgba(220, 38, 38, 0.5)"
+                : "linear-gradient(135deg, #dc2626, #991b1b)",
+            border: "none",
+            borderRadius: "12px",
+            color: "white",
+            fontSize: "0.9375rem",
+            fontWeight: 600,
+            cursor: isLoading || projectCreated ? "not-allowed" : "pointer",
+            boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
           }}
         >
           {isLoading ? (
             <>
-              <span className="spinner"></span>
+              <div
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  border: "2px solid white",
+                  borderTop: "2px solid transparent",
+                  borderRadius: "50%",
+                  animation: "spin 0.8s linear infinite",
+                }}
+              />
               <span>Sending...</span>
             </>
           ) : (
             <>
-              <span>📤</span>
+              <PaperAirplaneIcon style={{ width: "18px", height: "18px" }} />
               <span>Send</span>
             </>
           )}
@@ -258,6 +362,11 @@ const ChatInterface: React.FC = () => {
             opacity: 1;
             transform: scale(1);
           }
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </div>

@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import {
+  XMarkIcon,
+  UserIcon,
+  ClockIcon,
+  CalendarIcon,
+  ChartBarIcon,
+} from "@heroicons/react/24/solid";
 
 interface TaskUpdateModalProps {
   task: any;
@@ -71,7 +78,7 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        background: "rgba(24, 28, 20, 0.7)",
+        background: "rgba(0, 0, 0, 0.7)",
         backdropFilter: "blur(4px)",
         display: "flex",
         alignItems: "center",
@@ -82,26 +89,53 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="card-glass"
         style={{
           maxWidth: "500px",
           width: "100%",
           padding: "2rem",
           maxHeight: "90vh",
           overflowY: "auto",
+          background: "rgba(17, 17, 24, 0.95)",
+          backdropFilter: "blur(16px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          borderRadius: "20px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2
+        <div
           style={{
-            fontSize: "1.5rem",
-            fontWeight: "700",
-            color: "#181C14",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             marginBottom: "1.5rem",
           }}
         >
-          Update Task
-        </h2>
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "700",
+              color: "#f1f5f9",
+            }}
+          >
+            Update Task
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              padding: "0.5rem",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "8px",
+              color: "#f1f5f9",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <XMarkIcon style={{ width: "20px", height: "20px" }} />
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "1.25rem" }}>
@@ -110,7 +144,7 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
               }}
             >
@@ -118,11 +152,12 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
             </label>
             <div
               style={{
-                padding: "0.75rem",
-                background: "rgba(236, 223, 204, 0.5)",
-                borderRadius: "var(--radius-md)",
+                padding: "0.75rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                borderRadius: "12px",
                 fontSize: "0.9375rem",
-                color: "#181C14",
+                color: "#f1f5f9",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
               }}
             >
               {task.title}
@@ -135,10 +170,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
+              <ChartBarIcon style={{ width: "16px", height: "16px" }} />
               Status
             </label>
             <select
@@ -146,7 +185,16 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, status: e.target.value })
               }
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "#f1f5f9",
+                fontSize: "0.9375rem",
+                outline: "none",
+              }}
             >
               <option value="To Do">To Do</option>
               <option value="In Progress">In Progress</option>
@@ -160,10 +208,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
+              <UserIcon style={{ width: "16px", height: "16px" }} />
               Assign To
             </label>
             <select
@@ -171,7 +223,16 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, assigned_to: e.target.value })
               }
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "#f1f5f9",
+                fontSize: "0.9375rem",
+                outline: "none",
+              }}
             >
               <option value="">Unassigned</option>
               {teamMembers.map((member) => (
@@ -188,10 +249,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
+              <ClockIcon style={{ width: "16px", height: "16px" }} />
               Estimated Hours
             </label>
             <input
@@ -202,7 +267,16 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
               }
               placeholder="Enter hours"
               min="0"
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "#f1f5f9",
+                fontSize: "0.9375rem",
+                outline: "none",
+              }}
             />
           </div>
 
@@ -212,7 +286,7 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
               }}
             >
@@ -233,7 +307,7 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 width: "100%",
                 height: "8px",
                 borderRadius: "4px",
-                background: `linear-gradient(to right, #697565 0%, #697565 ${formData.progress_percentage}%, #ECDFCC ${formData.progress_percentage}%, #ECDFCC 100%)`,
+                background: `linear-gradient(to right, #dc2626 0%, #dc2626 ${formData.progress_percentage}%, rgba(255, 255, 255, 0.1) ${formData.progress_percentage}%, rgba(255, 255, 255, 0.1) 100%)`,
                 outline: "none",
                 appearance: "none",
               }}
@@ -246,10 +320,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#3C3D37",
+                color: "#94a3b8",
                 marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
+              <CalendarIcon style={{ width: "16px", height: "16px" }} />
               Due Date
             </label>
             <input
@@ -258,7 +336,16 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, due_date: e.target.value })
               }
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "#f1f5f9",
+                fontSize: "0.9375rem",
+                outline: "none",
+              }}
             />
           </div>
 
@@ -272,12 +359,37 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="btn-secondary"
               disabled={loading}
+              style={{
+                padding: "0.75rem 1.5rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "#f1f5f9",
+                fontSize: "0.9375rem",
+                fontWeight: 600,
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
             >
               Cancel
             </button>
-            <button type="submit" className="btn-primary" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                padding: "0.75rem 1.5rem",
+                background: loading
+                  ? "rgba(220, 38, 38, 0.5)"
+                  : "linear-gradient(135deg, #dc2626, #991b1b)",
+                border: "none",
+                borderRadius: "12px",
+                color: "white",
+                fontSize: "0.9375rem",
+                fontWeight: 600,
+                cursor: loading ? "not-allowed" : "pointer",
+                boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
+              }}
+            >
               {loading ? "Updating..." : "Update Task"}
             </button>
           </div>

@@ -51,7 +51,8 @@ const SignIn: React.FC = () => {
         style={{
           position: "absolute",
           inset: "0",
-          background: "linear-gradient(135deg, #0d1b2a 0%, #1b263b 40%, #415a77 100%)",
+          background:
+            "linear-gradient(135deg, #0d1b2a 0%, #1b263b 40%, #415a77 100%)",
           zIndex: "1",
         }}
       />
@@ -349,7 +350,7 @@ const SignIn: React.FC = () => {
                   {/* Logo */}
                   <img
                     src={logo}
-                    alt="Atlas AI Scrum Master"
+                    alt="Ideal Assistant"
                     style={{
                       width: "72px",
                       height: "72px",
@@ -392,7 +393,7 @@ const SignIn: React.FC = () => {
                     animation: "textShimmer 3s ease-in-out infinite",
                   }}
                 >
-                  AI SCRUM MASTER
+                  IDEAL ASSISTANT
                 </span>
               </div>
 
@@ -405,7 +406,7 @@ const SignIn: React.FC = () => {
                   animation: "fadeInOut 4s ease-in-out infinite",
                 }}
               >
-                ATLAS
+                {/* Removed ATLAS text */}
               </div>
             </div>
 

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  BookOpenIcon,
+  ArrowPathIcon,
+  ChevronRightIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
 
 interface Task {
   id: string;
@@ -39,7 +45,6 @@ const EpicView: React.FC = () => {
     if (projectId) {
       fetchEpics();
 
-      // Auto-refresh every 15 seconds
       const interval = setInterval(() => {
         fetchEpics();
       }, 15000);
@@ -62,18 +67,10 @@ const EpicView: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched epics data:", data); // Debug log
         setEpics(data);
-        // Expand first epic by default only on initial load
         if (data.length > 0 && expandedEpics.size === 0) {
           setExpandedEpics(new Set([data[0].id]));
         }
-      } else {
-        console.error(
-          "Failed to fetch epics:",
-          response.status,
-          response.statusText
-        );
       }
     } catch (error) {
       console.error("Error fetching epics:", error);
@@ -106,21 +103,21 @@ const EpicView: React.FC = () => {
     switch (status) {
       case "Done":
         return {
-          bg: "rgba(16, 185, 129, 0.2)",
-          border: "rgba(16, 185, 129, 0.4)",
-          text: "#ECDFCC",
+          bg: "rgba(34, 197, 94, 0.15)",
+          border: "rgba(34, 197, 94, 0.3)",
+          text: "#22c55e",
         };
       case "In Progress":
         return {
-          bg: "rgba(245, 158, 11, 0.2)",
-          border: "rgba(245, 158, 11, 0.4)",
-          text: "#ECDFCC",
+          bg: "rgba(245, 158, 11, 0.15)",
+          border: "rgba(245, 158, 11, 0.3)",
+          text: "#f59e0b",
         };
       default:
         return {
-          bg: "rgba(236, 223, 204, 0.2)",
-          border: "rgba(236, 223, 204, 0.3)",
-          text: "#ECDFCC",
+          bg: "rgba(100, 116, 139, 0.15)",
+          border: "rgba(100, 116, 139, 0.3)",
+          text: "#64748b",
         };
     }
   };
@@ -128,42 +125,57 @@ const EpicView: React.FC = () => {
   const calculateEpicProgress = (epic: Epic) => {
     const allTasks = epic.stories.flatMap((s) => s.tasks);
     if (allTasks.length === 0) return 0;
-    const totalProgress = allTasks.reduce((sum, t) => {
-      // If task is Done, count as 100%, otherwise use progress_percentage
-      const taskProgress =
-        t.status === "Done" ? 100 : t.progress_percentage || 0;
-      return sum + taskProgress;
-    }, 0);
-    return Math.round(totalProgress / allTasks.length);
+
+    const completedTasks = allTasks.filter((t) => t.status === "Done").length;
+    return Math.round((completedTasks / allTasks.length) * 100);
   };
 
   const calculateStoryProgress = (story: Story) => {
     if (story.tasks.length === 0) return 0;
-    const totalProgress = story.tasks.reduce((sum, t) => {
-      // If task is Done, count as 100%, otherwise use progress_percentage
-      const taskProgress =
-        t.status === "Done" ? 100 : t.progress_percentage || 0;
-      return sum + taskProgress;
-    }, 0);
-    return Math.round(totalProgress / story.tasks.length);
+
+    const completedTasks = story.tasks.filter(
+      (t) => t.status === "Done"
+    ).length;
+    return Math.round((completedTasks / story.tasks.length) * 100);
   };
 
   return (
     <div
       style={{
         minHeight: "100vh",
+        background: "#0a0a0f",
         position: "relative",
-        zIndex: 1,
       }}
     >
+      {/* Background Grid Pattern */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: "50px 50px",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+
       {/* Header */}
       <header
-        className="glass-header"
         style={{
-          padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
+          background: "rgba(17, 17, 24, 0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          padding: "1.25rem 2rem",
         }}
       >
         <div
@@ -175,51 +187,92 @@ const EpicView: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
             <button
               onClick={() => navigate(`/project/${projectId}`)}
-              className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
-            >
-              ←
-            </button>
-            <div
               style={{
-                width: "32px",
-                height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1rem",
+                gap: "0.5rem",
+                padding: "0.75rem 1.25rem",
+                background: "rgba(220, 38, 38, 0.15)",
+                border: "1px solid rgba(220, 38, 38, 0.3)",
+                borderRadius: "12px",
+                color: "#dc2626",
+                fontSize: "0.9375rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(220, 38, 38, 0.25)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(220, 38, 38, 0.15)";
               }}
             >
-              📚
+              ← Back to Project
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "12px",
+                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <BookOpenIcon
+                  style={{ width: "24px", height: "24px", color: "white" }}
+                />
+              </div>
+              <h1
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#f1f5f9",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Epics & Stories
+              </h1>
             </div>
-            <h1
-              style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
-              }}
-            >
-              Epics & Stories
-            </h1>
           </div>
           <button
             onClick={() => {
               setLoading(true);
               fetchEpics();
             }}
-            className="btn-secondary"
             style={{
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
+              padding: "0.75rem 1.5rem",
+              background: "linear-gradient(135deg, #dc2626, #991b1b)",
+              border: "none",
+              borderRadius: "12px",
+              color: "white",
+              fontSize: "0.9375rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow =
+                "0 6px 20px rgba(220, 38, 38, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow =
+                "0 4px 16px rgba(220, 38, 38, 0.4)";
             }}
           >
-            <span>🔄</span>
+            <ArrowPathIcon style={{ width: "18px", height: "18px" }} />
             <span>Refresh</span>
           </button>
         </div>
@@ -228,11 +281,11 @@ const EpicView: React.FC = () => {
       {/* Main Content */}
       <main
         style={{
-          maxWidth: "1400px",
-          margin: "0 auto",
-          padding: "2rem",
           position: "relative",
           zIndex: 1,
+          maxWidth: "1400px",
+          margin: "0 auto",
+          padding: "3rem 2rem",
         }}
       >
         {loading ? (
@@ -244,31 +297,55 @@ const EpicView: React.FC = () => {
             }}
           >
             <div
-              className="spinner"
-              style={{ width: "40px", height: "40px" }}
+              style={{
+                width: "48px",
+                height: "48px",
+                border: "3px solid #1a1a24",
+                borderTop: "3px solid #dc2626",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }}
             />
           </div>
         ) : epics.length === 0 ? (
           <div
-            className="card-glass-solid"
             style={{
-              padding: "4rem 2rem",
+              background: "rgba(17, 17, 24, 0.7)",
+              backdropFilter: "blur(16px)",
+              border: "2px dashed rgba(255, 255, 255, 0.12)",
+              borderRadius: "24px",
+              padding: "5rem 2rem",
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>📚</div>
+            <div
+              style={{
+                width: "88px",
+                height: "88px",
+                borderRadius: "22px",
+                background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.75rem",
+                boxShadow: "0 12px 36px rgba(220, 38, 38, 0.35)",
+              }}
+            >
+              <BookOpenIcon
+                style={{ width: "48px", height: "48px", color: "white" }}
+              />
+            </div>
             <h3
               style={{
-                fontSize: "1.5rem",
+                fontSize: "1.625rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                color: "#f1f5f9",
+                marginBottom: "0.75rem",
               }}
             >
               No Epics Yet
             </h3>
-            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
+            <p style={{ fontSize: "1.0625rem", color: "#94a3b8" }}>
               Create a project with AI to generate epics and stories
             </p>
           </div>
@@ -281,7 +358,16 @@ const EpicView: React.FC = () => {
               const progress = calculateEpicProgress(epic);
 
               return (
-                <div key={epic.id} className="card-glass-solid">
+                <div
+                  key={epic.id}
+                  style={{
+                    background: "rgba(17, 17, 24, 0.7)",
+                    backdropFilter: "blur(16px)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "20px",
+                    padding: "2rem",
+                  }}
+                >
                   {/* Epic Header */}
                   <div
                     onClick={() => toggleEpic(epic.id)}
@@ -297,13 +383,14 @@ const EpicView: React.FC = () => {
                       style={{
                         width: "48px",
                         height: "48px",
-                        background:
-                          "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                        borderRadius: "var(--radius-md)",
+                        background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                        borderRadius: "12px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: "1.5rem",
+                        fontSize: "1.25rem",
+                        fontWeight: "700",
+                        color: "white",
                         flexShrink: 0,
                       }}
                     >
@@ -312,20 +399,19 @@ const EpicView: React.FC = () => {
                     <div style={{ flex: 1 }}>
                       <h2
                         style={{
-                          fontSize: "1.25rem",
+                          fontSize: "1.5rem",
                           fontWeight: "700",
-                          color: "#ECDFCC",
-                          marginBottom: "0.25rem",
-                          textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                          color: "#f1f5f9",
+                          marginBottom: "0.5rem",
                         }}
                       >
                         {epic.name}
                       </h2>
                       <p
                         style={{
-                          fontSize: "0.875rem",
-                          color: "#ECDFCC",
-                          marginBottom: "0.5rem",
+                          fontSize: "0.9375rem",
+                          color: "#94a3b8",
+                          marginBottom: "0.75rem",
                         }}
                       >
                         {epic.description}
@@ -339,27 +425,33 @@ const EpicView: React.FC = () => {
                       >
                         <div
                           style={{
-                            fontSize: "0.8125rem",
-                            color: "#ECDFCC",
-                            fontWeight: "600",
+                            fontSize: "0.875rem",
+                            color: "#94a3b8",
+                            fontWeight: 600,
                           }}
                         >
                           {epic.stories.length} Stories •{" "}
                           {epic.stories.reduce(
+                            (sum, s) =>
+                              sum +
+                              s.tasks.filter((t) => t.status === "Done").length,
+                            0
+                          )}{" "}
+                          /{" "}
+                          {epic.stories.reduce(
                             (sum, s) => sum + s.tasks.length,
                             0
                           )}{" "}
-                          Tasks
+                          Tasks Complete
                         </div>
                         <div
                           style={{
                             flex: 1,
                             maxWidth: "200px",
                             height: "8px",
-                            background: "rgba(24, 28, 20, 0.3)",
-                            borderRadius: "4px",
+                            background: "rgba(26, 26, 36, 0.9)",
+                            borderRadius: "20px",
                             overflow: "hidden",
-                            border: "1px solid rgba(236, 223, 204, 0.2)",
                           }}
                         >
                           <div
@@ -367,35 +459,34 @@ const EpicView: React.FC = () => {
                               width: `${progress}%`,
                               height: "100%",
                               background:
-                                "linear-gradient(90deg, #ECDFCC, #D4C7B4)",
+                                "linear-gradient(90deg, #dc2626, #ef4444)",
+                              borderRadius: "20px",
                               transition: "width 0.3s",
-                              boxShadow: "0 0 8px rgba(236, 223, 204, 0.5)",
                             }}
                           />
                         </div>
                         <div
                           style={{
-                            fontSize: "0.8125rem",
+                            fontSize: "0.875rem",
                             fontWeight: "700",
-                            color: "#ECDFCC",
-                            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                            color: "#f1f5f9",
                           }}
                         >
                           {progress}%
                         </div>
                       </div>
                     </div>
-                    <div
+                    <ChevronRightIcon
                       style={{
-                        fontSize: "1.5rem",
+                        width: "24px",
+                        height: "24px",
+                        color: "#94a3b8",
                         transform: isExpanded
                           ? "rotate(90deg)"
                           : "rotate(0deg)",
                         transition: "transform 0.2s",
                       }}
-                    >
-                      ▶
-                    </div>
+                    />
                   </div>
 
                   {/* Stories */}
@@ -415,11 +506,11 @@ const EpicView: React.FC = () => {
                           <div
                             key={story.id}
                             style={{
-                              background: "rgba(236, 223, 204, 0.15)",
+                              background: "rgba(255, 255, 255, 0.03)",
                               backdropFilter: "blur(10px)",
-                              borderRadius: "var(--radius-lg)",
-                              padding: "1.25rem",
-                              border: "1px solid rgba(236, 223, 204, 0.3)",
+                              borderRadius: "16px",
+                              padding: "1.5rem",
+                              border: "1px solid rgba(255, 255, 255, 0.08)",
                             }}
                           >
                             {/* Story Header */}
@@ -437,14 +528,14 @@ const EpicView: React.FC = () => {
                                 style={{
                                   width: "32px",
                                   height: "32px",
-                                  background: "rgba(236, 223, 204, 0.3)",
-                                  borderRadius: "var(--radius-sm)",
+                                  background: "rgba(220, 38, 38, 0.2)",
+                                  borderRadius: "8px",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
                                   fontSize: "0.875rem",
                                   fontWeight: "700",
-                                  color: "#ECDFCC",
+                                  color: "#dc2626",
                                   flexShrink: 0,
                                 }}
                               >
@@ -453,9 +544,9 @@ const EpicView: React.FC = () => {
                               <div style={{ flex: 1 }}>
                                 <h3
                                   style={{
-                                    fontSize: "1rem",
+                                    fontSize: "1.125rem",
                                     fontWeight: "600",
-                                    color: "#ECDFCC",
+                                    color: "#f1f5f9",
                                     marginBottom: "0.25rem",
                                   }}
                                 >
@@ -463,10 +554,9 @@ const EpicView: React.FC = () => {
                                 </h3>
                                 <p
                                   style={{
-                                    fontSize: "0.8125rem",
-                                    color: "#ECDFCC",
+                                    fontSize: "0.875rem",
+                                    color: "#94a3b8",
                                     marginBottom: "0.5rem",
-                                    opacity: 0.9,
                                   }}
                                 >
                                   {story.description}
@@ -480,58 +570,59 @@ const EpicView: React.FC = () => {
                                 >
                                   <div
                                     style={{
-                                      fontSize: "0.75rem",
-                                      color: "#ECDFCC",
-                                      fontWeight: "600",
+                                      fontSize: "0.8125rem",
+                                      color: "#94a3b8",
+                                      fontWeight: 600,
                                     }}
                                   >
-                                    {story.tasks.length} Tasks
+                                    {
+                                      story.tasks.filter(
+                                        (t) => t.status === "Done"
+                                      ).length
+                                    }{" "}
+                                    / {story.tasks.length} Tasks Complete
                                   </div>
                                   <div
                                     style={{
                                       flex: 1,
                                       maxWidth: "150px",
                                       height: "6px",
-                                      background: "rgba(24, 28, 20, 0.3)",
-                                      borderRadius: "3px",
+                                      background: "rgba(26, 26, 36, 0.9)",
+                                      borderRadius: "20px",
                                       overflow: "hidden",
-                                      border:
-                                        "1px solid rgba(236, 223, 204, 0.2)",
                                     }}
                                   >
                                     <div
                                       style={{
                                         width: `${storyProgress}%`,
                                         height: "100%",
-                                        background: "#ECDFCC",
+                                        background: "#dc2626",
                                         transition: "width 0.3s",
-                                        boxShadow:
-                                          "0 0 6px rgba(236, 223, 204, 0.5)",
                                       }}
                                     />
                                   </div>
                                   <div
                                     style={{
-                                      fontSize: "0.75rem",
+                                      fontSize: "0.8125rem",
                                       fontWeight: "700",
-                                      color: "#ECDFCC",
+                                      color: "#f1f5f9",
                                     }}
                                   >
                                     {storyProgress}%
                                   </div>
                                 </div>
                               </div>
-                              <div
+                              <ChevronRightIcon
                                 style={{
-                                  fontSize: "1rem",
+                                  width: "20px",
+                                  height: "20px",
+                                  color: "#94a3b8",
                                   transform: isStoryExpanded
                                     ? "rotate(90deg)"
                                     : "rotate(0deg)",
                                   transition: "transform 0.2s",
                                 }}
-                              >
-                                ▶
-                              </div>
+                              />
                             </div>
 
                             {/* Tasks */}
@@ -552,29 +643,28 @@ const EpicView: React.FC = () => {
                                         display: "flex",
                                         alignItems: "center",
                                         gap: "0.75rem",
-                                        padding: "0.75rem",
+                                        padding: "0.875rem",
                                         background: colors.bg,
                                         backdropFilter: "blur(10px)",
                                         border: `1px solid ${colors.border}`,
-                                        borderRadius: "var(--radius-md)",
+                                        borderRadius: "12px",
                                       }}
                                     >
                                       <div
                                         style={{
-                                          width: "6px",
-                                          height: "6px",
+                                          width: "8px",
+                                          height: "8px",
                                           borderRadius: "50%",
-                                          background: colors.border,
+                                          background: colors.text,
                                           flexShrink: 0,
-                                          boxShadow: `0 0 4px ${colors.border}`,
                                         }}
                                       />
                                       <div style={{ flex: 1 }}>
                                         <div
                                           style={{
-                                            fontSize: "0.875rem",
+                                            fontSize: "0.9375rem",
                                             fontWeight: "500",
-                                            color: "#ECDFCC",
+                                            color: "#f1f5f9",
                                             marginBottom: "0.25rem",
                                           }}
                                         >
@@ -582,9 +672,9 @@ const EpicView: React.FC = () => {
                                         </div>
                                         <div
                                           style={{
-                                            fontSize: "0.75rem",
+                                            fontSize: "0.8125rem",
                                             color: colors.text,
-                                            fontWeight: "600",
+                                            fontWeight: 600,
                                           }}
                                         >
                                           {task.status}
@@ -592,16 +682,19 @@ const EpicView: React.FC = () => {
                                       </div>
                                       <div
                                         style={{
-                                          fontSize: "0.75rem",
+                                          fontSize: "0.8125rem",
                                           fontWeight: "700",
-                                          color: "#ECDFCC",
-                                          padding: "0.25rem 0.5rem",
+                                          color: "#f1f5f9",
+                                          padding: "0.25rem 0.625rem",
                                           background:
-                                            "rgba(236, 223, 204, 0.2)",
-                                          borderRadius: "var(--radius-sm)",
+                                            "rgba(255, 255, 255, 0.05)",
+                                          borderRadius: "8px",
                                         }}
                                       >
-                                        {task.progress_percentage}%
+                                        {task.status === "Done"
+                                          ? "100"
+                                          : task.progress_percentage || 0}
+                                        %
                                       </div>
                                     </div>
                                   );
@@ -619,6 +712,13 @@ const EpicView: React.FC = () => {
           </div>
         )}
       </main>
+
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
