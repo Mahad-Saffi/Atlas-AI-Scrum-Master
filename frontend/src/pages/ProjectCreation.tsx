@@ -45,10 +45,9 @@ const ProjectCreation: React.FC = () => {
               className="btn-secondary"
               style={{
                 padding: "0.5rem 1rem",
-                fontSize: "1.25rem",
               }}
             >
-              ←
+              Back
             </button>
             <div
               style={{

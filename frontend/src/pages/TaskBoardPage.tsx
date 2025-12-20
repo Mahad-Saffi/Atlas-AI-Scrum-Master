@@ -198,12 +198,26 @@ const TaskBoardPage: React.FC = () => {
             maxWidth: "500px",
           }}
         >
-          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
+          <div
+            style={{
+              width: "64px",
+              height: "64px",
+              background: "rgba(236, 223, 204, 0.1)",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 1rem",
+              border: "1px solid rgba(236, 223, 204, 0.2)",
+            }}
+          >
+            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>!</span>
+          </div>
           <h2
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#ECDFCC",
+              color: "#f5f5f5",
               marginBottom: "0.5rem",
               textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
@@ -213,7 +227,7 @@ const TaskBoardPage: React.FC = () => {
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "#ECDFCC",
+              color: "#a0a0a0",
               marginBottom: "1.5rem",
             }}
           >
@@ -269,10 +283,9 @@ const TaskBoardPage: React.FC = () => {
               className="btn-secondary"
               style={{
                 padding: "0.5rem 1rem",
-                fontSize: "1.25rem",
               }}
             >
-              ←
+              Back
             </button>
             <h1
               style={{
@@ -315,10 +328,11 @@ const TaskBoardPage: React.FC = () => {
                   left: "1rem",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  color: "var(--color-text-muted)",
+                  color: "#a0a0a0",
+                  fontSize: "0.875rem",
                 }}
               >
-                🔍
+                Search
               </span>
             </div>
 

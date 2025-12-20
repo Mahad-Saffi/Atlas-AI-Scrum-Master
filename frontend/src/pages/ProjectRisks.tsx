@@ -81,13 +81,13 @@ const ProjectRisks: React.FC = () => {
   const getRiskIcon = (level: string) => {
     switch (level) {
       case "high":
-        return "🔴";
+        return "H";
       case "medium":
-        return "🟡";
+        return "M";
       case "low":
-        return "🟢";
+        return "L";
       default:
-        return "⚪";
+        return "-";
     }
   };
 
@@ -121,9 +121,9 @@ const ProjectRisks: React.FC = () => {
             <button
               onClick={() => navigate(`/project/${projectId}`)}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -134,10 +134,12 @@ const ProjectRisks: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.625rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              ⚠️
+              RISK
             </div>
             <h1
               style={{
@@ -154,7 +156,7 @@ const ProjectRisks: React.FC = () => {
             className="btn-primary"
             style={{ padding: "0.75rem 1.5rem" }}
           >
-            🔄 Refresh
+            Refresh
           </button>
         </div>
       </header>
@@ -217,19 +219,14 @@ const ProjectRisks: React.FC = () => {
                 className="card"
                 style={{
                   padding: "0.75rem",
-                  background: "rgba(236, 223, 204, 0.9)",
-                  border: "2px solid #697565",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  📊
-                </div>
                 <div
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -238,7 +235,7 @@ const ProjectRisks: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#181C14",
+                    color: "#a0a0a0",
                     fontWeight: "600",
                   }}
                 >
@@ -255,14 +252,11 @@ const ProjectRisks: React.FC = () => {
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🔴
-                </div>
                 <div
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#ECDFCC",
+                    color: "#ef4444",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -271,7 +265,7 @@ const ProjectRisks: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     fontWeight: "600",
                   }}
                 >
@@ -288,14 +282,11 @@ const ProjectRisks: React.FC = () => {
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🟡
-                </div>
                 <div
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#ECDFCC",
+                    color: "#f59e0b",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -304,7 +295,7 @@ const ProjectRisks: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     fontWeight: "600",
                   }}
                 >
@@ -321,14 +312,11 @@ const ProjectRisks: React.FC = () => {
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.25rem" }}>
-                  🟢
-                </div>
                 <div
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "700",
-                    color: "#ECDFCC",
+                    color: "#10b981",
                     marginBottom: "0.25rem",
                   }}
                 >
@@ -337,7 +325,7 @@ const ProjectRisks: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     fontWeight: "600",
                   }}
                 >
@@ -376,9 +364,7 @@ const ProjectRisks: React.FC = () => {
                     }
                     style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
                   >
-                    {level === "all"
-                      ? "All"
-                      : `${getRiskIcon(level)} ${level.toUpperCase()}`}
+                    {level.toUpperCase()}
                   </button>
                 ))}
               </div>
@@ -405,23 +391,25 @@ const ProjectRisks: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "3rem",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#f5f5f5",
                     margin: "0 auto 1.5rem",
                   }}
                 >
-                  ✅
+                  OK
                 </div>
                 <h3
                   style={{
                     fontSize: "1.5rem",
                     fontWeight: "700",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     marginBottom: "0.75rem",
                   }}
                 >
                   No {filterLevel !== "all" ? filterLevel : ""} risk tasks
                 </h3>
-                <p style={{ fontSize: "1rem", color: "#3C3D37" }}>
+                <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
                   All tasks are on track!
                 </p>
               </div>
@@ -456,7 +444,20 @@ const ProjectRisks: React.FC = () => {
                             marginBottom: "0.75rem",
                           }}
                         >
-                          <span style={{ fontSize: "1.5rem" }}>
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              fontWeight: "bold",
+                              width: "24px",
+                              height: "24px",
+                              borderRadius: "50%",
+                              background: getRiskColor(task.risk_level),
+                              color: "#fff",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
                             {getRiskIcon(task.risk_level)}
                           </span>
                           <h3
@@ -564,9 +565,9 @@ const ProjectRisks: React.FC = () => {
                           {task.estimated_delay_days !== undefined &&
                             task.estimated_delay_days > 0 && (
                               <div
-                                style={{ color: "#ECDFCC", fontWeight: "600" }}
+                                style={{ color: "#ef4444", fontWeight: "600" }}
                               >
-                                ⚠️ Estimated Delay: {task.estimated_delay_days}{" "}
+                                Estimated Delay: {task.estimated_delay_days}{" "}
                                 days
                               </div>
                             )}

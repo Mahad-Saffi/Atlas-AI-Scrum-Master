@@ -89,7 +89,7 @@ class ErrorBoundary extends Component<Props, State> {
                 e.currentTarget.style.boxShadow = '4px 4px 0 #1a1a1a';
               }}
             >
-              🔄 Reload Page
+              Reload Page
             </button>
           </div>
         </div>

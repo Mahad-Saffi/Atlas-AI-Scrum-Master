@@ -67,7 +67,22 @@ const OrganizationInfo: React.FC = () => {
         gap: "1rem",
       }}
     >
-      <div style={{ fontSize: "2rem" }}>🏢</div>
+      <div
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "8px",
+          background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#f5f5f5",
+          fontWeight: "bold",
+          fontSize: "0.625rem",
+        }}
+      >
+        ORG
+      </div>
       <div style={{ flex: 1 }}>
         <div
           style={{

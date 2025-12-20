@@ -167,10 +167,12 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                 No tasks
               </div>
             ) : (
-              tasksInStatus.map((task) => (
+              tasksInStatus.map((task, taskIndex) => (
                 <div
                   key={task.id}
-                  className="card"
+                  id={`task-card-${status.toLowerCase().replace(' ', '-')}-${taskIndex}`}
+                  data-task-id={task.id}
+                  className="card task-card"
                   style={{
                     padding: "1rem",
                     cursor: "pointer",
@@ -286,7 +288,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   >
                     {task.due_date && (
                       <span>
-                        📅{" "}
+                        Due:{" "}
                         {new Date(task.due_date).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -294,16 +296,17 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                       </span>
                     )}
                     {task.estimate_hours && (
-                      <span>⏱️ {task.estimate_hours}h</span>
+                      <span>{task.estimate_hours}h</span>
                     )}
                   </div>
 
                   {/* Action Button */}
                   {status === "To Do" && (
                     <button
+                      id={`btn-start-task-${taskIndex}`}
                       onClick={() => handleStartTask(task.id)}
                       disabled={updatingTaskId === task.id}
-                      className="btn-secondary"
+                      className="btn-secondary btn-start-task"
                       style={{
                         width: "100%",
                         padding: "0.5rem",
@@ -317,14 +320,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                     >
                       {updatingTaskId === task.id
                         ? "Starting..."
-                        : "▶ Start Task"}
+                        : "Start Task"}
                     </button>
                   )}
                   {status === "In Progress" && (
                     <button
+                      id={`btn-complete-task-${taskIndex}`}
                       onClick={() => handleCompleteTask(task.id)}
                       disabled={updatingTaskId === task.id}
-                      className="btn-secondary"
+                      className="btn-secondary btn-complete-task"
                       style={{
                         width: "100%",
                         padding: "0.5rem",
@@ -338,7 +342,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                     >
                       {updatingTaskId === task.id
                         ? "Completing..."
-                        : "✓ Mark Complete"}
+                        : "Mark Complete"}
                     </button>
                   )}
 

@@ -180,12 +180,13 @@ const SimpleLogin: React.FC = () => {
               required
             />
             <button
+              id="btn-demo-login"
               type="button"
               className="demo-btn"
               onClick={handleDemoLogin}
               disabled={loading}
             >
-              🎮 Try Demo
+              Try Demo
             </button>
             <button type="submit" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}
@@ -238,7 +239,7 @@ const SimpleLogin: React.FC = () => {
         </div>
       </div>
 
-      <div className="demo-info">💡 Demo Account: demo@atlas.ai / demo123</div>
+      <div className="demo-info">Demo Account: demo@atlas.ai / demo123</div>
     </div>
   );
 };

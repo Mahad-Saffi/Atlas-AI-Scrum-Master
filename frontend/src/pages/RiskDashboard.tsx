@@ -114,9 +114,9 @@ const RiskDashboard: React.FC = () => {
             <button
               onClick={() => navigate(`/project/${projectId}`)}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -127,10 +127,12 @@ const RiskDashboard: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.625rem",
+                fontWeight: "bold",
+                color: "#fff",
               }}
             >
-              ⚠️
+              RISK
             </div>
             <h1
               style={{
@@ -159,10 +161,7 @@ const RiskDashboard: React.FC = () => {
                 <span>Detecting...</span>
               </>
             ) : (
-              <>
-                <span>🔍</span>
-                <span>Detect Delays</span>
-              </>
+              <span>Detect Delays</span>
             )}
           </button>
         </div>
@@ -196,13 +195,28 @@ const RiskDashboard: React.FC = () => {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div style={{ fontSize: "2rem" }}>🔴</div>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "#ef4444",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "0.875rem",
+                }}
+              >
+                H
+              </div>
               <div>
                 <div
                   style={{
                     fontSize: "1.75rem",
                     fontWeight: "700",
-                    color: "#dc2626",
+                    color: "#ef4444",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
                     textShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -213,7 +227,7 @@ const RiskDashboard: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.875rem",
-                    color: "#dc2626",
+                    color: "#f5f5f5",
                     fontWeight: "500",
                   }}
                 >
@@ -232,13 +246,28 @@ const RiskDashboard: React.FC = () => {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div style={{ fontSize: "2rem" }}>🟡</div>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "#f59e0b",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "0.875rem",
+                }}
+              >
+                M
+              </div>
               <div>
                 <div
                   style={{
                     fontSize: "1.75rem",
                     fontWeight: "700",
-                    color: "#ECDFCC",
+                    color: "#f59e0b",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
                     textShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -249,7 +278,7 @@ const RiskDashboard: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.875rem",
-                    color: "#ECDFCC",
+                    color: "#f5f5f5",
                     fontWeight: "500",
                   }}
                 >
@@ -266,13 +295,28 @@ const RiskDashboard: React.FC = () => {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div style={{ fontSize: "2rem" }}>🟢</div>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "#10b981",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "0.875rem",
+                }}
+              >
+                L
+              </div>
               <div>
                 <div
                   style={{
                     fontSize: "1.75rem",
                     fontWeight: "700",
-                    color: "#ECDFCC",
+                    color: "#10b981",
                     lineHeight: "1",
                     marginBottom: "0.375rem",
                     textShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -283,7 +327,7 @@ const RiskDashboard: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.875rem",
-                    color: "#ECDFCC",
+                    color: "#f5f5f5",
                     fontWeight: "500",
                   }}
                 >
@@ -316,19 +360,33 @@ const RiskDashboard: React.FC = () => {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>🎉</div>
+            <div
+              style={{
+                width: "64px",
+                height: "64px",
+                background: "rgba(16, 185, 129, 0.2)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1rem",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+              }}
+            >
+              <span style={{ fontSize: "1.5rem", color: "#10b981", fontWeight: "bold" }}>OK</span>
+            </div>
             <h3
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: "#f5f5f5",
                 marginBottom: "0.5rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No High Risk Tasks
             </h3>
-            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
+            <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
               Your project is on track!
             </p>
           </div>
@@ -366,7 +424,22 @@ const RiskDashboard: React.FC = () => {
                       gap: "1rem",
                     }}
                   >
-                    <div style={{ fontSize: "2rem" }}>⚠️</div>
+                    <div
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        background: "#ef4444",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      H
+                    </div>
                     <div style={{ flex: 1 }}>
                       <div
                         style={{
@@ -411,11 +484,11 @@ const RiskDashboard: React.FC = () => {
                       >
                         {task.due_date && (
                           <div>
-                            📅 Due:{" "}
+                            Due:{" "}
                             {new Date(task.due_date).toLocaleDateString()}
                           </div>
                         )}
-                        <div>📊 Progress: {task.progress}%</div>
+                        <div>Progress: {task.progress}%</div>
                       </div>
                     </div>
                   </div>

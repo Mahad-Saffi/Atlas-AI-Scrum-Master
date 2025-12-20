@@ -99,19 +99,24 @@ async def get_team_members(current_user: dict = Depends(get_current_user)):
     
     members = await organization_service.get_organization_members(str(org.id))
     
-    return [
-        {
+    result = []
+    for member in members:
+        # Skip members with missing user data
+        if member.user is None:
+            continue
+        
+        result.append({
             "id": member.user.id,
             "username": member.user.username,
             "email": member.user.email,
             "role": member.role,
             "description": member.description,
-            "invited_by": member.inviter.username,
+            "invited_by": member.inviter.username if member.inviter else "System",
             "invited_by_id": member.invited_by,
             "joined_at": member.joined_at.isoformat()
-        }
-        for member in members
-    ]
+        })
+    
+    return result
 
 
 @router.post("/add-member")

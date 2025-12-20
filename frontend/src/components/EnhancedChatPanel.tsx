@@ -340,7 +340,7 @@ const EnhancedChatPanel: React.FC = () => {
               cursor: "pointer",
             }}
           >
-            💬 DMs
+            DMs
           </button>
         </div>
 
@@ -540,7 +540,7 @@ const EnhancedChatPanel: React.FC = () => {
               fontSize: "0.875rem",
             }}
           >
-            🔍
+            Search
           </button>
         </div>
 
@@ -563,7 +563,21 @@ const EnhancedChatPanel: React.FC = () => {
                 padding: "3rem 1rem",
               }}
             >
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>💬</div>
+              <div
+                style={{
+                  width: "64px",
+                  height: "64px",
+                  borderRadius: "50%",
+                  background: "rgba(236, 223, 204, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 1rem",
+                  border: "1px solid rgba(236, 223, 204, 0.2)",
+                }}
+              >
+                <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>CHAT</span>
+              </div>
               <div style={{ fontSize: "0.9375rem", fontWeight: "500" }}>
                 {selectedChannel || selectedUser
                   ? "No messages yet. Start chatting!"

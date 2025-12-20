@@ -18,9 +18,9 @@ class ProjectService:
             if not org:
                 return []
             
-            # Get all projects in the organization (org.id is already a UUID object)
+            # Get all projects in the organization (org.id is now a string)
             result = await session.execute(
-                select(Project).where(Project.organization_id == org.id)
+                select(Project).where(Project.organization_id == str(org.id))
             )
             projects = result.scalars().all()
             return [
@@ -59,39 +59,45 @@ class ProjectService:
                 # owner_id is an integer from the user table
                 # No conversion needed
                 
-                # Create project
+                # Create project (organization_id is now a string)
                 project = Project(
                     name=plan.get('project_name', 'Untitled Project'),
                     description=plan.get('description', ''),
                     owner_id=owner_id,
-                    organization_id=organization_id
+                    organization_id=str(organization_id) if organization_id else None
                 )
                 session.add(project)
                 await session.flush()  # Get project ID
+                
+                print(f"Created project: {project.id} with {len(plan.get('epics', []))} epics")
 
                 # Create epics, stories, and tasks
                 epics_data = plan.get('epics', [])
+                print(f"Creating {len(epics_data)} epics...")
+                
                 for epic_idx, epic_data in enumerate(epics_data):
                     epic = Epic(
-                        project_id=project.id,
+                        project_id=str(project.id),
                         name=epic_data.get('name', f'Epic {epic_idx + 1}'),
                         description=epic_data.get('description', ''),
                         order=epic_idx
                     )
                     session.add(epic)
                     await session.flush()  # Get epic ID
+                    print(f"  Created epic: {epic.name} (ID: {epic.id})")
 
                     # Create stories
                     stories_data = epic_data.get('stories', [])
                     for story_idx, story_data in enumerate(stories_data):
                         story = Story(
-                            epic_id=epic.id,
+                            epic_id=str(epic.id),
                             name=story_data.get('name', f'Story {story_idx + 1}'),
                             description=story_data.get('description', ''),
                             order=story_idx
                         )
                         session.add(story)
                         await session.flush()  # Get story ID
+                        print(f"    Created story: {story.name} (ID: {story.id})")
 
                         # Create tasks
                         tasks_data = story_data.get('tasks', [])
@@ -105,14 +111,15 @@ class ProjectService:
                                 task_desc = task_data.get('description', '')
                             
                             task = Task(
-                                project_id=project.id,
-                                story_id=story.id,
+                                project_id=str(project.id),
+                                story_id=str(story.id),
                                 title=task_title,
                                 description=task_desc,
                                 status='To Do',
                                 order=task_idx
                             )
                             session.add(task)
+                            print(f"      Created task: {task_title}")
 
                 await session.commit()
                 return project
@@ -120,17 +127,12 @@ class ProjectService:
     async def get_project_epics(self, project_id: str) -> list:
         """Get all epics with their stories and tasks for a project"""
         async with SessionLocal() as session:
-            # Convert project_id to UUID
-            if isinstance(project_id, str):
-                if len(project_id) == 32 and '-' not in project_id:
-                    project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
-                project_uuid = uuid.UUID(project_id)
-            else:
-                project_uuid = project_id
+            # project_id is now a string (String(36))
+            project_id_str = str(project_id)
             
             # Get all epics for the project
             result = await session.execute(
-                select(Epic).where(Epic.project_id == project_uuid).order_by(Epic.order)
+                select(Epic).where(Epic.project_id == project_id_str).order_by(Epic.order)
             )
             epics = result.scalars().all()
             

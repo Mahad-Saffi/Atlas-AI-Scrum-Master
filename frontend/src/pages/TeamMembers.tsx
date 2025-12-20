@@ -123,9 +123,9 @@ const TeamMembers: React.FC = () => {
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -136,10 +136,12 @@ const TeamMembers: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.625rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              👥
+              TEAM
             </div>
             <h1
               style={{
@@ -153,6 +155,7 @@ const TeamMembers: React.FC = () => {
           </div>
 
           <button
+            id="btn-add-member"
             onClick={() => navigate("/organization-setup")}
             className="btn-primary"
             style={{
@@ -188,13 +191,28 @@ const TeamMembers: React.FC = () => {
             gap: "1rem",
           }}
         >
-          <div style={{ fontSize: "2rem" }}>👥</div>
+          <div
+            style={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#f5f5f5",
+              fontWeight: "bold",
+              fontSize: "0.75rem",
+            }}
+          >
+            TEAM
+          </div>
           <div>
             <div
               style={{
                 fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: "#f5f5f5",
                 lineHeight: "1",
                 marginBottom: "0.375rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -205,7 +223,7 @@ const TeamMembers: React.FC = () => {
             <div
               style={{
                 fontSize: "0.875rem",
-                color: "#ECDFCC",
+                color: "#a0a0a0",
                 fontWeight: "500",
               }}
             >
@@ -236,12 +254,26 @@ const TeamMembers: React.FC = () => {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>👥</div>
+            <div
+              style={{
+                width: "64px",
+                height: "64px",
+                background: "rgba(236, 223, 204, 0.1)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1rem",
+                border: "1px solid rgba(236, 223, 204, 0.2)",
+              }}
+            >
+              <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>TEAM</span>
+            </div>
             <h3
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: "#f5f5f5",
                 marginBottom: "0.5rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
@@ -251,7 +283,7 @@ const TeamMembers: React.FC = () => {
             <p
               style={{
                 fontSize: "1rem",
-                color: "#ECDFCC",
+                color: "#a0a0a0",
                 marginBottom: "2rem",
               }}
             >

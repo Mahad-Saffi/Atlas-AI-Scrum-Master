@@ -4,7 +4,7 @@
       "url": "http://localhost:5173/",
       "identifiers": {
         "url_pattern": "^http://localhost:5173/$",
-        "elements": ["button"]
+        "elements": ["#btn-demo-login", "button.demo-btn"]
       },
       "description": "Login page with Try Demo button",
       "actions": {
@@ -13,21 +13,26 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Try Demo')",
+              "selector": "#btn-demo-login",
               "fallback_selectors": [
-                "//button[contains(text(), 'Try Demo')]",
-                "button.btn-primary",
-                "form button:first-of-type"
+                "button.demo-btn",
+                "//button[contains(text(), 'Try Demo')]"
               ],
               "description": "Click Try Demo button"
             },
             {
               "type": "wait",
-              "seconds": 2,
+              "seconds": 3,
               "description": "Wait for login to complete"
             }
           ],
-          "navigates_to": "dashboard"
+          "navigates_to": "dashboard",
+          "verify": {
+            "type": "api",
+            "endpoint": "http://localhost:8000/api/v1/auth/me",
+            "method": "GET",
+            "success_condition": "status_code == 200"
+          }
         }
       }
     },
@@ -35,7 +40,7 @@
       "url": "http://localhost:5173/",
       "identifiers": {
         "url_pattern": "^http://localhost:5173/$",
-        "elements": ["button", ".card"]
+        "elements": ["#btn-new-project", ".project-card"]
       },
       "description": "Main dashboard showing all projects",
       "actions": {
@@ -44,7 +49,7 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('New Project')",
+              "selector": "#btn-new-project",
               "fallback_selectors": [
                 "//button[contains(text(), 'New Project')]",
                 "a[href='/create-project']"
@@ -63,7 +68,7 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Team')",
+              "selector": "#btn-team-members",
               "fallback_selectors": [
                 "//button[contains(text(), 'Team')]",
                 "a[href='/team-members']"
@@ -77,15 +82,51 @@
           ],
           "navigates_to": "team_members"
         },
+        "navigate_to_chat": {
+          "description": "Navigate to chat page",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "#btn-chat",
+              "fallback_selectors": [
+                "//button[contains(text(), 'Chat')]"
+              ],
+              "description": "Click Chat button in header"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "chat_page"
+        },
+        "navigate_to_ai_assistant": {
+          "description": "Navigate to AI assistant page",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "#btn-ai-assistant",
+              "fallback_selectors": [
+                "//button[contains(text(), 'AI Assistant')]"
+              ],
+              "description": "Click AI Assistant button in header"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "ai_assistant"
+        },
         "open_first_project": {
           "description": "Open the first project card",
           "steps": [
             {
               "type": "click",
-              "selector": ".card:first-of-type",
+              "selector": "#project-card-0",
               "fallback_selectors": [
-                "div.card:first-child",
-                "//main//div[contains(@class, 'card')][1]"
+                ".project-card:first-of-type",
+                "div.card-glass-solid.project-card:first-child"
               ],
               "description": "Click on first project card"
             },
@@ -101,14 +142,37 @@
           "steps": [
             {
               "type": "count_elements",
-              "selector": ".card",
+              "selector": ".project-card",
               "fallback_selectors": [
-                "div.card",
-                "//main//div[contains(@class, 'card')]"
+                "[id^='project-card-']"
               ],
               "description": "Count project cards"
             }
-          ]
+          ],
+          "verify": {
+            "type": "api",
+            "endpoint": "http://localhost:8000/api/v1/projects",
+            "method": "GET",
+            "success_condition": "len(response) >= 0"
+          }
+        },
+        "sign_out": {
+          "description": "Sign out from the application",
+          "steps": [
+            {
+              "type": "click",
+              "selector": "#btn-sign-out",
+              "fallback_selectors": [
+                "//button[contains(text(), 'Sign out')]"
+              ],
+              "description": "Click Sign out button"
+            },
+            {
+              "type": "wait",
+              "seconds": 1
+            }
+          ],
+          "navigates_to": "login"
         }
       }
     },
@@ -116,7 +180,7 @@
       "url": "http://localhost:5173/create-project",
       "identifiers": {
         "url_pattern": "/create-project",
-        "elements": ["input", "button"]
+        "elements": ["#chat-input", "#btn-send-message"]
       },
       "description": "AI-powered project creation page with chat interface",
       "actions": {
@@ -125,31 +189,36 @@
           "steps": [
             {
               "type": "input",
-              "selector": "input[placeholder*='message']",
+              "selector": "#chat-input",
               "fallback_selectors": [
-                "input[type='text']",
-                "textarea"
+                "input[placeholder*='message']",
+                "input[type='text']"
               ],
               "param": "description",
               "description": "Enter project description in chat input"
             },
             {
               "type": "click",
-              "selector": "button[type='submit']",
+              "selector": "#btn-send-message",
               "fallback_selectors": [
-                "button:contains('Send')",
-                "//button[contains(text(), 'Send')]",
-                "form button"
+                "button[type='submit']",
+                "//button[contains(text(), 'Send')]"
               ],
               "description": "Click send button"
             },
             {
               "type": "wait",
-              "seconds": 5,
+              "seconds": 10,
               "description": "Wait for AI to process and create project"
             }
           ],
-          "navigates_to": "dashboard"
+          "navigates_to": "dashboard",
+          "verify": {
+            "type": "api",
+            "endpoint": "http://localhost:8000/api/v1/projects",
+            "method": "GET",
+            "success_condition": "len(response) > previous_count"
+          }
         }
       }
     },
@@ -157,7 +226,7 @@
       "url": "http://localhost:5173/project/{project_id}",
       "identifiers": {
         "url_pattern": "/project/[a-f0-9-]+$",
-        "elements": ["button", ".card"]
+        "elements": ["#btn-task-board", "#btn-epics", "#btn-issues", "#btn-risks"]
       },
       "description": "Individual project dashboard with stats and recent tasks",
       "actions": {
@@ -166,11 +235,10 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('View Task Board')",
+              "selector": "#btn-task-board",
               "fallback_selectors": [
                 "//button[contains(text(), 'View Task Board')]",
-                "//button[contains(text(), 'Task Board')]",
-                "a[href='/task-board']"
+                "//button[contains(text(), 'Task Board')]"
               ],
               "description": "Click View Task Board button"
             },
@@ -186,11 +254,9 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Issues')",
+              "selector": "#btn-issues",
               "fallback_selectors": [
-                "//button[contains(text(), 'Issues')]",
-                "//button[contains(., '🐛')]",
-                "//span[text()='Issues']/parent::button"
+                "//button[contains(text(), 'Issues')]"
               ],
               "description": "Click Issues button"
             },
@@ -206,10 +272,9 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Epics')",
+              "selector": "#btn-epics",
               "fallback_selectors": [
-                "//button[contains(text(), 'Epics')]",
-                "//button[contains(., '📚')]"
+                "//button[contains(text(), 'Epics')]"
               ],
               "description": "Click Epics button"
             },
@@ -225,10 +290,9 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Risks')",
+              "selector": "#btn-risks",
               "fallback_selectors": [
-                "//button[contains(text(), 'Risks')]",
-                "//button[contains(., '⚠️')]"
+                "//button[contains(text(), 'Risks')]"
               ],
               "description": "Click Risks button"
             },
@@ -254,7 +318,7 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Start Task')",
+              "selector": "#btn-start-task-0",
               "fallback_selectors": [
                 "//button[contains(text(), 'Start Task')]",
                 "//button[contains(text(), 'Start')]"
@@ -272,7 +336,7 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Mark Complete')",
+              "selector": "#btn-complete-task-0",
               "fallback_selectors": [
                 "//button[contains(text(), 'Mark Complete')]",
                 "//button[contains(text(), 'Complete')]"
@@ -291,7 +355,7 @@
       "url": "http://localhost:5173/team-members",
       "identifiers": {
         "url_pattern": "/team-members",
-        "elements": ["input[type='email']", "button"]
+        "elements": ["#btn-add-member"]
       },
       "description": "Team members management page",
       "actions": {
@@ -300,72 +364,18 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Add Member')",
+              "selector": "#btn-add-member",
               "fallback_selectors": [
-                "//button[contains(text(), 'Add Member')]",
-                "//button[contains(text(), 'Add')]"
+                "//button[contains(text(), 'Add Member')]"
               ],
               "description": "Click Add Member button"
             },
             {
               "type": "wait",
               "seconds": 1
-            },
-            {
-              "type": "input",
-              "selector": "input[name='username']",
-              "fallback_selectors": [
-                "input[placeholder*='username' i]",
-                "//input[@type='text'][1]"
-              ],
-              "param": "username",
-              "description": "Enter username"
-            },
-            {
-              "type": "input",
-              "selector": "input[type='email']",
-              "fallback_selectors": [
-                "input[name='email']",
-                "input[placeholder*='email' i]"
-              ],
-              "param": "email",
-              "description": "Enter email"
-            },
-            {
-              "type": "input",
-              "selector": "input[type='password']",
-              "fallback_selectors": [
-                "input[name='password']",
-                "input[placeholder*='password' i]"
-              ],
-              "param": "password",
-              "description": "Enter password"
-            },
-            {
-              "type": "select",
-              "selector": "select[name='role']",
-              "fallback_selectors": [
-                "select",
-                "//select[1]"
-              ],
-              "param": "role",
-              "description": "Select role"
-            },
-            {
-              "type": "click",
-              "selector": "button[type='submit']",
-              "fallback_selectors": [
-                "button:contains('Submit')",
-                "//button[contains(text(), 'Submit')]",
-                "form button"
-              ],
-              "description": "Click Submit button"
-            },
-            {
-              "type": "wait",
-              "seconds": 2
             }
-          ]
+          ],
+          "navigates_to": "organization_setup"
         }
       }
     },
@@ -373,7 +383,7 @@
       "url": "http://localhost:5173/project/{project_id}/issues",
       "identifiers": {
         "url_pattern": "/project/[a-f0-9-]+/issues",
-        "elements": ["button", ".card"]
+        "elements": ["#btn-report-issue"]
       },
       "description": "Issues and bugs tracking page",
       "actions": {
@@ -382,10 +392,9 @@
           "steps": [
             {
               "type": "click",
-              "selector": "button:contains('Report Issue')",
+              "selector": "#btn-report-issue",
               "fallback_selectors": [
-                "//button[contains(text(), 'Report Issue')]",
-                "//button[contains(text(), 'Create Issue')]"
+                "//button[contains(text(), 'Report Issue')]"
               ],
               "description": "Click Report Issue button"
             },
@@ -395,48 +404,46 @@
             },
             {
               "type": "input",
-              "selector": "input[name='title']",
+              "selector": "#input-issue-title",
               "fallback_selectors": [
-                "input[placeholder*='title' i]",
-                "//input[@type='text'][1]"
+                "input[placeholder*='title' i]"
               ],
               "param": "title",
               "description": "Enter issue title"
             },
             {
               "type": "input",
-              "selector": "textarea[name='description']",
+              "selector": "#input-issue-description",
               "fallback_selectors": [
-                "textarea",
-                "//textarea[1]"
+                "textarea"
               ],
               "param": "description",
               "description": "Enter issue description"
             },
             {
               "type": "select",
-              "selector": "select[name='type']",
+              "selector": "#select-issue-type",
               "fallback_selectors": [
-                "//select[1]"
+                "select:first-of-type"
               ],
               "param": "type",
               "description": "Select issue type"
             },
             {
               "type": "select",
-              "selector": "select[name='priority']",
+              "selector": "#select-issue-priority",
               "fallback_selectors": [
-                "//select[2]"
+                "select:last-of-type"
               ],
               "param": "priority",
               "description": "Select priority"
             },
             {
               "type": "click",
-              "selector": "button[type='submit']",
+              "selector": "#btn-submit-issue",
               "fallback_selectors": [
-                "button:contains('Submit')",
-                "//button[contains(text(), 'Submit')]"
+                "button[type='submit']",
+                "//button[contains(text(), 'Create Issue')]"
               ],
               "description": "Click Submit button"
             },
@@ -444,9 +451,21 @@
               "type": "wait",
               "seconds": 2
             }
-          ]
+          ],
+          "verify": {
+            "type": "api",
+            "endpoint": "http://localhost:8000/api/v1/issues/project/{project_id}",
+            "method": "GET",
+            "success_condition": "len(response) > previous_count"
+          }
         }
       }
     }
+  },
+  "verification": {
+    "projects_api": "http://localhost:8000/api/v1/projects",
+    "tasks_api": "http://localhost:8000/api/v1/projects/{project_id}/tasks",
+    "issues_api": "http://localhost:8000/api/v1/issues/project/{project_id}",
+    "team_api": "http://localhost:8000/api/v1/organizations/members"
   }
 }

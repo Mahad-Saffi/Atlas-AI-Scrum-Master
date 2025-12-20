@@ -133,12 +133,26 @@ const ProjectDashboard: React.FC = () => {
             padding: "3rem",
           }}
         >
-          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>😕</div>
+          <div
+            style={{
+              width: "64px",
+              height: "64px",
+              background: "rgba(236, 223, 204, 0.1)",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 1rem",
+              border: "1px solid rgba(236, 223, 204, 0.2)",
+            }}
+          >
+            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>?</span>
+          </div>
           <h2
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#ECDFCC",
+              color: "#f5f5f5",
               marginBottom: "1rem",
               textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
@@ -194,10 +208,9 @@ const ProjectDashboard: React.FC = () => {
               className="btn-secondary"
               style={{
                 padding: "0.5rem 1rem",
-                fontSize: "1.25rem",
               }}
             >
-              ←
+              Back
             </button>
             <h1
               style={{
@@ -218,30 +231,28 @@ const ProjectDashboard: React.FC = () => {
             }}
           >
             <button
+              id="btn-epics"
               onClick={() => navigate(`/project/${projectId}/epics`)}
               className="btn-secondary"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <span>📚</span>
-              <span>Epics</span>
+              Epics
             </button>
             <button
+              id="btn-risks"
               onClick={() => navigate(`/project/${projectId}/risk-dashboard`)}
               className="btn-secondary"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <span>⚠️</span>
-              <span>Risks</span>
+              Risks
             </button>
             <button
+              id="btn-issues"
               onClick={() => navigate(`/project/${projectId}/issues`)}
               className="btn-secondary"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <span>🐛</span>
-              <span>Issues</span>
+              Issues
             </button>
             <button
+              id="btn-task-board"
               onClick={() => navigate("/task-board")}
               className="btn-secondary"
             >

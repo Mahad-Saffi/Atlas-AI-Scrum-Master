@@ -190,6 +190,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             }}
           >
             <button
+              id="btn-chat"
               onClick={() => navigate("/chat")}
               className="btn-secondary"
               style={{
@@ -198,11 +199,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 gap: "0.5rem",
               }}
             >
-              <span>💬</span>
               <span>Chat</span>
             </button>
 
             <button
+              id="btn-team-members"
               onClick={() => navigate("/team-members")}
               className="btn-secondary"
               style={{
@@ -211,11 +212,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 gap: "0.5rem",
               }}
             >
-              <span>👥</span>
               <span>Team</span>
             </button>
 
             <button
+              id="btn-new-project"
               onClick={() => navigate("/create-project")}
               className="btn-secondary"
               style={{
@@ -229,6 +230,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </button>
 
             <button
+              id="btn-ai-assistant"
               onClick={() => navigate("/ai-assistant")}
               className="btn-secondary"
               style={{
@@ -239,7 +241,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 border: "1px solid rgba(16, 185, 129, 0.4)",
               }}
             >
-              <span>🤖</span>
               <span>AI Assistant</span>
             </button>
 
@@ -284,6 +285,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             </div>
 
             <button
+              id="btn-sign-out"
               onClick={onSignOut}
               className="btn-secondary"
               style={{
@@ -334,7 +336,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 fontSize: "2rem",
               }}
             >
-              📊
+              #
             </div>
             <div>
               <div
@@ -376,7 +378,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 fontSize: "2rem",
               }}
             >
-              ✅
+              OK
             </div>
             <div>
               <div
@@ -418,7 +420,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 fontSize: "2rem",
               }}
             >
-              ⚡
+              IP
             </div>
             <div>
               <div
@@ -482,7 +484,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
                 onClick={() => setShowSortMenu(!showSortMenu)}
               >
-                📅 Sort by
+                Sort by
               </button>
               {showSortMenu && (
                 <div
@@ -585,7 +587,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 margin: "0 auto 1.5rem",
               }}
             >
-              📋
+              T
             </div>
             <h3
               style={{
@@ -647,10 +649,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 );
               }
               return sortedProjects;
-            })().map((project) => (
+            })().map((project, index) => (
               <div
                 key={project.id}
-                className="card-glass-solid"
+                id={`project-card-${index}`}
+                data-project-id={project.id}
+                className="card-glass-solid project-card"
                 style={{
                   cursor: "pointer",
                   position: "relative",
@@ -715,7 +719,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                       gap: "0.5rem",
                     }}
                   >
-                    <span style={{ fontSize: "0.875rem" }}>📅</span>
+                    <span style={{ fontSize: "0.75rem", color: "#a0a0a0" }}>Due:</span>
                     <span
                       style={{
                         fontSize: "0.875rem",

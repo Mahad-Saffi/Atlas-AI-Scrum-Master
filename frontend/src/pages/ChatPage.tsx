@@ -37,9 +37,9 @@ const ChatPage: React.FC = () => {
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -50,10 +50,12 @@ const ChatPage: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.75rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              💬
+              Chat
             </div>
             <h1
               style={{

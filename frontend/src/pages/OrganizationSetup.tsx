@@ -218,9 +218,9 @@ const OrganizationSetup: React.FC = () => {
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -274,24 +274,26 @@ const OrganizationSetup: React.FC = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "3rem",
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#f5f5f5",
                   margin: "0 auto 1rem",
                 }}
               >
-                🏢
+                ORG
               </div>
               <h2
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#ECDFCC",
+                  color: "#f5f5f5",
                   marginBottom: "0.5rem",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Create Your Organization
               </h2>
-              <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
+              <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
                 Set up your organization to start managing projects and team
                 members
               </p>
@@ -307,7 +309,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                   }}
                 >
                   Organization Name *
@@ -330,7 +332,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                   }}
                 >
                   Description
@@ -391,6 +393,7 @@ const OrganizationSetup: React.FC = () => {
                 </div>
                 {organization.is_owner && (
                   <button
+                    id="btn-add-team-member"
                     onClick={() => setShowAddMember(true)}
                     className="btn-primary"
                     style={{ padding: "0.75rem 1.5rem" }}
@@ -458,6 +461,7 @@ const OrganizationSetup: React.FC = () => {
                         Username *
                       </label>
                       <input
+                        id="input-member-username"
                         type="text"
                         required
                         value={memberForm.username}
@@ -484,6 +488,7 @@ const OrganizationSetup: React.FC = () => {
                         Email *
                       </label>
                       <input
+                        id="input-member-email"
                         type="email"
                         required
                         value={memberForm.email}
@@ -510,6 +515,7 @@ const OrganizationSetup: React.FC = () => {
                         Password *
                       </label>
                       <input
+                        id="input-member-password"
                         type="password"
                         required
                         value={memberForm.password}
@@ -536,6 +542,7 @@ const OrganizationSetup: React.FC = () => {
                         Role *
                       </label>
                       <select
+                        id="select-member-role"
                         required
                         value={memberForm.role}
                         onChange={(e) =>
@@ -577,6 +584,7 @@ const OrganizationSetup: React.FC = () => {
                   </div>
 
                   <button
+                    id="btn-submit-member"
                     type="submit"
                     className="btn-primary"
                     style={{ padding: "0.75rem 2rem" }}

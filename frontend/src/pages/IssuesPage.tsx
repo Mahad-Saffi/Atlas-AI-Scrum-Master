@@ -221,13 +221,13 @@ const IssuesPage: React.FC = () => {
   const getIssueTypeIcon = (type: string) => {
     switch (type) {
       case "blocker":
-        return "🚫";
+        return "BLK";
       case "bug":
-        return "🐛";
+        return "BUG";
       case "question":
-        return "❓";
+        return "Q";
       default:
-        return "📝";
+        return "ISS";
     }
   };
 
@@ -286,9 +286,9 @@ const IssuesPage: React.FC = () => {
             <button
               onClick={() => navigate(`/project/${projectId}`)}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -299,10 +299,12 @@ const IssuesPage: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.625rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              🐛
+              BUG
             </div>
             <h1
               style={{
@@ -315,6 +317,7 @@ const IssuesPage: React.FC = () => {
             </h1>
           </div>
           <button
+            id="btn-report-issue"
             onClick={() => setShowCreateForm(true)}
             className="btn-primary"
             style={{ padding: "0.75rem 1.5rem" }}
@@ -408,13 +411,14 @@ const IssuesPage: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     fontSize: "0.875rem",
                   }}
                 >
                   Title *
                 </label>
                 <input
+                  id="input-issue-title"
                   type="text"
                   required
                   value={issueForm.title}
@@ -431,13 +435,14 @@ const IssuesPage: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#181C14",
+                    color: "#f5f5f5",
                     fontSize: "0.875rem",
                   }}
                 >
                   Description *
                 </label>
                 <textarea
+                  id="input-issue-description"
                   required
                   value={issueForm.description}
                   onChange={(e) =>
@@ -448,13 +453,13 @@ const IssuesPage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "1em",
-                    borderRadius: "15px",
-                    border: "none",
-                    backgroundColor: "#697565",
-                    color: "#ECDFCC",
+                    borderRadius: "8px",
+                    border: "1px solid rgba(236, 223, 204, 0.3)",
+                    backgroundColor: "#1a1a1a",
+                    color: "#f5f5f5",
                     fontFamily: "inherit",
                     fontSize: "0.9375rem",
-                    boxShadow: "inset 2px 5px 10px rgba(0, 0, 0, 0.3)",
+                    boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.4)",
                     resize: "vertical",
                   }}
                 />
@@ -474,22 +479,23 @@ const IssuesPage: React.FC = () => {
                       display: "block",
                       marginBottom: "0.5rem",
                       fontWeight: "600",
-                      color: "#181C14",
+                      color: "#f5f5f5",
                       fontSize: "0.875rem",
                     }}
                   >
                     Type *
                   </label>
                   <select
+                    id="select-issue-type"
                     required
                     value={issueForm.issue_type}
                     onChange={(e) =>
                       setIssueForm({ ...issueForm, issue_type: e.target.value })
                     }
                   >
-                    <option value="bug">🐛 Bug</option>
-                    <option value="blocker">🚫 Blocker</option>
-                    <option value="question">❓ Question</option>
+                    <option value="bug">Bug</option>
+                    <option value="blocker">Blocker</option>
+                    <option value="question">Question</option>
                   </select>
                 </div>
 
@@ -499,13 +505,14 @@ const IssuesPage: React.FC = () => {
                       display: "block",
                       marginBottom: "0.5rem",
                       fontWeight: "600",
-                      color: "#181C14",
+                      color: "#f5f5f5",
                       fontSize: "0.875rem",
                     }}
                   >
                     Priority *
                   </label>
                   <select
+                    id="select-issue-priority"
                     required
                     value={issueForm.priority}
                     onChange={(e) =>
@@ -521,6 +528,7 @@ const IssuesPage: React.FC = () => {
               </div>
 
               <button
+                id="btn-submit-issue"
                 type="submit"
                 className="btn-primary"
                 style={{ padding: "0.75rem 2rem" }}
@@ -565,24 +573,26 @@ const IssuesPage: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "3rem",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
                 margin: "0 auto 1.5rem",
               }}
             >
-              ✅
+              OK
             </div>
             <h3
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: "#f5f5f5",
                 marginBottom: "0.75rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No issues found
             </h3>
-            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
+            <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
               {filterStatus === "all"
                 ? "Great! No issues reported yet."
                 : `No ${filterStatus.replace("_", " ")} issues.`}
@@ -610,7 +620,16 @@ const IssuesPage: React.FC = () => {
                         marginBottom: "0.75rem",
                       }}
                     >
-                      <span style={{ fontSize: "1.5rem" }}>
+                      <span
+                        style={{
+                          fontSize: "0.625rem",
+                          fontWeight: "bold",
+                          padding: "0.25rem 0.5rem",
+                          background: "rgba(236, 223, 204, 0.2)",
+                          borderRadius: "4px",
+                          color: "#f5f5f5",
+                        }}
+                      >
                         {getIssueTypeIcon(issue.issue_type)}
                       </span>
                       <h3
@@ -667,17 +686,17 @@ const IssuesPage: React.FC = () => {
                         alignItems: "center",
                         gap: "1.5rem",
                         fontSize: "0.875rem",
-                        color: "#ECDFCC",
+                        color: "#a0a0a0",
                       }}
                     >
                       <span>
-                        📅 {new Date(issue.created_at).toLocaleDateString()}
+                        {new Date(issue.created_at).toLocaleDateString()}
                       </span>
                       {issue.reporter_username && (
-                        <span>👤 Reported by: {issue.reporter_username}</span>
+                        <span>Reported by: {issue.reporter_username}</span>
                       )}
                       {issue.assignee_username && (
-                        <span>👨‍💻 Assigned to: {issue.assignee_username}</span>
+                        <span>Assigned to: {issue.assignee_username}</span>
                       )}
                     </div>
 
@@ -749,7 +768,7 @@ const IssuesPage: React.FC = () => {
                             fontSize: "0.875rem",
                           }}
                         >
-                          ✅ Resolve
+                          Resolve
                         </button>
                       )}
                   </div>

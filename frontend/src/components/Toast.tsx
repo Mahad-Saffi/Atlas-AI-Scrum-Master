@@ -60,13 +60,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
         return {
           background: "rgba(245, 158, 11, 0.95)",
           border: "1px solid rgba(245, 158, 11, 0.5)",
-          icon: "⚠",
+          icon: "!",
         };
       default:
         return {
           background: "rgba(59, 130, 246, 0.95)",
           border: "1px solid rgba(59, 130, 246, 0.5)",
-          icon: "ℹ",
+          icon: "i",
         };
     }
   };

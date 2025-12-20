@@ -179,9 +179,9 @@ const EpicView: React.FC = () => {
             <button
               onClick={() => navigate(`/project/${projectId}`)}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{ padding: "0.5rem 1rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -192,10 +192,12 @@ const EpicView: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
+                fontSize: "0.75rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              📚
+              EP
             </div>
             <h1
               style={{
@@ -208,6 +210,7 @@ const EpicView: React.FC = () => {
             </h1>
           </div>
           <button
+            id="btn-refresh-epics"
             onClick={() => {
               setLoading(true);
               fetchEpics();
@@ -219,8 +222,7 @@ const EpicView: React.FC = () => {
               gap: "0.5rem",
             }}
           >
-            <span>🔄</span>
-            <span>Refresh</span>
+            Refresh
           </button>
         </div>
       </header>
@@ -256,19 +258,33 @@ const EpicView: React.FC = () => {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>📚</div>
+            <div
+              style={{
+                width: "64px",
+                height: "64px",
+                background: "rgba(236, 223, 204, 0.1)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1rem",
+                border: "1px solid rgba(236, 223, 204, 0.2)",
+              }}
+            >
+              <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>EP</span>
+            </div>
             <h3
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: "#f5f5f5",
                 marginBottom: "0.5rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No Epics Yet
             </h3>
-            <p style={{ fontSize: "1rem", color: "#ECDFCC" }}>
+            <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
               Create a project with AI to generate epics and stories
             </p>
           </div>

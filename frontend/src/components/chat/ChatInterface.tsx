@@ -120,7 +120,7 @@ const ChatInterface: React.FC = () => {
                   color: msg.sender === "user" ? "#3C3D37" : "#697565",
                 }}
               >
-                {msg.sender === "ai" ? "🤖 Atlas AI" : "👤 You"}
+                {msg.sender === "ai" ? "Atlas AI" : "You"}
               </div>
               {msg.sender === "ai" ? (
                 <ReactMarkdown>{msg.text}</ReactMarkdown>
@@ -176,7 +176,7 @@ const ChatInterface: React.FC = () => {
                 padding: "0.875rem 2rem",
               }}
             >
-              🎉 View Your Project!
+              View Your Project
             </button>
           </div>
         )}
@@ -197,6 +197,7 @@ const ChatInterface: React.FC = () => {
         }}
       >
         <input
+          id="chat-input"
           type="text"
           placeholder="Type your message here..."
           value={inputValue}
@@ -211,6 +212,7 @@ const ChatInterface: React.FC = () => {
           disabled={isLoading || projectCreated}
         />
         <button
+          id="btn-send-message"
           onClick={handleSendMessage}
           className="btn-primary"
           disabled={isLoading || projectCreated}

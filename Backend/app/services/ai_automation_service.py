@@ -37,8 +37,8 @@ class AIAutomationService:
         self.context_history = []
         
         try:
-            # Initialize browser
-            await self._send_update(websocket, "🚀 Initializing browser...", "info")
+            # Initialize browser in headless mode
+            await self._send_update(websocket, "Initializing browser (headless mode)...", "info")
             self._init_browser()
             await asyncio.sleep(2)
             await self._send_screenshot(websocket)
@@ -46,16 +46,16 @@ class AIAutomationService:
             # Check if we need to login
             current_page = self._detect_current_page()
             if current_page == "login":
-                await self._send_update(websocket, "🔐 Logging in with demo account...", "info")
+                await self._send_update(websocket, "Logging in with demo account...", "info")
                 await self._auto_login(websocket)
                 await asyncio.sleep(2)
                 await self._send_screenshot(websocket)
             
             # Parse task with GPT
-            await self._send_update(websocket, f"🤔 Understanding task: {task}", "info")
+            await self._send_update(websocket, f"Understanding task: {task}", "info")
             plan = await self._create_task_plan(task)
             
-            await self._send_update(websocket, f"📋 Created plan with {len(plan['steps'])} steps", "info")
+            await self._send_update(websocket, f"Created plan with {len(plan['steps'])} steps", "info")
             
             # Execute plan
             for idx, step in enumerate(plan['steps'], 1):
@@ -64,7 +64,7 @@ class AIAutomationService:
                     
                 await self._send_update(
                     websocket, 
-                    f"⚙️ Step {idx}/{len(plan['steps'])}: {step.get('description', 'Executing step')}", 
+                    f"Step {idx}/{len(plan['steps'])}: {step.get('description', 'Executing step')}", 
                     "info"
                 )
                 
@@ -72,8 +72,8 @@ class AIAutomationService:
                     await self._execute_step(step, websocket)
                 except Exception as step_error:
                     # Try to recover from error
-                    await self._send_update(websocket, f"⚠️ Step failed: {str(step_error)}", "warning")
-                    await self._send_update(websocket, "🔄 Attempting to recover...", "info")
+                    await self._send_update(websocket, f"Step failed: {str(step_error)}", "warning")
+                    await self._send_update(websocket, "Attempting to recover...", "info")
                     
                     recovered = await self._attempt_recovery(step, websocket)
                     if not recovered:
@@ -82,10 +82,10 @@ class AIAutomationService:
                 await asyncio.sleep(0.5)
                 await self._send_screenshot(websocket)
             
-            await self._send_update(websocket, "✅ Task completed successfully!", "success")
+            await self._send_update(websocket, "Task completed successfully!", "success")
             
         except Exception as e:
-            await self._send_update(websocket, f"❌ Error: {str(e)}", "error")
+            await self._send_update(websocket, f"Error: {str(e)}", "error")
             print(f"Automation error: {e}")
             import traceback
             traceback.print_exc()
@@ -95,15 +95,16 @@ class AIAutomationService:
             self.is_running = False
     
     def _init_browser(self):
-        """Initialize Selenium WebDriver"""
+        """Initialize Selenium WebDriver in headless mode"""
         options = Options()
-        options.add_argument('--start-maximized')
+        options.add_argument('--headless=new')  # Use new headless mode
+        options.add_argument('--window-size=1920,1080')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
-        
-        # Don't use headless mode so we can see what's happening
-        # options.add_argument('--headless')
         
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=options)
@@ -121,10 +122,10 @@ class AIAutomationService:
             }
             
             await self._execute_step(login_step, websocket)
-            await self._send_update(websocket, "✅ Successfully logged in!", "success")
+            await self._send_update(websocket, "Successfully logged in!", "success")
             
         except Exception as e:
-            await self._send_update(websocket, f"❌ Login failed: {str(e)}", "error")
+            await self._send_update(websocket, f"Login failed: {str(e)}", "error")
             raise
     
     async def _create_task_plan(self, task: str) -> Dict:
@@ -287,7 +288,7 @@ Examples:
                 fallback_selectors = action_step.get('fallback_selectors', [])
                 elements = self._find_elements_with_fallback(selector, fallback_selectors)
                 count = len(elements)
-                await self._send_update(websocket, f"  → Found {count} elements", "info")
+                await self._send_update(websocket, f"Found {count} elements", "info")
                 return count
                 
             elif action_type == 'find_and_click':
@@ -307,7 +308,7 @@ Examples:
                 button.click()
                 
         except Exception as e:
-            await self._send_update(websocket, f"⚠️ Action failed: {str(e)}", "warning")
+            await self._send_update(websocket, f"Action failed: {str(e)}", "warning")
             raise
     
     def _find_element(self, selector: str, timeout: int = 10):
@@ -462,7 +463,7 @@ Examples:
         """Navigate to a specific page"""
         current_page = self._detect_current_page()
         
-        await self._send_update(websocket, f"🧭 Navigating from {current_page} to {target_page}", "info")
+        await self._send_update(websocket, f"Navigating from {current_page} to {target_page}", "info")
         
         # Direct navigation
         if target_page in self.app_map['pages']:
@@ -480,25 +481,25 @@ Examples:
             
             await self._send_update(
                 websocket, 
-                f"📍 Current location: {current_page} (URL: {current_url})", 
+                f"Current location: {current_page} (URL: {current_url})", 
                 "info"
             )
             await self._send_update(
                 websocket, 
-                f"🎯 Target location: {target_page}", 
+                f"Target location: {target_page}", 
                 "info"
             )
             
             # If we're on login page, login first
             if current_page == "login":
-                await self._send_update(websocket, "🔐 Detected login page, logging in...", "info")
+                await self._send_update(websocket, "Detected login page, logging in...", "info")
                 try:
                     await self._auto_login(websocket)
                     await asyncio.sleep(2)
                     
                     # Re-detect page after login
                     current_page = self._detect_current_page()
-                    await self._send_update(websocket, f"✅ Logged in, now on: {current_page}", "info")
+                    await self._send_update(websocket, f"Logged in, now on: {current_page}", "success")
                     
                     # If we need to be on a different page, navigate there
                     if current_page != target_page and target_page != 'unknown':
@@ -506,18 +507,18 @@ Examples:
                         await asyncio.sleep(2)
                     
                     # Try the step again
-                    await self._send_update(websocket, "🔄 Retrying step after login...", "info")
+                    await self._send_update(websocket, "Retrying step after login...", "info")
                     await self._execute_step(failed_step, websocket)
                     return True
                 except Exception as login_error:
-                    await self._send_update(websocket, f"❌ Login failed: {str(login_error)}", "error")
+                    await self._send_update(websocket, f"Login failed: {str(login_error)}", "error")
                     return False
             
             # If we're not on the right page, navigate there
             if current_page != target_page and target_page != 'unknown':
                 await self._send_update(
                     websocket, 
-                    f"🧭 Wrong page detected, navigating to {target_page}...", 
+                    f"Wrong page detected, navigating to {target_page}...", 
                     "info"
                 )
                 try:
@@ -525,30 +526,30 @@ Examples:
                     await asyncio.sleep(2)
                     
                     # Try the step again
-                    await self._send_update(websocket, "🔄 Retrying step after navigation...", "info")
+                    await self._send_update(websocket, "Retrying step after navigation...", "info")
                     await self._execute_step(failed_step, websocket)
                     return True
                 except Exception as nav_error:
-                    await self._send_update(websocket, f"❌ Navigation failed: {str(nav_error)}", "error")
+                    await self._send_update(websocket, f"Navigation failed: {str(nav_error)}", "error")
                     # Continue to AI suggestion
             
             # If we're on the right page but element not found, wait and retry
             if current_page == target_page:
-                await self._send_update(websocket, "⏳ Waiting for page to fully load...", "info")
+                await self._send_update(websocket, "Waiting for page to fully load...", "info")
                 await asyncio.sleep(2)
                 
                 try:
-                    await self._send_update(websocket, "🔄 Retrying step after wait...", "info")
+                    await self._send_update(websocket, "Retrying step after wait...", "info")
                     await self._execute_step(failed_step, websocket)
                     return True
                 except Exception as retry_error:
-                    await self._send_update(websocket, f"⚠️ Retry failed: {str(retry_error)}", "warning")
+                    await self._send_update(websocket, f"Retry failed: {str(retry_error)}", "warning")
                     # Continue to AI suggestion
             
             # If element not found, use GPT to find alternative
             await self._send_update(
                 websocket, 
-                "🤖 Asking AI for alternative approach...", 
+                "Asking AI for alternative approach...", 
                 "info"
             )
             
@@ -592,7 +593,7 @@ Return JSON with: {{"possible": true/false, "suggestion": "what to do next"}}
             if suggestion.get('possible', False):
                 await self._send_update(
                     websocket, 
-                    f"💡 AI suggestion: {suggestion.get('suggestion', 'Try alternative approach')}", 
+                    f"AI suggestion: {suggestion.get('suggestion', 'Try alternative approach')}", 
                     "info"
                 )
                 # For now, just log the suggestion
@@ -601,7 +602,7 @@ Return JSON with: {{"possible": true/false, "suggestion": "what to do next"}}
             else:
                 await self._send_update(
                     websocket, 
-                    f"❌ AI says: {suggestion.get('suggestion', 'Cannot proceed from current state')}", 
+                    f"AI says: {suggestion.get('suggestion', 'Cannot proceed from current state')}", 
                     "error"
                 )
                 return False
@@ -609,7 +610,7 @@ Return JSON with: {{"possible": true/false, "suggestion": "what to do next"}}
         except Exception as recovery_error:
             await self._send_update(
                 websocket, 
-                f"❌ Recovery failed: {str(recovery_error)}", 
+                f"Recovery failed: {str(recovery_error)}", 
                 "error"
             )
             return False

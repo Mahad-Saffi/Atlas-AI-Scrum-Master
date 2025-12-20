@@ -18,7 +18,6 @@ const AIAssistant: React.FC = () => {
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Auto-scroll logs
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
@@ -133,27 +132,30 @@ const AIAssistant: React.FC = () => {
     }
   };
 
-  const getLevelIcon = (level: string) => {
+  const getLevelLabel = (level: string) => {
     switch (level) {
       case "error":
-        return "❌";
+        return "[ERROR]";
       case "success":
-        return "✅";
+        return "[OK]";
       case "warning":
-        return "⚠️";
+        return "[WARN]";
       case "action":
-        return "⚡";
+        return "[ACTION]";
       case "info":
-        return "ℹ️";
+        return "[INFO]";
       default:
-        return "•";
+        return "";
     }
   };
 
   return (
     <div
       style={{
-        minHeight: "100vh",
+        height: "100vh",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
         position: "relative",
         zIndex: 1,
       }}
@@ -162,10 +164,8 @@ const AIAssistant: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
+          padding: "0.75rem 2rem",
+          flexShrink: 0,
         }}
       >
         <div
@@ -183,7 +183,7 @@ const AIAssistant: React.FC = () => {
               className="btn-secondary"
               style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
             >
-              ←
+              Back
             </button>
             <div
               style={{
@@ -194,10 +194,12 @@ const AIAssistant: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1.25rem",
+                fontSize: "0.875rem",
+                fontWeight: "bold",
+                color: "#ECDFCC",
               }}
             >
-              🤖
+              AI
             </div>
             <h1
               style={{
@@ -220,7 +222,7 @@ const AIAssistant: React.FC = () => {
                   color: "#ECDFCC",
                 }}
               >
-                ⏹ Stop
+                Stop
               </button>
             )}
             <NotificationBell />
@@ -231,32 +233,46 @@ const AIAssistant: React.FC = () => {
       {/* Main Content */}
       <main
         style={{
-          maxWidth: "1800px",
-          margin: "0 auto",
-          padding: "2rem",
-          position: "relative",
-          zIndex: 1,
+          flex: 1,
+          overflow: "hidden",
+          padding: "1rem 2rem",
         }}
       >
         <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "2rem" }}
+          style={{
+            maxWidth: "1800px",
+            margin: "0 auto",
+            height: "100%",
+            display: "grid",
+            gridTemplateColumns: "1fr 1.5fr",
+            gap: "1.5rem",
+          }}
         >
-          {/* Control Panel */}
+          {/* Left Panel - Task Input and Logs */}
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              height: "100%",
+              overflow: "hidden",
+            }}
           >
             {/* Task Input */}
-            <div className="card-glass-solid">
+            <div
+              className="card-glass-solid"
+              style={{ flexShrink: 0 }}
+            >
               <h2
                 style={{
-                  fontSize: "1.125rem",
+                  fontSize: "1rem",
                   fontWeight: "700",
                   color: "#ECDFCC",
-                  marginBottom: "1rem",
+                  marginBottom: "0.75rem",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                📝 Task Input
+                Task Input
               </h2>
               <textarea
                 value={task}
@@ -264,23 +280,23 @@ const AIAssistant: React.FC = () => {
                 placeholder={`Enter your task...
 
 Examples:
-• Create a new project named 'Q4 Report'
-• Start the task 'Design UI mockups'
-• Add a team member with email john@example.com`}
-                rows={8}
+- Create a new project named 'Q4 Report'
+- Start the task 'Design UI mockups'
+- Add a team member with email john@example.com`}
+                rows={5}
                 disabled={isRunning}
                 style={{
                   width: "100%",
-                  marginBottom: "1rem",
-                  padding: "1rem",
-                  borderRadius: "15px",
-                  border: "none",
-                  backgroundColor: "#697565",
-                  color: "#ECDFCC",
+                  marginBottom: "0.75rem",
+                  padding: "0.75rem",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(236, 223, 204, 0.3)",
+                  backgroundColor: "#1a1a1a",
+                  color: "#f5f5f5",
                   fontFamily: "inherit",
-                  fontSize: "0.9375rem",
-                  boxShadow: "inset 2px 5px 10px rgba(0, 0, 0, 0.3)",
-                  resize: "vertical",
+                  fontSize: "0.875rem",
+                  boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.4)",
+                  resize: "none",
                 }}
               />
 
@@ -290,8 +306,8 @@ Examples:
                 className="btn-primary"
                 style={{
                   width: "100%",
-                  padding: "0.875rem",
-                  fontSize: "1rem",
+                  padding: "0.75rem",
+                  fontSize: "0.9375rem",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -303,52 +319,60 @@ Examples:
                     <div
                       className="spinner"
                       style={{
-                        width: "20px",
-                        height: "20px",
+                        width: "18px",
+                        height: "18px",
                         borderWidth: "2px",
                       }}
                     />
                     <span>AI is working...</span>
                   </>
                 ) : (
-                  <>
-                    <span>▶</span>
-                    <span>Start Automation</span>
-                  </>
+                  <span>Start Automation</span>
                 )}
               </button>
             </div>
 
             {/* Action Log */}
-            <div className="card-glass-solid" style={{ flex: 1 }}>
+            <div
+              className="card-glass-solid"
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                minHeight: 0,
+              }}
+            >
               <h3
                 style={{
-                  fontSize: "1.125rem",
+                  fontSize: "1rem",
                   fontWeight: "700",
                   color: "#ECDFCC",
-                  marginBottom: "1rem",
+                  marginBottom: "0.75rem",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  flexShrink: 0,
                 }}
               >
-                📋 Action Log
+                Action Log
               </h3>
               <div
                 style={{
-                  maxHeight: "500px",
+                  flex: 1,
                   overflowY: "auto",
-                  background: "rgba(0,0,0,0.3)",
-                  padding: "1rem",
+                  background: "#1a1a1a",
+                  padding: "0.75rem",
                   borderRadius: "8px",
                   border: "1px solid rgba(236, 223, 204, 0.2)",
+                  minHeight: 0,
                 }}
               >
                 {logs.length === 0 ? (
                   <div
                     style={{
                       textAlign: "center",
-                      padding: "2rem",
-                      color: "#ECDFCC",
-                      opacity: 0.6,
+                      padding: "2rem 1rem",
+                      color: "#a0a0a0",
+                      fontSize: "0.875rem",
                     }}
                   >
                     Logs will appear here when automation starts
@@ -358,15 +382,13 @@ Examples:
                     <div
                       key={idx}
                       style={{
-                        padding: "0.75rem",
-                        marginBottom: "0.5rem",
+                        padding: "0.5rem 0.75rem",
+                        marginBottom: "0.375rem",
                         background: getLevelColor(log.level),
-                        borderRadius: "6px",
-                        fontSize: "0.875rem",
-                        color: "#ECDFCC",
-                        borderLeft: `3px solid ${getLevelBorderColor(
-                          log.level
-                        )}`,
+                        borderRadius: "4px",
+                        fontSize: "0.8125rem",
+                        color: "#f5f5f5",
+                        borderLeft: `3px solid ${getLevelBorderColor(log.level)}`,
                       }}
                     >
                       <div
@@ -374,20 +396,20 @@ Examples:
                           display: "flex",
                           alignItems: "center",
                           gap: "0.5rem",
+                          fontSize: "0.75rem",
                         }}
                       >
-                        <span>{getLevelIcon(log.level)}</span>
                         <span
-                          style={{ opacity: 0.7, fontSize: "0.75rem" }}
+                          style={{
+                            fontWeight: "600",
+                            color: getLevelBorderColor(log.level),
+                          }}
                         >
-                          {log.timestamp}
+                          {getLevelLabel(log.level)}
                         </span>
+                        <span style={{ color: "#a0a0a0" }}>{log.timestamp}</span>
                       </div>
-                      <div
-                        style={{ marginTop: "0.25rem", paddingLeft: "1.5rem" }}
-                      >
-                        {log.message}
-                      </div>
+                      <div style={{ marginTop: "0.25rem" }}>{log.message}</div>
                     </div>
                   ))
                 )}
@@ -396,100 +418,142 @@ Examples:
             </div>
           </div>
 
-          {/* Live Browser View */}
-          <div className="card-glass-solid">
+          {/* Right Panel - Live Browser View */}
+          <div
+            className="card-glass-solid"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              maxHeight: "80vh",
+            }}
+          >
             <h2
               style={{
-                fontSize: "1.125rem",
+                fontSize: "1rem",
                 fontWeight: "700",
                 color: "#ECDFCC",
-                marginBottom: "1rem",
+                marginBottom: "0.75rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                flexShrink: 0,
               }}
             >
-              🖥️ Live Browser View
+              Live Browser View
             </h2>
-            {screenshot ? (
-              <div style={{ position: "relative" }}>
-                <img
-                  src={`data:image/png;base64,${screenshot}`}
-                  alt="Browser view"
+            <div
+              style={{
+                flex: 1,
+                overflow: "hidden",
+                borderRadius: "8px",
+                minHeight: 0,
+              }}
+            >
+              {screenshot ? (
+                <div style={{ position: "relative", height: "100%" }}>
+                  <img
+                    src={`data:image/png;base64,${screenshot}`}
+                    alt="Browser view"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                      border: "2px solid rgba(236, 223, 204, 0.3)",
+                      borderRadius: "8px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                    }}
+                  />
+                  {isRunning && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "0.75rem",
+                        right: "0.75rem",
+                        padding: "0.375rem 0.75rem",
+                        background: "#10b981",
+                        color: "#ffffff",
+                        borderRadius: "6px",
+                        fontSize: "0.75rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.375rem",
+                      }}
+                    >
+                      <div
+                        className="spinner"
+                        style={{
+                          width: "12px",
+                          height: "12px",
+                          borderWidth: "2px",
+                        }}
+                      />
+                      <span>LIVE</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div
                   style={{
-                    width: "100%",
-                    border: "2px solid rgba(236, 223, 204, 0.3)",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#1a1a1a",
                     borderRadius: "8px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                    border: "2px dashed rgba(236, 223, 204, 0.3)",
                   }}
-                />
-                {isRunning && (
+                >
                   <div
                     style={{
-                      position: "absolute",
-                      top: "1rem",
-                      right: "1rem",
-                      padding: "0.5rem 1rem",
-                      background: "rgba(16, 185, 129, 0.9)",
-                      color: "#ECDFCC",
+                      width: "48px",
+                      height: "48px",
+                      background: "rgba(236, 223, 204, 0.1)",
                       borderRadius: "8px",
-                      fontSize: "0.875rem",
-                      fontWeight: "600",
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.5rem",
+                      justifyContent: "center",
+                      marginBottom: "1rem",
+                      border: "1px solid rgba(236, 223, 204, 0.3)",
                     }}
                   >
-                    <div
-                      className="spinner"
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                        borderWidth: "2px",
-                      }}
-                    />
-                    <span>LIVE</span>
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#f5f5f5"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                      <line x1="8" y1="21" x2="16" y2="21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
                   </div>
-                )}
-              </div>
-            ) : (
-              <div
-                style={{
-                  height: "700px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "rgba(0,0,0,0.3)",
-                  borderRadius: "8px",
-                  border: "2px dashed rgba(236, 223, 204, 0.3)",
-                }}
-              >
-                <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>
-                  🖥️
+                  <p
+                    style={{
+                      color: "#e0e0e0",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    Browser view will appear here when automation starts
+                  </p>
+                  <p
+                    style={{
+                      color: "#808080",
+                      fontSize: "0.75rem",
+                      marginTop: "0.5rem",
+                      textAlign: "center",
+                      maxWidth: "300px",
+                    }}
+                  >
+                    Real-time screenshots of the AI navigating the application
+                  </p>
                 </div>
-                <p
-                  style={{
-                    color: "#ECDFCC",
-                    fontSize: "1rem",
-                    opacity: 0.8,
-                  }}
-                >
-                  Browser view will appear here when automation starts
-                </p>
-                <p
-                  style={{
-                    color: "#ECDFCC",
-                    fontSize: "0.875rem",
-                    opacity: 0.6,
-                    marginTop: "0.5rem",
-                    textAlign: "center",
-                    maxWidth: "400px",
-                  }}
-                >
-                  You'll see real-time screenshots of the AI navigating the
-                  application
-                </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </main>
