@@ -116,7 +116,8 @@ class ProjectService:
                                 title=task_title,
                                 description=task_desc,
                                 status='To Do',
-                                order=task_idx
+                                order=task_idx,
+                                risk_level='low'  # Initialize with low risk
                             )
                             session.add(task)
                             print(f"      Created task: {task_title}")
