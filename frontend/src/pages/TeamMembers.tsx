@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserGroupIcon, PlusIcon } from "@heroicons/react/24/solid";
 
 interface TeamMember {
   id: number;
@@ -97,39 +96,18 @@ const TeamMembers: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0a0f",
         position: "relative",
+        zIndex: 1,
       }}
     >
-      {/* Background Grid Pattern */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-          `,
-          backgroundSize: "50px 50px",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-
       {/* Header */}
       <header
+        className="glass-header"
         style={{
+          padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(17, 17, 24, 0.85)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          padding: "1.25rem 2rem",
         }}
       >
         <div
@@ -141,79 +119,52 @@ const TeamMembers: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
+              style={{ padding: "0.5rem 1rem" }}
+            >
+              Back
+            </button>
+            <div
               style={{
+                width: "32px",
+                height: "32px",
+                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(220, 38, 38, 0.15)",
-                border: "1px solid rgba(220, 38, 38, 0.3)",
-                borderRadius: "12px",
-                color: "#dc2626",
-                fontSize: "0.9375rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.25)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.15)";
+                justifyContent: "center",
+                fontSize: "0.625rem",
+                fontWeight: "bold",
+                color: "#f5f5f5",
               }}
             >
-              ← Back to Home
-            </button>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "12px",
-                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <UserGroupIcon
-                  style={{ width: "24px", height: "24px", color: "white" }}
-                />
-              </div>
-              <h1
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#f1f5f9",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Team Members
-              </h1>
+              TEAM
             </div>
+            <h1
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
+              }}
+            >
+              Team Members
+            </h1>
           </div>
 
           <button
+            id="btn-add-member"
             onClick={() => navigate("/organization-setup")}
+            className="btn-primary"
             style={{
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
-              padding: "0.75rem 1.5rem",
-              background: "linear-gradient(135deg, #dc2626, #991b1b)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
             }}
           >
-            <PlusIcon style={{ width: "18px", height: "18px" }} />
+            <span>+</span>
             <span>Add Member</span>
           </button>
         </div>
@@ -222,57 +173,59 @@ const TeamMembers: React.FC = () => {
       {/* Main Content */}
       <main
         style={{
-          position: "relative",
-          zIndex: 1,
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "3rem 2rem",
+          padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Stats */}
         <div
+          className="card"
           style={{
-            background: "rgba(17, 17, 24, 0.7)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "20px",
-            padding: "2rem",
+            padding: "1.25rem 1.5rem",
             marginBottom: "2rem",
             display: "flex",
             alignItems: "center",
-            gap: "1.5rem",
+            gap: "1rem",
           }}
         >
           <div
             style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "16px",
-              background: "linear-gradient(135deg, #dc2626, #991b1b)",
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "2rem",
+              color: "#f5f5f5",
+              fontWeight: "bold",
+              fontSize: "0.75rem",
             }}
           >
-            <UserGroupIcon
-              style={{ width: "48px", height: "48px", color: "#dc2626" }}
-            />
+            TEAM
           </div>
           <div>
             <div
               style={{
-                fontSize: "2.5rem",
+                fontSize: "1.75rem",
                 fontWeight: "700",
-                color: "#f1f5f9",
+                color: "#f5f5f5",
                 lineHeight: "1",
-                marginBottom: "0.5rem",
+                marginBottom: "0.375rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               {members.length}
             </div>
             <div
-              style={{ fontSize: "1rem", color: "#94a3b8", fontWeight: "500" }}
+              style={{
+                fontSize: "0.875rem",
+                color: "#a0a0a0",
+                fontWeight: "500",
+              }}
             >
               Total Team Members
             </div>
@@ -289,76 +242,56 @@ const TeamMembers: React.FC = () => {
             }}
           >
             <div
-              style={{
-                width: "48px",
-                height: "48px",
-                border: "3px solid #1a1a24",
-                borderTop: "3px solid #dc2626",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-              }}
+              className="spinner"
+              style={{ width: "40px", height: "40px" }}
             />
           </div>
         ) : members.length === 0 ? (
           <div
+            className="card-glass-solid"
             style={{
-              background: "rgba(17, 17, 24, 0.7)",
-              backdropFilter: "blur(16px)",
-              border: "2px dashed rgba(255, 255, 255, 0.12)",
-              borderRadius: "24px",
-              padding: "5rem 2rem",
+              padding: "4rem 2rem",
               textAlign: "center",
             }}
           >
             <div
               style={{
-                width: "88px",
-                height: "88px",
-                borderRadius: "22px",
-                background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                width: "64px",
+                height: "64px",
+                background: "rgba(236, 223, 204, 0.1)",
+                borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "0 auto 1.75rem",
-                boxShadow: "0 12px 36px rgba(220, 38, 38, 0.35)",
+                margin: "0 auto 1rem",
+                border: "1px solid rgba(236, 223, 204, 0.2)",
               }}
             >
-              <UserGroupIcon
-                style={{ width: "48px", height: "48px", color: "white" }}
-              />
+              <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>TEAM</span>
             </div>
             <h3
               style={{
-                fontSize: "1.625rem",
+                fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#f1f5f9",
-                marginBottom: "0.75rem",
+                color: "#f5f5f5",
+                marginBottom: "0.5rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               No Team Members Yet
             </h3>
             <p
               style={{
-                fontSize: "1.0625rem",
-                color: "#94a3b8",
-                marginBottom: "2.25rem",
+                fontSize: "1rem",
+                color: "#a0a0a0",
+                marginBottom: "2rem",
               }}
             >
               Add team members to collaborate on projects
             </p>
             <button
               onClick={() => navigate("/organization-setup")}
-              style={{
-                padding: "1rem 2rem",
-                background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                border: "none",
-                borderRadius: "12px",
-                color: "white",
-                fontSize: "1rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-              }}
+              className="btn-primary"
             >
               Add First Member
             </button>
@@ -368,21 +301,11 @@ const TeamMembers: React.FC = () => {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-              gap: "1.5rem",
+              gap: "1.25rem",
             }}
           >
             {members.map((member) => (
-              <div
-                key={member.id}
-                style={{
-                  background: "rgba(17, 17, 24, 0.7)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "20px",
-                  padding: "1.5rem",
-                  transition: "all 0.3s",
-                }}
-              >
+              <div key={member.id} className="card">
                 <div
                   style={{
                     display: "flex",
@@ -395,12 +318,13 @@ const TeamMembers: React.FC = () => {
                     style={{
                       width: "48px",
                       height: "48px",
-                      background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                      background:
+                        "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "white",
+                      color: "#ECDFCC",
                       fontSize: "1.25rem",
                       fontWeight: "700",
                       flexShrink: 0,
@@ -413,11 +337,12 @@ const TeamMembers: React.FC = () => {
                       style={{
                         fontSize: "1.125rem",
                         fontWeight: "700",
-                        color: "#f1f5f9",
+                        color: "#ECDFCC",
                         marginBottom: "0.25rem",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                       }}
                     >
                       {member.username}
@@ -425,7 +350,7 @@ const TeamMembers: React.FC = () => {
                     <p
                       style={{
                         fontSize: "0.8125rem",
-                        color: "#94a3b8",
+                        color: "#ECDFCC",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -448,11 +373,11 @@ const TeamMembers: React.FC = () => {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: "700",
-                      color: "#dc2626",
+                      color: "#ECDFCC",
                       textTransform: "uppercase",
                       padding: "0.25rem 0.75rem",
-                      background: "rgba(220, 38, 38, 0.15)",
-                      borderRadius: "8px",
+                      background: "rgba(236, 223, 204, 0.2)",
+                      borderRadius: "var(--radius-sm)",
                     }}
                   >
                     {member.role}
@@ -463,7 +388,7 @@ const TeamMembers: React.FC = () => {
                   <p
                     style={{
                       fontSize: "0.875rem",
-                      color: "#94a3b8",
+                      color: "#ECDFCC",
                       marginBottom: "0.75rem",
                       lineHeight: "1.5",
                     }}
@@ -475,7 +400,7 @@ const TeamMembers: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#64748b",
+                    color: "#ECDFCC",
                     marginBottom: "1rem",
                   }}
                 >
@@ -486,17 +411,14 @@ const TeamMembers: React.FC = () => {
                 {member.id !== currentUserId && (
                   <button
                     onClick={() => removeMember(member.id)}
+                    className="btn-secondary"
                     style={{
                       width: "100%",
-                      padding: "0.75rem",
+                      padding: "0.5rem",
                       fontSize: "0.875rem",
-                      background: "rgba(239, 68, 68, 0.15)",
-                      color: "#ef4444",
+                      background: "rgba(239, 68, 68, 0.1)",
+                      color: "#dc2626",
                       border: "1px solid rgba(239, 68, 68, 0.3)",
-                      borderRadius: "12px",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                      transition: "all 0.2s",
                     }}
                   >
                     Remove Member
@@ -507,13 +429,6 @@ const TeamMembers: React.FC = () => {
           </div>
         )}
       </main>
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };

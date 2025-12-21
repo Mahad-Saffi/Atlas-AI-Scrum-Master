@@ -1,17 +1,19 @@
 import uuid
 from sqlalchemy import Column, String, Text, ForeignKey, TIMESTAMP, func, Integer
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.models.user import Base
+
+def generate_uuid():
+    return str(uuid.uuid4())
 
 class Project(Base):
     __tablename__ = 'projects'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=generate_uuid)
     name = Column(String(200), nullable=False)
     description = Column(Text)
     owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    organization_id = Column(UUID(as_uuid=True), ForeignKey('organizations.id'), nullable=True)
+    organization_id = Column(String(36), ForeignKey('organizations.id'), nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     updated_at = Column(TIMESTAMP(timezone=True), onupdate=func.now())
 

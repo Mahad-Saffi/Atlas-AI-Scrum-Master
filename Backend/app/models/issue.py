@@ -1,13 +1,12 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
-from sqlalchemy.dialects.postgresql import UUID
 from app.config.database import Base
 
 class Issue(Base):
     __tablename__ = "issues"
 
     id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(UUID(as_uuid=True), ForeignKey('projects.id'), nullable=False, index=True)
-    task_id = Column(UUID(as_uuid=True), ForeignKey('tasks.id'), nullable=True, index=True)
+    project_id = Column(String(36), ForeignKey('projects.id'), nullable=False, index=True)
+    task_id = Column(String(36), ForeignKey('tasks.id'), nullable=True, index=True)
     reporter_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
     assignee_id = Column(Integer, ForeignKey('users.id'), nullable=True, index=True)
     title = Column(String(200), nullable=False)

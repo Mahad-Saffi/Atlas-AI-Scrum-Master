@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BuildingOfficeIcon } from "@heroicons/react/24/solid";
 
 interface Organization {
   id: string;
@@ -43,7 +42,12 @@ const OrganizationInfo: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="card p-6">
+      <div
+        className="card"
+        style={{
+          padding: "1.5rem",
+        }}
+      >
         <div className="spinner" />
       </div>
     );
@@ -54,20 +58,68 @@ const OrganizationInfo: React.FC = () => {
   }
 
   return (
-    <div className="card p-5 flex items-center gap-4">
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-tertiary)] flex items-center justify-center">
-        <BuildingOfficeIcon className="w-6 h-6 text-white" />
+    <div
+      className="card"
+      style={{
+        padding: "1.25rem 1.5rem",
+        display: "flex",
+        alignItems: "center",
+        gap: "1rem",
+      }}
+    >
+      <div
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "8px",
+          background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#f5f5f5",
+          fontWeight: "bold",
+          fontSize: "0.625rem",
+        }}
+      >
+        ORG
       </div>
-      <div className="flex-1">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+      <div style={{ flex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            marginBottom: "0.25rem",
+          }}
+        >
+          <h3
+            style={{
+              fontSize: "1.6rem",
+              fontWeight: "700",
+              color: "#ECDFCC",
+              margin: 0,
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            }}
+          >
             {org.name}
           </h3>
           {org.is_owner && (
-            <span className="badge badge-primary text-xs">Owner</span>
+            <span
+              style={{
+                fontSize: "0.625rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
+                padding: "0.125rem 0.375rem",
+                background: "rgba(236, 223, 204, 0.2)",
+                borderRadius: "var(--radius-sm)",
+                textTransform: "uppercase",
+              }}
+            >
+              Owner
+            </span>
           )}
         </div>
-        <div className="text-sm text-[var(--text-secondary)]">
+        <div style={{ fontSize: "0.75rem", color: "#ECDFCC" }}>
           Created: {new Date(org.created_at).toLocaleDateString()}
         </div>
       </div>

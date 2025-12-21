@@ -4,7 +4,6 @@ from app.models.organization import Organization, OrganizationMember
 from app.models.user import User
 from app.config.database import SessionLocal
 from app.services.auth_service import auth_service
-import uuid
 
 class OrganizationService:
     
@@ -46,13 +45,11 @@ class OrganizationService:
     
     async def get_organization_members(self, organization_id: str):
         """Get all members of an organization"""
-        import uuid as uuid_lib
         async with SessionLocal() as session:
-            # Convert string to UUID if needed
-            org_uuid = uuid_lib.UUID(organization_id) if isinstance(organization_id, str) else organization_id
+            # organization_id is now a string (String(36))
             result = await session.execute(
                 select(OrganizationMember)
-                .where(OrganizationMember.organization_id == org_uuid)
+                .where(OrganizationMember.organization_id == str(organization_id))
                 .options(
                     selectinload(OrganizationMember.user),
                     selectinload(OrganizationMember.inviter)
@@ -71,10 +68,10 @@ class OrganizationService:
         invited_by: int
     ):
         """Add a new team member to organization"""
-        import uuid as uuid_lib
         async with SessionLocal() as session:
-            # Convert string to UUID if needed
-            org_uuid = uuid_lib.UUID(organization_id) if isinstance(organization_id, str) else organization_id
+            # organization_id is now a string (String(36))
+            org_id_str = str(organization_id)
+            
             # Check if user with email already exists
             result = await session.execute(
                 select(User).where(User.email == email)
@@ -101,7 +98,7 @@ class OrganizationService:
             # Check if already a member
             result = await session.execute(
                 select(OrganizationMember).where(
-                    OrganizationMember.organization_id == org_uuid,
+                    OrganizationMember.organization_id == org_id_str,
                     OrganizationMember.user_id == user.id
                 )
             )
@@ -112,7 +109,7 @@ class OrganizationService:
             
             # Add as organization member
             member = OrganizationMember(
-                organization_id=org_uuid,
+                organization_id=org_id_str,
                 user_id=user.id,
                 role=role,
                 description=description,
@@ -131,13 +128,11 @@ class OrganizationService:
     
     async def remove_team_member(self, organization_id: str, user_id: int):
         """Remove a team member from organization"""
-        import uuid as uuid_lib
         async with SessionLocal() as session:
-            # Convert string to UUID if needed
-            org_uuid = uuid_lib.UUID(organization_id) if isinstance(organization_id, str) else organization_id
+            # organization_id is now a string (String(36))
             result = await session.execute(
                 select(OrganizationMember).where(
-                    OrganizationMember.organization_id == org_uuid,
+                    OrganizationMember.organization_id == str(organization_id),
                     OrganizationMember.user_id == user_id
                 )
             )
@@ -153,13 +148,11 @@ class OrganizationService:
     
     async def is_organization_owner(self, organization_id: str, user_id: int) -> bool:
         """Check if user is the owner of the organization"""
-        import uuid as uuid_lib
         async with SessionLocal() as session:
-            # Convert string to UUID if needed
-            org_uuid = uuid_lib.UUID(organization_id) if isinstance(organization_id, str) else organization_id
+            # organization_id is now a string (String(36))
             result = await session.execute(
                 select(Organization).where(
-                    Organization.id == org_uuid,
+                    Organization.id == str(organization_id),
                     Organization.owner_id == user_id
                 )
             )
@@ -167,13 +160,11 @@ class OrganizationService:
     
     async def get_organization_by_id(self, organization_id: str):
         """Get organization by ID"""
-        import uuid as uuid_lib
         async with SessionLocal() as session:
-            # Convert string to UUID if needed
-            org_uuid = uuid_lib.UUID(organization_id) if isinstance(organization_id, str) else organization_id
+            # organization_id is now a string (String(36))
             result = await session.execute(
                 select(Organization)
-                .where(Organization.id == org_uuid)
+                .where(Organization.id == str(organization_id))
                 .options(selectinload(Organization.members))
             )
             return result.scalars().first()

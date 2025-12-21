@@ -144,7 +144,10 @@ async def login(credentials: UserLogin):
 
 @router.post("/demo-login", response_model=Token)
 async def demo_login():
-    """Quick demo login - creates/uses a demo user"""
+    """Quick demo login - creates/uses a demo user with organization"""
+    from app.models.organization import Organization, OrganizationMember
+    import uuid
+    
     async with SessionLocal() as session:
         # Check if demo user exists
         result = await session.execute(
@@ -162,6 +165,51 @@ async def demo_login():
                 avatar_url="https://ui-avatars.com/api/?name=Demo+User&background=4a90e2"
             )
             session.add(user)
+            await session.flush()
+            
+            # Create demo organization
+            org = Organization(
+                id=str(uuid.uuid4()),
+                name="Demo Organization",
+                description="Demo organization for testing",
+                owner_id=user.id
+            )
+            session.add(org)
+            await session.flush()
+            
+            # Add user as organization owner member
+            member = OrganizationMember(
+                id=str(uuid.uuid4()),
+                organization_id=org.id,
+                user_id=user.id,
+                role="owner",
+                description="Organization owner",
+                invited_by=user.id
+            )
+            session.add(member)
+            
+            # Create a demo team member
+            demo_member_password = auth_service.get_password_hash("member123")
+            demo_member = User(
+                username="team_member",
+                email="member@atlas.ai",
+                password_hash=demo_member_password,
+                avatar_url="https://ui-avatars.com/api/?name=Team+Member&background=10b981"
+            )
+            session.add(demo_member)
+            await session.flush()
+            
+            # Add demo member to organization
+            member2 = OrganizationMember(
+                id=str(uuid.uuid4()),
+                organization_id=org.id,
+                user_id=demo_member.id,
+                role="developer",
+                description="Demo team member",
+                invited_by=user.id
+            )
+            session.add(member2)
+            
             await session.commit()
             await session.refresh(user)
         

@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import {
-  BuildingOfficeIcon,
-  ArrowLeftIcon,
-  UserPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
 
 const OrganizationSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -200,24 +194,15 @@ const OrganizationSetup: React.FC = () => {
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        position: "relative",
-        zIndex: 1,
-        background: "#0a0a0f",
-      }}
-    >
+    <div style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
       {/* Header */}
       <header
+        className="glass-header"
         style={{
           padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(17, 17, 24, 0.7)",
-          backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
         }}
       >
         <div
@@ -232,19 +217,10 @@ const OrganizationSetup: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <button
               onClick={() => navigate("/")}
-              style={{
-                padding: "0.75rem 1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
+              className="btn-secondary"
+              style={{ padding: "0.5rem 1rem" }}
             >
-              <ArrowLeftIcon style={{ width: "20px", height: "20px" }} />
+              Back
             </button>
             <div
               style={{
@@ -259,7 +235,7 @@ const OrganizationSetup: React.FC = () => {
             >
               <img
                 src={logo}
-                alt="Ideal Assistant"
+                alt="Atlas AI"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
@@ -267,7 +243,7 @@ const OrganizationSetup: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#f1f5f9",
+                color: "#ECDFCC",
               }}
             >
               {hasOrganization ? "Team Management" : "Organization Setup"}
@@ -286,44 +262,38 @@ const OrganizationSetup: React.FC = () => {
         }}
       >
         {!hasOrganization ? (
-          <div
-            style={{
-              padding: "2rem",
-              background: "rgba(17, 17, 24, 0.7)",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "20px",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-            }}
-          >
+          <div className="card-glass-solid">
             <div style={{ textAlign: "center", marginBottom: "2rem" }}>
               <div
                 style={{
                   width: "80px",
                   height: "80px",
-                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                  background:
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#f5f5f5",
                   margin: "0 auto 1rem",
                 }}
               >
-                <BuildingOfficeIcon
-                  style={{ width: "48px", height: "48px", color: "white" }}
-                />
+                ORG
               </div>
               <h2
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#f1f5f9",
+                  color: "#f5f5f5",
                   marginBottom: "0.5rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Create Your Organization
               </h2>
-              <p style={{ fontSize: "1rem", color: "#94a3b8" }}>
+              <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
                 Set up your organization to start managing projects and team
                 members
               </p>
@@ -339,7 +309,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#f1f5f9",
+                    color: "#f5f5f5",
                   }}
                 >
                   Organization Name *
@@ -352,16 +322,7 @@ const OrganizationSetup: React.FC = () => {
                     setOrgForm({ ...orgForm, name: e.target.value })
                   }
                   placeholder="Enter organization name"
-                  style={{
-                    width: "100%",
-                    padding: "0.875rem 1rem",
-                    background: "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "12px",
-                    color: "#f1f5f9",
-                    fontSize: "0.9375rem",
-                    outline: "none",
-                  }}
+                  style={{ width: "100%" }}
                 />
               </div>
 
@@ -371,7 +332,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#f1f5f9",
+                    color: "#f5f5f5",
                   }}
                 >
                   Description
@@ -383,35 +344,14 @@ const OrganizationSetup: React.FC = () => {
                     setOrgForm({ ...orgForm, description: e.target.value })
                   }
                   placeholder="What does your organization do?"
-                  style={{
-                    width: "100%",
-                    padding: "0.875rem 1rem",
-                    background: "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "12px",
-                    color: "#f1f5f9",
-                    fontSize: "0.9375rem",
-                    outline: "none",
-                  }}
+                  style={{ width: "100%" }}
                 />
               </div>
 
               <button
                 type="submit"
-                style={{
-                  width: "100%",
-                  padding: "0.875rem",
-                  background: loading
-                    ? "rgba(220, 38, 38, 0.5)"
-                    : "linear-gradient(135deg, #dc2626, #991b1b)",
-                  border: "none",
-                  borderRadius: "12px",
-                  color: "white",
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  cursor: loading ? "not-allowed" : "pointer",
-                  boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-                }}
+                className="btn-primary"
+                style={{ width: "100%", padding: "0.875rem" }}
                 disabled={loading}
               >
                 {loading ? "Creating..." : "Create Organization"}
@@ -421,14 +361,9 @@ const OrganizationSetup: React.FC = () => {
         ) : (
           <>
             <div
+              className="card-glass-solid"
               style={{
                 marginBottom: "2rem",
-                padding: "2rem",
-                background: "rgba(17, 17, 24, 0.7)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "20px",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
               }}
             >
               <div
@@ -445,36 +380,25 @@ const OrganizationSetup: React.FC = () => {
                     style={{
                       fontSize: "1.5rem",
                       fontWeight: "700",
-                      color: "#f1f5f9",
+                      color: "#ECDFCC",
                       marginBottom: "0.25rem",
+                      textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                     }}
                   >
                     {organization.name}
                   </h2>
-                  <p style={{ fontSize: "0.9375rem", color: "#94a3b8" }}>
+                  <p style={{ fontSize: "0.9375rem", color: "#ECDFCC" }}>
                     {organization.description || "No description"}
                   </p>
                 </div>
                 {organization.is_owner && (
                   <button
+                    id="btn-add-team-member"
                     onClick={() => setShowAddMember(true)}
-                    style={{
-                      padding: "0.75rem 1.5rem",
-                      background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                      border: "none",
-                      borderRadius: "12px",
-                      color: "white",
-                      fontSize: "0.9375rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
+                    className="btn-primary"
+                    style={{ padding: "0.75rem 1.5rem" }}
                   >
-                    <UserPlusIcon style={{ width: "20px", height: "20px" }} />
-                    Add Team Member
+                    + Add Team Member
                   </button>
                 )}
               </div>
@@ -482,14 +406,9 @@ const OrganizationSetup: React.FC = () => {
 
             {showAddMember && (
               <div
+                className="card-glass-solid"
                 style={{
                   marginBottom: "2rem",
-                  padding: "2rem",
-                  background: "rgba(17, 17, 24, 0.7)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "20px",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
                 }}
               >
                 <div
@@ -504,21 +423,16 @@ const OrganizationSetup: React.FC = () => {
                     style={{
                       fontSize: "1.25rem",
                       fontWeight: "700",
-                      color: "#f1f5f9",
+                      color: "#ECDFCC",
+                      textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                     }}
                   >
                     Add New Team Member
                   </h3>
                   <button
                     onClick={() => setShowAddMember(false)}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      background: "rgba(255, 255, 255, 0.05)",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "12px",
-                      color: "#f1f5f9",
-                      cursor: "pointer",
-                    }}
+                    className="btn-secondary"
+                    style={{ padding: "0.5rem 1rem" }}
                   >
                     Cancel
                   </button>
@@ -540,13 +454,14 @@ const OrganizationSetup: React.FC = () => {
                           display: "block",
                           marginBottom: "0.5rem",
                           fontWeight: "600",
-                          color: "#f1f5f9",
+                          color: "#ECDFCC",
                           fontSize: "0.875rem",
                         }}
                       >
                         Username *
                       </label>
                       <input
+                        id="input-member-username"
                         type="text"
                         required
                         value={memberForm.username}
@@ -557,16 +472,6 @@ const OrganizationSetup: React.FC = () => {
                           })
                         }
                         placeholder="john_doe"
-                        style={{
-                          width: "100%",
-                          padding: "0.75rem 1rem",
-                          background: "rgba(255, 255, 255, 0.05)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          borderRadius: "12px",
-                          color: "#f1f5f9",
-                          fontSize: "0.9375rem",
-                          outline: "none",
-                        }}
                       />
                     </div>
 
@@ -583,6 +488,7 @@ const OrganizationSetup: React.FC = () => {
                         Email *
                       </label>
                       <input
+                        id="input-member-email"
                         type="email"
                         required
                         value={memberForm.email}
@@ -609,6 +515,7 @@ const OrganizationSetup: React.FC = () => {
                         Password *
                       </label>
                       <input
+                        id="input-member-password"
                         type="password"
                         required
                         value={memberForm.password}
@@ -635,6 +542,7 @@ const OrganizationSetup: React.FC = () => {
                         Role *
                       </label>
                       <select
+                        id="select-member-role"
                         required
                         value={memberForm.role}
                         onChange={(e) =>
@@ -676,20 +584,10 @@ const OrganizationSetup: React.FC = () => {
                   </div>
 
                   <button
+                    id="btn-submit-member"
                     type="submit"
-                    style={{
-                      padding: "0.75rem 2rem",
-                      background: loading
-                        ? "rgba(220, 38, 38, 0.5)"
-                        : "linear-gradient(135deg, #dc2626, #991b1b)",
-                      border: "none",
-                      borderRadius: "12px",
-                      color: "white",
-                      fontSize: "0.9375rem",
-                      fontWeight: 600,
-                      cursor: loading ? "not-allowed" : "pointer",
-                      boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-                    }}
+                    className="btn-primary"
+                    style={{ padding: "0.75rem 2rem" }}
                     disabled={loading}
                   >
                     {loading ? "Adding..." : "Add Member"}
@@ -698,22 +596,14 @@ const OrganizationSetup: React.FC = () => {
               </div>
             )}
 
-            <div
-              style={{
-                padding: "2rem",
-                background: "rgba(17, 17, 24, 0.7)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "20px",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-              }}
-            >
+            <div className="card-glass-solid">
               <h3
                 style={{
                   fontSize: "1.25rem",
                   fontWeight: "700",
-                  color: "#f1f5f9",
+                  color: "#ECDFCC",
                   marginBottom: "1.5rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Team Members ({teamMembers.length})
@@ -725,10 +615,10 @@ const OrganizationSetup: React.FC = () => {
                     key={member.id}
                     style={{
                       padding: "1rem",
-                      background: "rgba(255, 255, 255, 0.05)",
+                      background: "rgba(236, 223, 204, 0.15)",
                       backdropFilter: "blur(10px)",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: "8px",
+                      border: "1px solid rgba(236, 223, 204, 0.3)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
@@ -749,12 +639,12 @@ const OrganizationSetup: React.FC = () => {
                           width: "48px",
                           height: "48px",
                           background:
-                            "linear-gradient(135deg, #dc2626, #991b1b)",
+                            "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                           borderRadius: "50%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: "white",
+                          color: "#ECDFCC",
                           fontSize: "1.25rem",
                           fontWeight: "700",
                         }}
@@ -774,7 +664,7 @@ const OrganizationSetup: React.FC = () => {
                             style={{
                               fontSize: "1rem",
                               fontWeight: "600",
-                              color: "#f1f5f9",
+                              color: "#ECDFCC",
                             }}
                           >
                             {member.username}
@@ -782,8 +672,8 @@ const OrganizationSetup: React.FC = () => {
                           <span
                             style={{
                               padding: "0.25rem 0.75rem",
-                              background: "rgba(220, 38, 38, 0.2)",
-                              color: "#fca5a5",
+                              background: "rgba(236, 223, 204, 0.3)",
+                              color: "#ECDFCC",
                               borderRadius: "12px",
                               fontSize: "0.75rem",
                               fontWeight: "600",
@@ -792,15 +682,16 @@ const OrganizationSetup: React.FC = () => {
                             {member.role}
                           </span>
                         </div>
-                        <div style={{ fontSize: "0.875rem", color: "#94a3b8" }}>
+                        <div style={{ fontSize: "0.875rem", color: "#ECDFCC" }}>
                           {member.email}
                         </div>
                         {member.description && (
                           <div
                             style={{
                               fontSize: "0.8125rem",
-                              color: "#94a3b8",
+                              color: "#ECDFCC",
                               marginTop: "0.25rem",
+                              opacity: 0.9,
                             }}
                           >
                             {member.description}
@@ -811,15 +702,8 @@ const OrganizationSetup: React.FC = () => {
                     {organization.is_owner && member.role !== "owner" && (
                       <button
                         onClick={() => handleRemoveMember(member.id)}
-                        style={{
-                          padding: "0.5rem 1rem",
-                          fontSize: "0.875rem",
-                          background: "rgba(239, 68, 68, 0.1)",
-                          border: "1px solid rgba(239, 68, 68, 0.3)",
-                          borderRadius: "12px",
-                          color: "#fca5a5",
-                          cursor: "pointer",
-                        }}
+                        className="btn-secondary"
+                        style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
                       >
                         Remove
                       </button>
@@ -833,7 +717,7 @@ const OrganizationSetup: React.FC = () => {
                   style={{
                     textAlign: "center",
                     padding: "2rem",
-                    color: "#94a3b8",
+                    color: "#ECDFCC",
                   }}
                 >
                   No team members yet. Add your first team member to get
@@ -845,17 +729,8 @@ const OrganizationSetup: React.FC = () => {
             <div style={{ marginTop: "2rem", textAlign: "center" }}>
               <button
                 onClick={() => navigate("/")}
-                style={{
-                  padding: "0.875rem 2rem",
-                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                  border: "none",
-                  borderRadius: "12px",
-                  color: "white",
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-                }}
+                className="btn-primary"
+                style={{ padding: "0.875rem 2rem" }}
               >
                 Go to Dashboard
               </button>

@@ -33,7 +33,7 @@ const ThemeToggle: React.FC = () => {
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      {theme === 'light' ? '🌙' : '☀️'}
+      {theme === 'light' ? 'Dark' : 'Light'}
     </button>
   );
 };

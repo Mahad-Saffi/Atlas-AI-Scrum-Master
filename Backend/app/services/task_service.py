@@ -3,24 +3,17 @@ from sqlalchemy.future import select
 from sqlalchemy import and_
 from app.models.task import Task
 from app.config.database import SessionLocal
-import uuid
 from datetime import datetime
 
 class TaskService:
     async def get_tasks_for_user_in_project(self, project_id: str, user_id: str) -> list:
         async with SessionLocal() as session:
-            # Convert project_id to UUID, handling both formats
+            # project_id is now a string (String(36))
             try:
-                if isinstance(project_id, str):
-                    # Add hyphens if missing
-                    if len(project_id) == 32 and '-' not in project_id:
-                        project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
-                    project_uuid = uuid.UUID(project_id)
-                else:
-                    project_uuid = project_id
+                project_id_str = str(project_id)
                 
                 result = await session.execute(
-                    select(Task).where(Task.project_id == project_uuid)
+                    select(Task).where(Task.project_id == project_id_str)
                 )
                 tasks = result.scalars().all()
                 
@@ -51,20 +44,13 @@ class TaskService:
         """
         try:
             async with SessionLocal() as session:
-                # Convert task_id to UUID, handling both formats
-                if isinstance(task_id, str):
-                    # Add hyphens if missing
-                    if len(task_id) == 32 and '-' not in task_id:
-                        task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
-                    task_uuid = uuid.UUID(task_id)
-                else:
-                    task_uuid = task_id
-                
+                # task_id is now a string (String(36))
+                task_id_str = str(task_id)
                 user_id_int = int(user_id) if isinstance(user_id, str) else user_id
                 
                 # Get the task
                 result = await session.execute(
-                    select(Task).where(Task.id == task_uuid)
+                    select(Task).where(Task.id == task_id_str)
                 )
                 task = result.scalars().first()
                 
@@ -131,16 +117,11 @@ class TaskService:
         """Update task estimate, progress, or due date"""
         try:
             async with SessionLocal() as session:
-                # Convert task_id to UUID
-                if isinstance(task_id, str):
-                    if len(task_id) == 32 and '-' not in task_id:
-                        task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
-                    task_uuid = uuid.UUID(task_id)
-                else:
-                    task_uuid = task_id
+                # task_id is now a string (String(36))
+                task_id_str = str(task_id)
                 
                 result = await session.execute(
-                    select(Task).where(Task.id == task_uuid)
+                    select(Task).where(Task.id == task_id_str)
                 )
                 task = result.scalars().first()
                 
@@ -190,16 +171,11 @@ class TaskService:
         async with SessionLocal() as session:
             for task_id in task_ids:
                 try:
-                    # Convert task_id to UUID
-                    if isinstance(task_id, str):
-                        if len(task_id) == 32 and '-' not in task_id:
-                            task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
-                        task_uuid = uuid.UUID(task_id)
-                    else:
-                        task_uuid = task_id
+                    # task_id is now a string (String(36))
+                    task_id_str = str(task_id)
                     
                     result = await session.execute(
-                        select(Task).where(Task.id == task_uuid)
+                        select(Task).where(Task.id == task_id_str)
                     )
                     task = result.scalars().first()
                     

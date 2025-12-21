@@ -14,6 +14,7 @@ import ProjectRisks from "./pages/ProjectRisks";
 import RiskDashboard from "./pages/RiskDashboard";
 import TeamMembers from "./pages/TeamMembers";
 import EpicView from "./pages/EpicView";
+import AIAssistant from "./pages/AIAssistant";
 import "./App.css";
 import { authService, type User } from "./services/auth";
 import UserProfile from "./components/UserProfile";
@@ -90,6 +91,10 @@ function App() {
             <Route
               path="/chat"
               element={isAuthenticated ? <ChatPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/ai-assistant"
+              element={isAuthenticated ? <AIAssistant /> : <SimpleLogin />}
             />
             <Route
               path="/"

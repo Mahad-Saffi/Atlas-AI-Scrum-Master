@@ -82,6 +82,7 @@ from app.api.v1 import chat as chat_router
 from app.api.v1 import auth as auth_router
 from app.api.v1 import issues as issues_router
 from app.api.v1 import organizations as organizations_router
+from app.api.v1 import ai_automation as ai_automation_router
 
 app.include_router(auth_router.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(ai_router.router, prefix="/api/v1/ai", tags=["ai"])
@@ -90,6 +91,7 @@ app.include_router(notifications_router.router, prefix="/api/v1/notifications", 
 app.include_router(chat_router.router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(issues_router.router, prefix="/api/v1/issues", tags=["issues"])
 app.include_router(organizations_router.router, prefix="/api/v1/organizations", tags=["organizations"])
+app.include_router(ai_automation_router.router, prefix="/api/v1/ai-automation", tags=["ai-automation"])
 
 @app.get("/")
 async def read_root():

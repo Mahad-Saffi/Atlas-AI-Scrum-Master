@@ -1,13 +1,15 @@
 import uuid
 from sqlalchemy import Column, String, Integer, ForeignKey, TIMESTAMP, func, Text
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.models.user import Base
+
+def generate_uuid():
+    return str(uuid.uuid4())
 
 class Organization(Base):
     __tablename__ = 'organizations'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=generate_uuid)
     name = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -23,8 +25,8 @@ class Organization(Base):
 class OrganizationMember(Base):
     __tablename__ = 'organization_members'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    organization_id = Column(UUID(as_uuid=True), ForeignKey('organizations.id'), nullable=False)
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    organization_id = Column(String(36), ForeignKey('organizations.id'), nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     role = Column(String(50), nullable=False)  # developer, designer, qa, manager, etc.
     description = Column(Text, nullable=True)  # What they do in the team

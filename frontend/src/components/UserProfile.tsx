@@ -1,29 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ChatBubbleLeftRightIcon,
-  UserGroupIcon,
-  PlusIcon,
-  RocketLaunchIcon,
-  FlagIcon,
-  WrenchScrewdriverIcon,
-  FolderIcon,
-  CalendarIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/solid";
 import logo from "../assets/logo.png";
-import { taskService } from "../services/taskService";
 import OrganizationInfo from "./OrganizationInfo";
 
 interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
-}
-
-interface UserProfileProps {
-  user: User;
-  onSignOut: () => void;
+  role: string;
+  avatar_url?: string;
 }
 
 interface Project {
@@ -33,736 +18,739 @@ interface Project {
   created_at: string;
 }
 
-interface Task {
-  id: string;
-  status: string;
+interface UserProfileProps {
+  user: User;
+  onSignOut: () => void;
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<string>("default");
+  const [showSortMenu, setShowSortMenu] = useState(false);
   const [taskStats, setTaskStats] = useState({
-    total: 0,
     completed: 0,
     inProgress: 0,
   });
-  const [sortBy, setSortBy] = useState("default");
-  const [showSortMenu, setShowSortMenu] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const fetchedProjects = await taskService.getProjects();
-        setProjects(fetchedProjects);
+    fetchProjects();
+    fetchTaskStats();
 
-        // Fetch all tasks across projects
-        let allTasks: Task[] = [];
-        for (const project of fetchedProjects) {
-          const tasks = await taskService.getTasks(project.id);
-          allTasks = [...allTasks, ...tasks];
+    // Auto-refresh every 15 seconds
+    const interval = setInterval(() => {
+      fetchProjects();
+      fetchTaskStats();
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch("http://localhost:8000/api/v1/projects/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data);
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchTaskStats = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch("http://localhost:8000/api/v1/projects/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const projectsData = await response.json();
+        let totalCompleted = 0;
+        let totalInProgress = 0;
+
+        // Fetch tasks for each project
+        for (const project of projectsData) {
+          try {
+            const tasksResponse = await fetch(
+              `http://localhost:8000/api/v1/projects/${project.id}/tasks`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (tasksResponse.ok) {
+              const tasks = await tasksResponse.json();
+              totalCompleted += tasks.filter(
+                (t: any) => t.status === "Done"
+              ).length;
+              totalInProgress += tasks.filter(
+                (t: any) => t.status === "In Progress"
+              ).length;
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching tasks for project ${project.id}:`,
+              error
+            );
+          }
         }
 
         setTaskStats({
-          total: allTasks.length,
-          completed: allTasks.filter((t) => t.status === "Done").length,
-          inProgress: allTasks.filter((t) => t.status === "In Progress").length,
+          completed: totalCompleted,
+          inProgress: totalInProgress,
         });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchData();
-  }, []);
-
-  const getSortedProjects = () => {
-    let sorted = [...projects];
-    if (sortBy === "name") {
-      sorted.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === "date") {
-      sorted.sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    } else if (sortBy === "oldest") {
-      sorted.sort(
-        (a, b) =>
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
+    } catch (error) {
+      console.error("Error fetching task stats:", error);
     }
-    return sorted;
   };
 
-  // Mockup-inspired stat cards
-  const statCards = [
-    {
-      label: "Projects",
-      sublabel: "Active Now",
-      value: projects.length,
-      Icon: RocketLaunchIcon,
-      iconBg: "linear-gradient(135deg, #dc2626, #991b1b)",
-    },
-    {
-      label: "Completed",
-      sublabel: "Successfully Delivered",
-      value: taskStats.completed,
-      Icon: FlagIcon,
-      iconBg: "linear-gradient(135deg, #22c55e, #15803d)",
-    },
-    {
-      label: "In Progress",
-      sublabel: "Currently Active",
-      value: taskStats.inProgress,
-      Icon: WrenchScrewdriverIcon,
-      iconBg: "linear-gradient(135deg, #f59e0b, #d97706)",
-    },
-  ];
-
   return (
-    <div style={styles.page}>
-      {/* Background Grid Pattern */}
-      <div style={styles.gridPattern} />
-
-      {/* Header - Matching Mockup */}
-      <header style={styles.header}>
-        <div style={styles.headerContent}>
-          {/* Logo */}
-          <div style={styles.logo}>
-            <div style={styles.logoIcon}>
+    <div
+      style={{
+        minHeight: "100vh",
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
+      {/* Header */}
+      <header
+        className="glass-header"
+        style={{
+          padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1400px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+            }}
+          >
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "var(--radius-md)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
+              }}
+            >
               <img
                 src={logo}
-                alt="Ideal Assistant"
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                alt="Atlas AI"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
-            <span style={styles.logoText}>
-              <span style={{ color: "#f1f5f9" }}>Ideal</span>{" "}
-              <span style={{ color: "#dc2626" }}>Assistant</span>
-            </span>
+            <h1
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
+              }}
+            >
+              Atlas AI
+            </h1>
           </div>
 
-          {/* Nav Actions */}
-          <div style={styles.navActions}>
-            <button onClick={() => navigate("/chat")} style={styles.navBtn}>
-              <ChatBubbleLeftRightIcon
-                style={{ width: "18px", height: "18px" }}
-              />
-              <span>Chat</span>
-              <div style={styles.notificationDot} />
-            </button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
             <button
-              onClick={() => navigate("/team-members")}
-              style={styles.navBtn}
+              id="btn-chat"
+              onClick={() => navigate("/chat")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
             >
-              <UserGroupIcon style={{ width: "18px", height: "18px" }} />
+              <span>Chat</span>
+            </button>
+
+            <button
+              id="btn-team-members"
+              onClick={() => navigate("/team-members")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
               <span>Team</span>
             </button>
+
             <button
+              id="btn-new-project"
               onClick={() => navigate("/create-project")}
-              style={styles.primaryBtn}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
             >
-              <PlusIcon style={{ width: "18px", height: "18px" }} />
+              <span>+</span>
               <span>New Project</span>
             </button>
-            <div style={{ position: "relative" }}>
+
+            <button
+              id="btn-ai-assistant"
+              onClick={() => navigate("/ai-assistant")}
+              className="btn-secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+              }}
+            >
+              <span>AI Assistant</span>
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.375rem 0.75rem",
+                background: "rgba(236, 223, 204, 0.8)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid rgba(236, 223, 204, 0.3)",
+              }}
+            >
               <div
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                style={styles.userMenu}
+                style={{
+                  width: "28px",
+                  height: "28px",
+                  background:
+                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#ECDFCC",
+                  fontSize: "0.8125rem",
+                  fontWeight: "600",
+                }}
               >
-                <div style={styles.avatar}>
-                  {user.username.charAt(0).toUpperCase()}
-                </div>
-                <ChevronDownIcon
-                  style={{ width: "16px", height: "16px", color: "#94a3b8" }}
-                />
+                {user.username.charAt(0).toUpperCase()}
               </div>
-              {showUserMenu && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 0.5rem)",
-                    right: 0,
-                    minWidth: "200px",
-                    background: "rgba(17, 17, 24, 0.95)",
-                    backdropFilter: "blur(16px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "12px",
-                    padding: "0.5rem",
-                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-                    zIndex: 1000,
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: "0.75rem 1rem",
-                      borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "0.875rem",
-                        fontWeight: 600,
-                        color: "#f1f5f9",
-                      }}
-                    >
-                      {user.username}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        color: "#94a3b8",
-                        marginTop: "0.25rem",
-                      }}
-                    >
-                      {user.email}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigate("/organization-setup");
-                      setShowUserMenu(false);
-                    }}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      background: "transparent",
-                      border: "none",
-                      borderRadius: "8px",
-                      color: "#f1f5f9",
-                      fontSize: "0.875rem",
-                      textAlign: "left",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.05)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                    }}
-                  >
-                    Organization Settings
-                  </button>
-                  <button
-                    onClick={() => {
-                      onSignOut();
-                      setShowUserMenu(false);
-                    }}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      background: "transparent",
-                      border: "none",
-                      borderRadius: "8px",
-                      color: "#dc2626",
-                      fontSize: "0.875rem",
-                      textAlign: "left",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        "rgba(220, 38, 38, 0.1)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                    }}
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
+              <span
+                style={{
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  color: "var(--color-text-primary)",
+                }}
+              >
+                {user.username}
+              </span>
             </div>
+
+            <button
+              id="btn-sign-out"
+              onClick={onSignOut}
+              className="btn-secondary"
+              style={{
+                padding: "0.5rem 1rem",
+              }}
+            >
+              Sign out
+            </button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={styles.main}>
-        {/* Stats Cards - Matching Mockup */}
-        <div style={styles.statsGrid}>
-          {statCards.map((stat, i) => (
-            <div key={i} style={styles.statCard}>
-              <div style={{ ...styles.statIcon, background: stat.iconBg }}>
-                <stat.Icon
-                  style={{ width: "40px", height: "40px", color: "white" }}
-                />
+      <main
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+          padding: "2rem",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {/* Organization Info */}
+        <div style={{ marginBottom: "2rem" }}>
+          <OrganizationInfo />
+        </div>
+
+        {/* Stats Section */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1rem",
+            marginBottom: "2rem",
+          }}
+        >
+          <div
+            className="card"
+            style={{
+              padding: "1.25rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "2rem",
+              }}
+            >
+              #
+            </div>
+            <div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {projects.length}
               </div>
-              <div style={styles.statContent}>
-                <div style={styles.statValue}>
-                  <span style={{ color: "#dc2626" }}>{stat.value}</span>{" "}
-                  {stat.label}
-                </div>
-                <div style={styles.statLabel}>{stat.sublabel}</div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#ECDFCC",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Total Projects
               </div>
             </div>
-          ))}
+          </div>
+
+          <div
+            className="card"
+            style={{
+              padding: "1.25rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "2rem",
+              }}
+            >
+              OK
+            </div>
+            <div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {taskStats.completed}
+              </div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#ECDFCC",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Tasks Completed
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="card"
+            style={{
+              padding: "1.25rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "2rem",
+              }}
+            >
+              IP
+            </div>
+            <div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  lineHeight: "1",
+                  marginBottom: "0.375rem",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {taskStats.inProgress}
+              </div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#ECDFCC",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                In Progress
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Projects Section */}
-        <div style={styles.projectsSection}>
-          <div style={styles.projectsHeader}>
-            <h2 style={styles.projectsTitle}>Your Projects</h2>
+        <div
+          style={{
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "1.75rem",
+              fontWeight: "700",
+              color: "#ECDFCC",
+              textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+            }}
+          >
+            Your Projects
+          </h2>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              position: "relative",
+            }}
+          >
+            {/* Sort By Dropdown */}
             <div style={{ position: "relative" }}>
               <button
+                className="btn-secondary"
+                style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
                 onClick={() => setShowSortMenu(!showSortMenu)}
-                style={styles.sortBtn}
               >
-                <span>Sort by: Recent</span>
-                <ChevronDownIcon style={{ width: "16px", height: "16px" }} />
+                Sort by
               </button>
               {showSortMenu && (
-                <div style={styles.sortMenu}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 0.5rem)",
+                    right: 0,
+                    background: "rgba(236, 223, 204, 0.98)",
+                    border: "2px solid #697565",
+                    borderRadius: "8px",
+                    padding: "0.5rem",
+                    minWidth: "180px",
+                    zIndex: 1000,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  }}
+                >
                   {[
-                    { value: "default", label: "Recent" },
+                    { value: "default", label: "Default" },
                     { value: "name", label: "Name (A-Z)" },
                     { value: "date", label: "Newest First" },
                     { value: "oldest", label: "Oldest First" },
-                  ].map((opt) => (
+                  ].map((option) => (
                     <button
-                      key={opt.value}
+                      key={option.value}
                       onClick={() => {
-                        setSortBy(opt.value);
+                        setSortBy(option.value);
                         setShowSortMenu(false);
                       }}
                       style={{
-                        ...styles.sortOption,
+                        width: "100%",
+                        padding: "0.5rem 0.75rem",
+                        textAlign: "left",
                         background:
-                          sortBy === opt.value
-                            ? "rgba(220, 38, 38, 0.15)"
+                          sortBy === option.value
+                            ? "rgba(105, 117, 101, 0.3)"
                             : "transparent",
-                        color: sortBy === opt.value ? "#dc2626" : "#94a3b8",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "0.875rem",
+                        color: "#181C14",
+                        fontWeight: sortBy === option.value ? "600" : "500",
+                        marginBottom: "0.25rem",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background =
+                            "rgba(105, 117, 101, 0.15)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (sortBy !== option.value) {
+                          e.currentTarget.style.background = "transparent";
+                        }
                       }}
                     >
-                      {opt.label}
+                      {sortBy === option.value ? "✓ " : ""}
+                      {option.label}
                     </button>
                   ))}
                 </div>
               )}
             </div>
           </div>
+        </div>
 
-          {/* Projects Grid - Matching Mockup */}
-          {loading ? (
-            <div style={styles.loadingContainer}>
-              <div style={styles.spinner} />
+        {loading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "4rem",
+            }}
+          >
+            <div
+              className="spinner"
+              style={{ width: "40px", height: "40px", borderWidth: "3px" }}
+            />
+          </div>
+        ) : projects.length === 0 ? (
+          <div
+            className="card-glass-solid"
+            style={{
+              padding: "4rem 2rem",
+              textAlign: "center",
+              border: "2px dashed rgba(236, 223, 204, 0.4)",
+            }}
+          >
+            <div
+              style={{
+                width: "80px",
+                height: "80px",
+                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "3rem",
+                margin: "0 auto 1.5rem",
+              }}
+            >
+              T
             </div>
-          ) : projects.length === 0 ? (
-            <div style={styles.emptyState}>
-              <div style={styles.emptyIcon}>
-                <RocketLaunchIcon style={{ width: "48px", height: "48px" }} />
-              </div>
-              <h3 style={styles.emptyTitle}>No projects yet</h3>
-              <p style={styles.emptyText}>
-                Create your first project to get started
-              </p>
-              <button
-                onClick={() => navigate("/create-project")}
-                style={styles.primaryBtn}
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
+                marginBottom: "0.75rem",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              }}
+            >
+              No projects yet
+            </h3>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "#ECDFCC",
+                marginBottom: "2rem",
+                maxWidth: "500px",
+                margin: "0 auto 2rem",
+              }}
+            >
+              Create your first project to get started with AI-powered project
+              management and collaboration
+            </p>
+            <button
+              onClick={() => navigate("/create-project")}
+              className="btn-primary"
+              style={{
+                padding: "0.875rem 2rem",
+                fontSize: "1rem",
+              }}
+            >
+              🚀 Create Your First Project
+            </button>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+              gap: "1.25rem",
+            }}
+          >
+            {(() => {
+              let sortedProjects = [...projects];
+              if (sortBy === "name") {
+                sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
+              } else if (sortBy === "date") {
+                sortedProjects.sort(
+                  (a, b) =>
+                    new Date(b.created_at).getTime() -
+                    new Date(a.created_at).getTime()
+                );
+              } else if (sortBy === "oldest") {
+                sortedProjects.sort(
+                  (a, b) =>
+                    new Date(a.created_at).getTime() -
+                    new Date(b.created_at).getTime()
+                );
+              }
+              return sortedProjects;
+            })().map((project, index) => (
+              <div
+                key={project.id}
+                id={`project-card-${index}`}
+                data-project-id={project.id}
+                className="card-glass-solid project-card"
+                style={{
+                  cursor: "pointer",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+                onClick={() => navigate(`/project/${project.id}`)}
               >
-                <PlusIcon style={{ width: "20px", height: "20px" }} />
-                <span>Create Your First Project</span>
-              </button>
-            </div>
-          ) : (
-            <div style={styles.projectsGrid}>
-              {getSortedProjects().map((project) => (
                 <div
-                  key={project.id}
-                  style={styles.projectCard}
-                  onClick={() => navigate(`/project/${project.id}`)}
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem",
+                    width: "40px",
+                    height: "40px",
+                    background:
+                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.25rem",
+                  }}
                 >
-                  <div style={styles.projectIcon}>
-                    <FolderIcon
+                  📁
+                </div>
+                <h3
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "700",
+                    color: "#ECDFCC",
+                    marginBottom: "0.75rem",
+                    paddingRight: "3rem",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  {project.name}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "0.9375rem",
+                    color: "#ECDFCC",
+                    marginBottom: "1.25rem",
+                    lineHeight: "1.6",
+                    minHeight: "3rem",
+                  }}
+                >
+                  {project.description || "No description provided"}
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingTop: "1rem",
+                    borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    <span style={{ fontSize: "0.75rem", color: "#a0a0a0" }}>Due:</span>
+                    <span
                       style={{
-                        width: "48px",
-                        height: "48px",
-                        color: "#dc2626",
+                        fontSize: "0.875rem",
+                        color: "#ECDFCC",
+                        fontWeight: "500",
                       }}
-                    />
-                  </div>
-                  <div style={styles.projectContent}>
-                    <h3 style={styles.projectTitle}>{project.name}</h3>
-                    <p style={styles.projectDesc}>
-                      {project.description ||
-                        "Machine learning model deployment for client X"}
-                    </p>
-                    <div style={styles.projectFooter}>
-                      <div style={styles.projectDate}>
-                        <span style={{ color: "#dc2626" }}>Due:</span>{" "}
-                        {new Date(project.created_at).toLocaleDateString(
-                          "en-US",
-                          { month: "short", day: "numeric", year: "numeric" }
-                        )}
-                      </div>
-                    </div>
+                    >
+                      {new Date(project.created_at).toLocaleDateString()}
+                    </span>
                   </div>
                   <button
+                    className="btn-secondary"
+                    style={{
+                      padding: "0.375rem 0.875rem",
+                      fontSize: "0.8125rem",
+                    }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate("/task-board");
+                      navigate(`/task-board`);
                     }}
-                    style={styles.viewTasksBtn}
                   >
                     View Tasks
                   </button>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
-};
-
-// Styles matching the mockup
-const styles: { [key: string]: React.CSSProperties } = {
-  page: {
-    minHeight: "100vh",
-    background: "#0a0a0f",
-    position: "relative",
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-  },
-  gridPattern: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: `
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-    `,
-    backgroundSize: "50px 50px",
-    pointerEvents: "none",
-    zIndex: 0,
-  },
-  header: {
-    position: "sticky",
-    top: 0,
-    zIndex: 100,
-    background: "rgba(17, 17, 24, 0.85)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-    padding: "1rem 2rem",
-  },
-  headerContent: {
-    maxWidth: "1400px",
-    margin: "0 auto",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  logo: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-  },
-  logoIcon: {
-    width: "48px",
-    height: "48px",
-    position: "relative",
-  },
-  logoText: {
-    fontSize: "1.5rem",
-    fontWeight: 600,
-    color: "#f1f5f9",
-    letterSpacing: "-0.01em",
-  },
-  navActions: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-  },
-  navBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.75rem 1.25rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    color: "#f1f5f9",
-    fontSize: "0.9375rem",
-    fontWeight: 500,
-    cursor: "pointer",
-    transition: "all 0.2s",
-    position: "relative",
-  },
-  notificationDot: {
-    position: "absolute",
-    top: "8px",
-    right: "8px",
-    width: "8px",
-    height: "8px",
-    background: "#dc2626",
-    borderRadius: "50%",
-    boxShadow: "0 0 10px rgba(220, 38, 38, 0.6)",
-  },
-  primaryBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.75rem 1.5rem",
-    background: "linear-gradient(135deg, #dc2626, #991b1b)",
-    border: "none",
-    borderRadius: "12px",
-    color: "white",
-    fontSize: "0.9375rem",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "all 0.2s",
-    boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-  },
-  userMenu: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.5rem 1rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    cursor: "pointer",
-  },
-  avatar: {
-    width: "32px",
-    height: "32px",
-    borderRadius: "50%",
-    background: "linear-gradient(135deg, #dc2626, #991b1b)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-    fontSize: "0.875rem",
-    fontWeight: 600,
-  },
-  main: {
-    position: "relative",
-    zIndex: 1,
-    maxWidth: "1400px",
-    margin: "0 auto",
-    padding: "3rem 2rem",
-  },
-  statsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "1.5rem",
-    marginBottom: "3rem",
-  },
-  statCard: {
-    background: "rgba(17, 17, 24, 0.7)",
-    backdropFilter: "blur(16px)",
-    WebkitBackdropFilter: "blur(16px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
-    borderRadius: "20px",
-    padding: "2rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "1.5rem",
-    transition: "all 0.3s",
-    cursor: "pointer",
-  },
-  statIcon: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
-  statContent: {
-    flex: 1,
-  },
-  statValue: {
-    fontSize: "1.75rem",
-    fontWeight: 700,
-    color: "#f1f5f9",
-    marginBottom: "0.25rem",
-    letterSpacing: "-0.01em",
-  },
-  statLabel: {
-    fontSize: "0.9375rem",
-    color: "#94a3b8",
-  },
-  projectsSection: {
-    marginTop: "2rem",
-  },
-  projectsHeader: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: "2rem",
-  },
-  projectsTitle: {
-    fontSize: "2rem",
-    fontWeight: 700,
-    color: "#f1f5f9",
-    letterSpacing: "-0.02em",
-  },
-  sortBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.75rem 1.25rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    color: "#f1f5f9",
-    fontSize: "0.9375rem",
-    fontWeight: 500,
-    cursor: "pointer",
-  },
-  sortMenu: {
-    position: "absolute",
-    top: "calc(100% + 8px)",
-    right: 0,
-    background: "rgba(17, 17, 24, 0.98)",
-    backdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: "14px",
-    padding: "0.5rem",
-    minWidth: "180px",
-    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.5)",
-    zIndex: 1000,
-  },
-  sortOption: {
-    width: "100%",
-    padding: "0.75rem 1rem",
-    textAlign: "left",
-    background: "transparent",
-    border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontSize: "0.9375rem",
-    fontWeight: 500,
-    transition: "all 0.2s",
-  },
-  projectsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(450px, 1fr))",
-    gap: "1.5rem",
-  },
-  projectCard: {
-    background: "rgba(17, 17, 24, 0.7)",
-    backdropFilter: "blur(16px)",
-    WebkitBackdropFilter: "blur(16px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
-    borderRadius: "20px",
-    padding: "2rem",
-    cursor: "pointer",
-    transition: "all 0.3s",
-    position: "relative",
-  },
-  projectIcon: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "16px",
-    background:
-      "linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(153, 27, 27, 0.2))",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "1.5rem",
-  },
-  projectContent: {
-    marginBottom: "1.5rem",
-  },
-  projectTitle: {
-    fontSize: "1.5rem",
-    fontWeight: 700,
-    color: "#f1f5f9",
-    marginBottom: "0.75rem",
-    letterSpacing: "-0.01em",
-  },
-  projectDesc: {
-    fontSize: "1rem",
-    color: "#94a3b8",
-    lineHeight: 1.6,
-    marginBottom: "1rem",
-  },
-  projectFooter: {
-    paddingTop: "1rem",
-    borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-  },
-  projectDate: {
-    fontSize: "0.9375rem",
-    color: "#94a3b8",
-  },
-  viewTasksBtn: {
-    width: "100%",
-    padding: "0.875rem",
-    background: "rgba(220, 38, 38, 0.15)",
-    border: "1px solid rgba(220, 38, 38, 0.3)",
-    borderRadius: "12px",
-    color: "#dc2626",
-    fontSize: "0.9375rem",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "all 0.2s",
-  },
-  loadingContainer: {
-    display: "flex",
-    justifyContent: "center",
-    padding: "4rem",
-  },
-  spinner: {
-    width: "48px",
-    height: "48px",
-    border: "3px solid #1a1a24",
-    borderTop: "3px solid #dc2626",
-    borderRadius: "50%",
-    animation: "spin 0.8s linear infinite",
-  },
-  emptyState: {
-    background: "rgba(17, 17, 24, 0.7)",
-    backdropFilter: "blur(16px)",
-    border: "2px dashed rgba(255, 255, 255, 0.12)",
-    borderRadius: "24px",
-    padding: "5rem 2rem",
-    textAlign: "center",
-  },
-  emptyIcon: {
-    width: "88px",
-    height: "88px",
-    borderRadius: "22px",
-    background: "linear-gradient(135deg, #dc2626, #991b1b)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-    margin: "0 auto 1.75rem",
-    boxShadow: "0 12px 36px rgba(220, 38, 38, 0.35)",
-  },
-  emptyTitle: {
-    fontSize: "1.625rem",
-    fontWeight: 700,
-    color: "#f1f5f9",
-    marginBottom: "0.75rem",
-  },
-  emptyText: {
-    fontSize: "1.0625rem",
-    color: "#94a3b8",
-    marginBottom: "2.25rem",
-    maxWidth: "420px",
-    margin: "0 auto 2.25rem",
-  },
 };
 
 export default UserProfile;

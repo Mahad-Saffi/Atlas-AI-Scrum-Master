@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { taskService } from "../../services/taskService";
 import { useToast } from "../Toast";
-import { CalendarIcon, ClockIcon, CheckIcon } from "@heroicons/react/24/solid";
 
 interface Task {
   id: string;
@@ -21,279 +20,355 @@ interface TaskBoardProps {
   onTaskUpdate?: () => void;
 }
 
-// Exact mockup styling
-const columnStyles = {
-  "To Do": {
-    headerBg: "rgba(100, 116, 139, 0.12)",
-    accentColor: "#64748b",
-    borderColor: "rgba(100, 116, 139, 0.4)",
-    badgeBg: "rgba(100, 116, 139, 0.2)",
-  },
-  "In Progress": {
-    headerBg: "rgba(245, 158, 11, 0.12)",
-    accentColor: "#f59e0b",
-    borderColor: "rgba(245, 158, 11, 0.4)",
-    badgeBg: "rgba(245, 158, 11, 0.2)",
-  },
-  "Done": {
-    headerBg: "rgba(34, 197, 94, 0.12)",
-    accentColor: "#22c55e",
-    borderColor: "rgba(34, 197, 94, 0.4)",
-    badgeBg: "rgba(34, 197, 94, 0.2)",
-  },
-};
-
 const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
-  const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
+  const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
   const { showToast } = useToast();
+
+  const handleStartTask = async (taskId: string) => {
+    try {
+      setUpdatingTaskId(taskId);
+      await taskService.updateTask(taskId, { status: "In Progress" });
+      showToast("Task started!", "success");
+      if (onTaskUpdate) {
+        onTaskUpdate();
+      }
+    } catch (error: any) {
+      console.error("Failed to start task:", error);
+      const errorMessage =
+        error.response?.data?.detail || error.message || "Unknown error";
+      showToast(`Failed to start task: ${errorMessage}`, "error");
+    } finally {
+      setUpdatingTaskId(null);
+    }
+  };
 
   const handleCompleteTask = async (taskId: string) => {
     try {
-      setCompletingTaskId(taskId);
+      setUpdatingTaskId(taskId);
       await taskService.completeTask(taskId);
       showToast("Task completed successfully!", "success");
-      if (onTaskUpdate) onTaskUpdate();
+      if (onTaskUpdate) {
+        onTaskUpdate();
+      }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || error.message || "Unknown error";
+      console.error("Failed to complete task:", error);
+      const errorMessage =
+        error.response?.data?.detail || error.message || "Unknown error";
       showToast(`Failed to complete task: ${errorMessage}`, "error");
     } finally {
-      setCompletingTaskId(null);
+      setUpdatingTaskId(null);
     }
   };
 
   const columns = {
     "To Do": tasks.filter((task) => task.status === "To Do"),
     "In Progress": tasks.filter((task) => task.status === "In Progress"),
-    "Done": tasks.filter((task) => task.status === "Done"),
+    Done: tasks.filter((task) => task.status === "Done"),
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "To Do":
+        return "#e5e7eb";
+      case "In Progress":
+        return "#fef3c7";
+      case "Done":
+        return "#d1fae5";
+      default:
+        return "#e5e7eb";
+    }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "high": return "#ef4444";
-      case "medium": return "#f59e0b";
-      default: return "#64748b";
+      case "high":
+        return "var(--color-error)";
+      case "medium":
+        return "var(--color-warning)";
+      default:
+        return "var(--color-text-muted)";
     }
   };
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", height: "100%", padding: "0.5rem" }}>
-      {(Object.entries(columns) as [keyof typeof columnStyles, Task[]][]).map(([status, tasksInStatus]) => {
-        const style = columnStyles[status];
-        return (
-          <div key={status} style={{ display: "flex", flexDirection: "column" }}>
-            {/* Column Header - Glass with accent border */}
-            <div
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "1.25rem",
+        height: "100%",
+      }}
+    >
+      {Object.entries(columns).map(([status, tasksInStatus]) => (
+        <div
+          key={status}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Column Header */}
+          <div
+            style={{
+              padding: "0.75rem 1rem",
+              background: "rgba(236, 223, 204, 0.2)",
+              borderRadius: "var(--radius-md)",
+              marginBottom: "1rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <h3
               style={{
-                padding: "1rem 1.25rem",
-                background: style.headerBg,
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                borderRadius: "16px",
-                marginBottom: "1.25rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderLeft: `4px solid ${style.accentColor}`,
-                boxShadow: `0 4px 20px rgba(0, 0, 0, 0.15)`,
+                fontSize: "0.9375rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
+                margin: 0,
               }}
             >
-              <h3 style={{ fontSize: "1rem", fontWeight: 600, color: "#f1f5f9", margin: 0, letterSpacing: "-0.01em" }}>
-                {status}
-              </h3>
-              <span
+              {status}
+            </h3>
+            <span
+              style={{
+                fontSize: "0.8125rem",
+                fontWeight: "500",
+                color: "#ECDFCC",
+                background: "rgba(236, 223, 204, 0.3)",
+                padding: "0.25rem 0.625rem",
+                borderRadius: "var(--radius-sm)",
+              }}
+            >
+              {tasksInStatus.length}
+            </span>
+          </div>
+
+          {/* Tasks */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.75rem",
+              flex: 1,
+            }}
+          >
+            {tasksInStatus.length === 0 ? (
+              <div
                 style={{
+                  padding: "2rem 1rem",
+                  textAlign: "center",
+                  color: "#ECDFCC",
                   fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: style.accentColor,
-                  background: style.badgeBg,
-                  padding: "0.375rem 0.875rem",
-                  borderRadius: "20px",
+                  background: "rgba(236, 223, 204, 0.1)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px dashed rgba(236, 223, 204, 0.3)",
                 }}
               >
-                {tasksInStatus.length}
-              </span>
-            </div>
-
-            {/* Tasks Container */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}>
-              {tasksInStatus.length === 0 ? (
+                No tasks
+              </div>
+            ) : (
+              tasksInStatus.map((task, taskIndex) => (
                 <div
+                  key={task.id}
+                  id={`task-card-${status.toLowerCase().replace(' ', '-')}-${taskIndex}`}
+                  data-task-id={task.id}
+                  className="card task-card"
                   style={{
-                    padding: "3rem 1.5rem",
-                    textAlign: "center",
-                    color: "#64748b",
-                    fontSize: "0.9375rem",
-                    background: "rgba(255, 255, 255, 0.02)",
-                    borderRadius: "16px",
-                    border: "2px dashed rgba(255, 255, 255, 0.08)",
+                    padding: "1rem",
+                    cursor: "pointer",
+                    position: "relative",
                   }}
                 >
-                  No tasks
-                </div>
-              ) : (
-                tasksInStatus.map((task) => (
-                  <div
-                    key={task.id}
+                  {/* Risk Indicator */}
+                  {task.risk_level && task.risk_level !== "low" && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "0.75rem",
+                        right: "0.75rem",
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        background: getRiskColor(task.risk_level),
+                      }}
+                    />
+                  )}
+
+                  {/* Task Title */}
+                  <h4
                     style={{
-                      background: "rgba(17, 17, 24, 0.85)",
-                      backdropFilter: "blur(16px)",
-                      WebkitBackdropFilter: "blur(16px)",
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      borderRadius: "16px",
-                      padding: "1.25rem",
-                      cursor: "pointer",
-                      position: "relative",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(220, 38, 38, 0.4)";
-                      e.currentTarget.style.boxShadow = "0 8px 28px rgba(220, 38, 38, 0.12)";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "translateY(0)";
+                      fontSize: "0.9375rem",
+                      fontWeight: "500",
+                      color: "var(--color-text-primary)",
+                      marginBottom: "0.5rem",
+                      paddingRight: "1rem",
+                      lineHeight: "1.4",
                     }}
                   >
-                    {/* Risk Indicator */}
-                    {task.risk_level && task.risk_level !== "low" && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "1rem",
-                          right: "1rem",
-                          width: "10px",
-                          height: "10px",
-                          borderRadius: "50%",
-                          background: getRiskColor(task.risk_level),
-                          boxShadow: `0 0 10px ${getRiskColor(task.risk_level)}`,
-                        }}
-                      />
-                    )}
+                    {task.title}
+                  </h4>
 
-                    {/* Title */}
-                    <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "#f1f5f9", marginBottom: "0.625rem", paddingRight: "1.5rem", lineHeight: 1.45 }}>
-                      {task.title}
-                    </h4>
+                  {/* Task Description */}
+                  {task.description && (
+                    <p
+                      style={{
+                        fontSize: "0.8125rem",
+                        color: "var(--color-text-secondary)",
+                        marginBottom: "0.75rem",
+                        lineHeight: "1.5",
+                      }}
+                    >
+                      {task.description.length > 80
+                        ? `${task.description.substring(0, 80)}...`
+                        : task.description}
+                    </p>
+                  )}
 
-                    {/* Description */}
-                    {task.description && (
-                      <p style={{ fontSize: "0.875rem", color: "#94a3b8", marginBottom: "1rem", lineHeight: 1.6 }}>
-                        {task.description.length > 90 ? `${task.description.substring(0, 90)}...` : task.description}
-                      </p>
-                    )}
-
-                    {/* Progress Bar */}
-                    {task.progress_percentage !== undefined && task.progress_percentage > 0 && (
-                      <div style={{ marginBottom: "1rem" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                          <span style={{ fontSize: "0.8125rem", color: "#64748b" }}>Progress</span>
-                          <span style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#f1f5f9" }}>{task.progress_percentage}%</span>
+                  {/* Progress Bar */}
+                  {task.progress_percentage !== undefined &&
+                    task.progress_percentage > 0 && (
+                      <div style={{ marginBottom: "0.75rem" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "0.375rem",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "var(--color-text-muted)",
+                            }}
+                          >
+                            Progress
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              fontWeight: "600",
+                              color: "var(--color-text-primary)",
+                            }}
+                          >
+                            {task.progress_percentage}%
+                          </span>
                         </div>
-                        <div style={{ width: "100%", height: "6px", background: "rgba(26, 26, 36, 0.9)", borderRadius: "20px", overflow: "hidden" }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "4px",
+                            background: "var(--color-light-gray)",
+                            borderRadius: "var(--radius-sm)",
+                            overflow: "hidden",
+                          }}
+                        >
                           <div
                             style={{
                               width: `${task.progress_percentage}%`,
                               height: "100%",
-                              background: "linear-gradient(90deg, #dc2626, #ef4444)",
-                              borderRadius: "20px",
-                              transition: "width 0.4s ease",
+                              background: "var(--color-dark)",
+                              transition: "width 0.3s ease",
                             }}
                           />
                         </div>
                       </div>
                     )}
 
-                    {/* Meta */}
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: status !== "Done" ? "1rem" : "0", fontSize: "0.8125rem", color: "#64748b" }}>
-                      {task.due_date && (
-                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                          <CalendarIcon style={{ width: "16px", height: "16px" }} />
-                          {new Date(task.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                        </div>
-                      )}
-                      {task.estimate_hours && (
-                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                          <ClockIcon style={{ width: "16px", height: "16px" }} />
-                          {task.estimate_hours}h
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Action Button */}
-                    {status !== "Done" && (
-                      <button
-                        onClick={() => handleCompleteTask(task.id)}
-                        disabled={completingTaskId === task.id}
-                        style={{
-                          width: "100%",
-                          padding: "0.75rem",
-                          fontSize: "0.875rem",
-                          fontWeight: 600,
-                          background: "rgba(255, 255, 255, 0.05)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          borderRadius: "12px",
-                          color: "#f1f5f9",
-                          cursor: completingTaskId === task.id ? "not-allowed" : "pointer",
-                          opacity: completingTaskId === task.id ? 0.6 : 1,
-                          transition: "all 0.25s ease",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px"
-                        }}
-                        onMouseEnter={(e) => {
-                          if (completingTaskId !== task.id) {
-                            e.currentTarget.style.background = "rgba(34, 197, 94, 0.15)";
-                            e.currentTarget.style.borderColor = "rgba(34, 197, 94, 0.4)";
-                            e.currentTarget.style.color = "#4ade80";
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
-                          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
-                          e.currentTarget.style.color = "#f1f5f9";
-                        }}
-                      >
-                        {completingTaskId === task.id ? (
-                          "Completing..."
-                        ) : (
-                          <>
-                            <CheckIcon style={{ width: "16px", height: "16px" }} /> Mark Complete
-                          </>
-                        )}
-                      </button>
+                  {/* Task Meta */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.75rem",
+                      marginBottom: status !== "Done" ? "0.75rem" : "0",
+                      fontSize: "0.75rem",
+                      color: "var(--color-text-muted)",
+                    }}
+                  >
+                    {task.due_date && (
+                      <span>
+                        Due:{" "}
+                        {new Date(task.due_date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
                     )}
-
-                    {/* Done Badge */}
-                    {status === "Done" && (
-                      <div
-                        style={{
-                          padding: "0.75rem",
-                          textAlign: "center",
-                          background: "rgba(34, 197, 94, 0.15)",
-                          borderRadius: "12px",
-                          fontSize: "0.875rem",
-                          fontWeight: 600,
-                          color: "#4ade80",
-                          border: "1px solid rgba(34, 197, 94, 0.3)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px"
-                        }}
-                      >
-                         <CheckIcon style={{ width: "16px", height: "16px" }} /> Completed
-                      </div>
+                    {task.estimate_hours && (
+                      <span>{task.estimate_hours}h</span>
                     )}
                   </div>
-                ))
-              )}
-            </div>
+
+                  {/* Action Button */}
+                  {status === "To Do" && (
+                    <button
+                      id={`btn-start-task-${taskIndex}`}
+                      onClick={() => handleStartTask(task.id)}
+                      disabled={updatingTaskId === task.id}
+                      className="btn-secondary btn-start-task"
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem",
+                        fontSize: "0.8125rem",
+                        opacity: updatingTaskId === task.id ? 0.6 : 1,
+                        cursor:
+                          updatingTaskId === task.id
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {updatingTaskId === task.id
+                        ? "Starting..."
+                        : "Start Task"}
+                    </button>
+                  )}
+                  {status === "In Progress" && (
+                    <button
+                      id={`btn-complete-task-${taskIndex}`}
+                      onClick={() => handleCompleteTask(task.id)}
+                      disabled={updatingTaskId === task.id}
+                      className="btn-secondary btn-complete-task"
+                      style={{
+                        width: "100%",
+                        padding: "0.5rem",
+                        fontSize: "0.8125rem",
+                        opacity: updatingTaskId === task.id ? 0.6 : 1,
+                        cursor:
+                          updatingTaskId === task.id
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {updatingTaskId === task.id
+                        ? "Completing..."
+                        : "Mark Complete"}
+                    </button>
+                  )}
+
+                  {/* Done Badge */}
+                  {status === "Done" && (
+                    <div
+                      style={{
+                        padding: "0.5rem",
+                        textAlign: "center",
+                        background: "rgba(16, 185, 129, 0.2)",
+                        borderRadius: "var(--radius-sm)",
+                        fontSize: "0.8125rem",
+                        fontWeight: "600",
+                        color: "#ECDFCC",
+                        border: "1px solid rgba(16, 185, 129, 0.4)",
+                      }}
+                    >
+                      ✓ Completed
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   );
 };

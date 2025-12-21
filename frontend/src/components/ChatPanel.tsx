@@ -1,9 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  ChatBubbleLeftRightIcon,
-  PaperAirplaneIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/solid";
 
 interface Message {
   id: number;
@@ -103,25 +98,21 @@ const ChatPanel: React.FC = () => {
 
   return (
     <div
+      className="card-glass"
       style={{
         display: "flex",
         height: "calc(100vh - 150px)",
         maxHeight: "700px",
         overflow: "hidden",
-        background: "rgba(17, 17, 24, 0.7)",
-        backdropFilter: "blur(16px)",
-        border: "1px solid rgba(255, 255, 255, 0.08)",
-        borderRadius: "20px",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
       }}
     >
       {/* Online Users Sidebar */}
       <div
         style={{
           width: "240px",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRight: "1px solid rgba(236, 223, 204, 0.3)",
           padding: "1.25rem",
-          background: "rgba(10, 10, 15, 0.5)",
+          background: "rgba(236, 223, 204, 0.5)",
           backdropFilter: "blur(10px)",
         }}
       >
@@ -130,7 +121,7 @@ const ChatPanel: React.FC = () => {
             fontSize: "0.875rem",
             fontWeight: "600",
             marginBottom: "1rem",
-            color: "#f1f5f9",
+            color: "#181C14",
             display: "flex",
             alignItems: "center",
             gap: "0.5rem",
@@ -162,21 +153,21 @@ const ChatPanel: React.FC = () => {
                 alignItems: "center",
                 gap: "0.75rem",
                 padding: "0.75rem",
-                background: "rgba(255, 255, 255, 0.05)",
+                background: "rgba(255, 255, 255, 0.6)",
                 backdropFilter: "blur(10px)",
-                borderRadius: "12px",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid rgba(236, 223, 204, 0.3)",
                 fontSize: "0.875rem",
-                color: "#f1f5f9",
+                color: "#181C14",
                 transition: "all 0.2s",
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.8)";
                 e.currentTarget.style.transform = "translateX(4px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.6)";
                 e.currentTarget.style.transform = "translateX(0)";
               }}
             >
@@ -187,7 +178,7 @@ const ChatPanel: React.FC = () => {
                   width: "32px",
                   height: "32px",
                   borderRadius: "50%",
-                  border: "2px solid #10b981",
+                  border: "2px solid #ECDFCC",
                   objectFit: "cover",
                 }}
               />
@@ -203,20 +194,20 @@ const ChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(10, 10, 15, 0.3)",
+          background: "rgba(236, 223, 204, 0.3)",
         }}
       >
         {/* Connection Status */}
         <div
           style={{
             padding: "0.75rem 1.25rem",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
             background: isConnected
               ? "rgba(16, 185, 129, 0.1)"
               : "rgba(239, 68, 68, 0.1)",
             fontSize: "0.875rem",
             fontWeight: "600",
-            color: "#f1f5f9",
+            color: "#181C14",
             display: "flex",
             alignItems: "center",
             gap: "0.5rem",
@@ -249,25 +240,26 @@ const ChatPanel: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                color: "#94a3b8",
+                color: "#697565",
                 padding: "3rem 1rem",
               }}
             >
-              <ChatBubbleLeftRightIcon
+              <div
                 style={{
                   width: "64px",
                   height: "64px",
+                  borderRadius: "50%",
+                  background: "rgba(236, 223, 204, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   margin: "0 auto 1rem",
-                  color: "#475569",
-                }}
-              />
-              <div
-                style={{
-                  fontSize: "0.9375rem",
-                  fontWeight: "500",
-                  color: "#f1f5f9",
+                  border: "1px solid rgba(236, 223, 204, 0.2)",
                 }}
               >
+                <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>CHAT</span>
+              </div>
+              <div style={{ fontSize: "0.9375rem", fontWeight: "500" }}>
                 No messages yet. Start chatting!
               </div>
             </div>
@@ -275,33 +267,30 @@ const ChatPanel: React.FC = () => {
             messages.map((msg, index) => (
               <div
                 key={index}
+                className="card"
                 style={{
                   padding: "1rem",
-                  background: "rgba(255, 255, 255, 0.05)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "12px",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(15px)",
+                  border: "1px solid rgba(236, 223, 204, 0.4)",
+                  borderRadius: "var(--radius-md)",
+                  boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
                 }}
               >
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#94a3b8",
+                    color: "#697565",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
                   }}
                 >
-                  <UserCircleIcon style={{ width: "16px", height: "16px" }} />
                   User #{msg.sender_id}
                 </div>
                 <div
                   style={{
                     fontSize: "0.9375rem",
-                    color: "#f1f5f9",
+                    color: "#181C14",
                     lineHeight: "1.5",
                   }}
                 >
@@ -317,8 +306,8 @@ const ChatPanel: React.FC = () => {
         <div
           style={{
             padding: "1.25rem",
-            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-            background: "rgba(10, 10, 15, 0.5)",
+            borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+            background: "rgba(236, 223, 204, 0.5)",
             backdropFilter: "blur(10px)",
             display: "flex",
             gap: "0.75rem",
@@ -331,40 +320,23 @@ const ChatPanel: React.FC = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             disabled={!isConnected}
+            className="input-modern"
             style={{
               flex: 1,
-              padding: "0.875rem 1rem",
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              color: "#f1f5f9",
-              fontSize: "0.9375rem",
-              outline: "none",
             }}
           />
           <button
             onClick={sendMessage}
             disabled={!isConnected || !inputValue.trim()}
+            className="btn-primary"
             style={{
-              padding: "0.875rem 1.5rem",
+              padding: "0.75rem 1.5rem",
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
-              background:
-                !isConnected || !inputValue.trim()
-                  ? "rgba(220, 38, 38, 0.5)"
-                  : "linear-gradient(135deg, #dc2626, #991b1b)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              cursor:
-                !isConnected || !inputValue.trim() ? "not-allowed" : "pointer",
-              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
             }}
           >
-            <PaperAirplaneIcon style={{ width: "18px", height: "18px" }} />
+            <span>📤</span>
             <span>Send</span>
           </button>
         </div>

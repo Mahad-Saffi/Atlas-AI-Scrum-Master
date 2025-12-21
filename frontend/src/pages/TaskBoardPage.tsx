@@ -191,31 +191,35 @@ const TaskBoardPage: React.FC = () => {
         }}
       >
         <div
+          className="card-glass-solid"
           style={{
             textAlign: "center",
             padding: "3rem",
             maxWidth: "500px",
-            background: "rgba(17, 17, 24, 0.95)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
           }}
         >
-          <ExclamationTriangleIcon
+          <div
             style={{
               width: "64px",
               height: "64px",
+              background: "rgba(236, 223, 204, 0.1)",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               margin: "0 auto 1rem",
-              color: "#dc2626",
+              border: "1px solid rgba(236, 223, 204, 0.2)",
             }}
-          />
+          >
+            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>!</span>
+          </div>
           <h2
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#f1f5f9",
+              color: "#f5f5f5",
               marginBottom: "0.5rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             Oops!
@@ -223,7 +227,7 @@ const TaskBoardPage: React.FC = () => {
           <p
             style={{
               fontSize: "0.9375rem",
-              color: "#94a3b8",
+              color: "#a0a0a0",
               marginBottom: "1.5rem",
             }}
           >
@@ -231,17 +235,7 @@ const TaskBoardPage: React.FC = () => {
           </p>
           <button
             onClick={() => window.location.reload()}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "linear-gradient(135deg, #dc2626, #991b1b)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-            }}
+            className="btn-primary"
           >
             Try Again
           </button>
@@ -256,38 +250,16 @@ const TaskBoardPage: React.FC = () => {
         minHeight: "100vh",
         position: "relative",
         zIndex: 1,
-        background: "#0a0a0f",
       }}
     >
-      {/* Background Grid Pattern */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-          `,
-          backgroundSize: "50px 50px",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-
-      {/* Header - Matching Mockup */}
+      {/* Header */}
       <header
+        className="glass-header"
         style={{
+          padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(17, 17, 24, 0.85)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          padding: "1.25rem 2rem",
         }}
       >
         <div
@@ -303,40 +275,23 @@ const TaskBoardPage: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "2rem",
+              gap: "1rem",
             }}
           >
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(220, 38, 38, 0.15)",
-                border: "1px solid rgba(220, 38, 38, 0.3)",
-                borderRadius: "12px",
-                color: "#dc2626",
-                fontSize: "0.9375rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.25)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.15)";
+                padding: "0.5rem 1rem",
               }}
             >
-              ← Back to Home
+              Back
             </button>
             <h1
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#f1f5f9",
-                letterSpacing: "-0.01em",
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
               }}
             >
               Task Board
@@ -350,40 +305,36 @@ const TaskBoardPage: React.FC = () => {
               gap: "1rem",
             }}
           >
-            {/* Project Selector Dropdown */}
-            {projects.length > 0 && (
-              <select
-                value={selectedProjectId || ""}
-                onChange={(e) => setSelectedProjectId(e.target.value)}
+            {/* Search */}
+            <div
+              style={{
+                position: "relative",
+                width: "300px",
+              }}
+            >
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="input-modern"
                 style={{
-                  padding: "0.75rem 1.25rem",
-                  background: "rgba(17, 17, 24, 0.95)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  borderRadius: "12px",
-                  color: "#f1f5f9",
-                  fontSize: "0.9375rem",
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  minWidth: "200px",
-                  outline: "none",
+                  paddingLeft: "2.5rem",
                 }}
-                className="custom-select"
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  left: "1rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#a0a0a0",
+                  fontSize: "0.875rem",
+                }}
               >
-                {projects.map((project) => (
-                  <option
-                    key={project.id}
-                    value={project.id}
-                    style={{
-                      background: "#111118",
-                      color: "#f1f5f9",
-                      padding: "0.75rem",
-                    }}
-                  >
-                    {project.name}
-                  </option>
-                ))}
-              </select>
-            )}
+                Search
+              </span>
+            </div>
 
             <NotificationBell />
           </div>
@@ -393,49 +344,71 @@ const TaskBoardPage: React.FC = () => {
       {/* Main Content */}
       <main
         style={{
-          position: "relative",
-          zIndex: 1,
           maxWidth: "1600px",
           margin: "0 auto",
           padding: "2rem",
         }}
       >
-        {/* Stats Bar - Matching Mockup */}
+        {/* Stats Bar */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1.5rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+            gap: "1rem",
             marginBottom: "2rem",
           }}
         >
           <div
+            className="card"
             style={{
-              background: "rgba(100, 116, 139, 0.12)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(100, 116, 139, 0.3)",
-              borderRadius: "16px",
-              padding: "1.5rem",
+              padding: "1rem",
               textAlign: "center",
             }}
           >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "#94a3b8",
-                marginBottom: "0.75rem",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                fontSize: "0.75rem",
+                color: "#ECDFCC",
+                marginBottom: "0.5rem",
+                fontWeight: "600",
+              }}
+            >
+              Total Tasks
+            </div>
+            <div
+              style={{
+                fontSize: "1.75rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              }}
+            >
+              {taskStats.total}
+            </div>
+          </div>
+
+          <div
+            className="card"
+            style={{
+              padding: "1rem",
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "0.75rem",
+                color: "#ECDFCC",
+                marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               To Do
             </div>
             <div
               style={{
-                fontSize: "2.5rem",
-                fontWeight: 700,
-                color: "#f1f5f9",
+                fontSize: "1.75rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
@@ -444,32 +417,29 @@ const TaskBoardPage: React.FC = () => {
           </div>
 
           <div
+            className="card"
             style={{
-              background: "rgba(245, 158, 11, 0.12)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(245, 158, 11, 0.3)",
-              borderRadius: "16px",
-              padding: "1.5rem",
+              padding: "1rem",
               textAlign: "center",
+              background: "rgba(245, 158, 11, 0.15)",
+              border: "1px solid rgba(245, 158, 11, 0.4)",
             }}
           >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "#f59e0b",
-                marginBottom: "0.75rem",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                fontSize: "0.75rem",
+                color: "#ECDFCC",
+                marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               In Progress
             </div>
             <div
               style={{
-                fontSize: "2.5rem",
-                fontWeight: 700,
-                color: "#f1f5f9",
+                fontSize: "1.75rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
@@ -478,32 +448,29 @@ const TaskBoardPage: React.FC = () => {
           </div>
 
           <div
+            className="card"
             style={{
-              background: "rgba(34, 197, 94, 0.12)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(34, 197, 94, 0.3)",
-              borderRadius: "16px",
-              padding: "1.5rem",
+              padding: "1rem",
               textAlign: "center",
+              background: "rgba(16, 185, 129, 0.15)",
+              border: "1px solid rgba(16, 185, 129, 0.4)",
             }}
           >
             <div
               style={{
-                fontSize: "0.875rem",
-                color: "#22c55e",
-                marginBottom: "0.75rem",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                fontSize: "0.75rem",
+                color: "#ECDFCC",
+                marginBottom: "0.5rem",
+                fontWeight: "600",
               }}
             >
               Done
             </div>
             <div
               style={{
-                fontSize: "2.5rem",
-                fontWeight: 700,
-                color: "#f1f5f9",
+                fontSize: "1.75rem",
+                fontWeight: "700",
+                color: "#ECDFCC",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
@@ -512,55 +479,59 @@ const TaskBoardPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Project Selector & Filters */}
+        <div
+          className="card-glass-solid"
+          style={{
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <span style={{ fontWeight: "600", color: "#ECDFCC" }}>
+              Project:
+            </span>
+            {projects.length > 0 && (
+              <select
+                value={selectedProjectId || ""}
+                onChange={(e) => setSelectedProjectId(e.target.value)}
+                style={{
+                  padding: "0.625rem 1rem",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  minWidth: "200px",
+                }}
+              >
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        </div>
+
         {/* Task Board */}
         <div
+          className="card-glass-solid"
           style={{
-            background: "rgba(17, 17, 24, 0.7)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "20px",
-            padding: "2rem",
-            minHeight: "600px",
+            minHeight: "500px",
           }}
         >
           <TaskBoard tasks={filteredTasks} onTaskUpdate={handleTaskUpdate} />
         </div>
       </main>
-
-      {/* Custom Select Styling */}
-      <style>{`
-        .custom-select {
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 0.75rem center;
-          background-size: 20px;
-          padding-right: 2.5rem !important;
-        }
-        
-        .custom-select:hover {
-          background-color: rgba(17, 17, 24, 1);
-          border-color: rgba(255, 255, 255, 0.15);
-        }
-        
-        .custom-select:focus {
-          outline: none;
-          border-color: rgba(220, 38, 38, 0.5);
-          box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-        }
-        
-        .custom-select option {
-          background: #111118;
-          color: #f1f5f9;
-          padding: 0.75rem;
-        }
-        
-        .custom-select option:hover {
-          background: rgba(220, 38, 38, 0.15);
-        }
-      `}</style>
     </div>
   );
 };

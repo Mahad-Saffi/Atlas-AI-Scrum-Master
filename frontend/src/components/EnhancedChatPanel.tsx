@@ -1,12 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  ChatBubbleLeftRightIcon,
-  MagnifyingGlassIcon,
-  PaperAirplaneIcon,
-  UserGroupIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
 
 interface Message {
   id: number;
@@ -114,16 +106,9 @@ const EnhancedChatPanel: React.FC = () => {
         }
       );
       const users = await response.json();
-      // Ensure users is an array
-      if (Array.isArray(users)) {
-        setOnlineUsers(users);
-      } else {
-        console.error("Online users data is not an array:", users);
-        setOnlineUsers([]);
-      }
+      setOnlineUsers(users);
     } catch (error) {
       console.error("Error fetching online users:", error);
-      setOnlineUsers([]);
     }
   };
 
@@ -137,16 +122,9 @@ const EnhancedChatPanel: React.FC = () => {
         }
       );
       const data = await response.json();
-      // Ensure data is an array
-      if (Array.isArray(data)) {
-        setChannels(data);
-      } else {
-        console.error("Channels data is not an array:", data);
-        setChannels([]);
-      }
+      setChannels(data);
     } catch (error) {
       console.error("Error fetching channels:", error);
-      setChannels([]);
     }
   };
 
@@ -160,16 +138,9 @@ const EnhancedChatPanel: React.FC = () => {
         }
       );
       const data = await response.json();
-      // Ensure data is an array
-      if (Array.isArray(data)) {
-        setConversations(data);
-      } else {
-        console.error("Conversations data is not an array:", data);
-        setConversations([]);
-      }
+      setConversations(data);
     } catch (error) {
       console.error("Error fetching conversations:", error);
-      setConversations([]);
     }
   };
 
@@ -292,31 +263,33 @@ const EnhancedChatPanel: React.FC = () => {
     <div
       style={{
         display: "flex",
-        height: "100%",
+        height: "calc(100vh - 135px)",
+        maxHeight: "850px",
         overflow: "hidden",
-        background: "rgba(17, 17, 24, 0.7)",
-        backdropFilter: "blur(16px)",
-        border: "1px solid rgba(255, 255, 255, 0.08)",
-        borderRadius: "20px",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+        background: "rgba(236, 223, 204, 0.25)",
+        backdropFilter: "blur(25px)",
+        border: "1px solid rgba(236, 223, 204, 0.35)",
+        borderRadius: "var(--radius-lg)",
+        boxShadow:
+          "0 8px 32px 0 rgba(24, 28, 20, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)",
       }}
     >
       {/* Sidebar */}
       <div
         style={{
           width: "280px",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRight: "1px solid rgba(236, 223, 204, 0.3)",
           display: "flex",
           flexDirection: "column",
-          background: "rgba(10, 10, 15, 0.5)",
-          backdropFilter: "blur(10px)",
+          background: "rgba(236, 223, 204, 0.1)",
+          backdropFilter: "blur(15px)",
         }}
       >
         {/* Tabs */}
         <div
           style={{
             display: "flex",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
           }}
         >
           <button
@@ -329,23 +302,20 @@ const EnhancedChatPanel: React.FC = () => {
               padding: "0.875rem",
               background:
                 activeView === "channels"
-                  ? "rgba(220, 38, 38, 0.1)"
+                  ? "rgba(236, 223, 204, 0.3)"
                   : "transparent",
               border: "none",
               borderBottom:
-                activeView === "channels" ? "2px solid #dc2626" : "none",
+                activeView === "channels"
+                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  : "none",
               fontSize: "0.875rem",
               fontWeight: "600",
-              color: "#f1f5f9",
+              color: "#ECDFCC",
               cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
             }}
           >
-            <UserGroupIcon style={{ width: "16px", height: "16px" }} />
-            Channels
+            📢 Channels
           </button>
           <button
             onClick={() => {
@@ -356,22 +326,20 @@ const EnhancedChatPanel: React.FC = () => {
               flex: 1,
               padding: "0.875rem",
               background:
-                activeView === "dms" ? "rgba(220, 38, 38, 0.1)" : "transparent",
+                activeView === "dms"
+                  ? "rgba(236, 223, 204, 0.3)"
+                  : "transparent",
               border: "none",
-              borderBottom: activeView === "dms" ? "2px solid #dc2626" : "none",
+              borderBottom:
+                activeView === "dms"
+                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  : "none",
               fontSize: "0.875rem",
               fontWeight: "600",
-              color: "#f1f5f9",
+              color: "#ECDFCC",
               cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
             }}
           >
-            <ChatBubbleLeftRightIcon
-              style={{ width: "16px", height: "16px" }}
-            />
             DMs
           </button>
         </div>
@@ -382,25 +350,15 @@ const EnhancedChatPanel: React.FC = () => {
             <>
               <button
                 onClick={() => setShowCreateChannel(true)}
+                className="btn-primary"
                 style={{
                   width: "100%",
                   marginBottom: "1rem",
-                  padding: "0.75rem",
+                  padding: "0.5rem",
                   fontSize: "0.875rem",
-                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                  border: "none",
-                  borderRadius: "12px",
-                  color: "white",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "0.5rem",
                 }}
               >
-                <PlusIcon style={{ width: "16px", height: "16px" }} />
-                New Channel
+                + New Channel
               </button>
               {channels.map((channel) => (
                 <div
@@ -412,13 +370,13 @@ const EnhancedChatPanel: React.FC = () => {
                   onMouseEnter={(e) => {
                     if (selectedChannel !== channel.id) {
                       e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.08)";
+                        "rgba(236, 223, 204, 0.18)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (selectedChannel !== channel.id) {
                       e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.03)";
+                        "rgba(236, 223, 204, 0.1)";
                     }
                   }}
                   style={{
@@ -426,14 +384,14 @@ const EnhancedChatPanel: React.FC = () => {
                     marginBottom: "0.5rem",
                     background:
                       selectedChannel === channel.id
-                        ? "rgba(220, 38, 38, 0.15)"
-                        : "rgba(255, 255, 255, 0.03)",
+                        ? "rgba(236, 223, 204, 0.25)"
+                        : "rgba(236, 223, 204, 0.1)",
                     backdropFilter: "blur(10px)",
                     border:
                       selectedChannel === channel.id
-                        ? "1px solid rgba(220, 38, 38, 0.4)"
-                        : "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: "12px",
+                        ? "1px solid rgba(236, 223, 204, 0.4)"
+                        : "1px solid rgba(236, 223, 204, 0.2)",
+                    borderRadius: "var(--radius-md)",
                     cursor: "pointer",
                     transition: "all 0.2s",
                   }}
@@ -442,7 +400,7 @@ const EnhancedChatPanel: React.FC = () => {
                     style={{
                       fontSize: "0.875rem",
                       fontWeight: "600",
-                      color: "#f1f5f9",
+                      color: "#ECDFCC",
                     }}
                   >
                     # {channel.name}
@@ -451,7 +409,8 @@ const EnhancedChatPanel: React.FC = () => {
                     <div
                       style={{
                         fontSize: "0.75rem",
-                        color: "#94a3b8",
+                        color: "#ECDFCC",
+                        opacity: 0.8,
                         marginTop: "0.25rem",
                       }}
                     >
@@ -467,7 +426,7 @@ const EnhancedChatPanel: React.FC = () => {
                 style={{
                   fontSize: "0.75rem",
                   fontWeight: "700",
-                  color: "#94a3b8",
+                  color: "#ECDFCC",
                   textTransform: "uppercase",
                   marginBottom: "0.75rem",
                 }}
@@ -484,13 +443,13 @@ const EnhancedChatPanel: React.FC = () => {
                   onMouseEnter={(e) => {
                     if (selectedUser !== user.id) {
                       e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.08)";
+                        "rgba(236, 223, 204, 0.18)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (selectedUser !== user.id) {
                       e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.03)";
+                        "rgba(236, 223, 204, 0.1)";
                     }
                   }}
                   style={{
@@ -501,14 +460,14 @@ const EnhancedChatPanel: React.FC = () => {
                     marginBottom: "0.5rem",
                     background:
                       selectedUser === user.id
-                        ? "rgba(220, 38, 38, 0.15)"
-                        : "rgba(255, 255, 255, 0.03)",
+                        ? "rgba(236, 223, 204, 0.25)"
+                        : "rgba(236, 223, 204, 0.1)",
                     backdropFilter: "blur(10px)",
                     border:
                       selectedUser === user.id
-                        ? "1px solid rgba(220, 38, 38, 0.4)"
-                        : "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: "12px",
+                        ? "1px solid rgba(236, 223, 204, 0.4)"
+                        : "1px solid rgba(236, 223, 204, 0.2)",
+                    borderRadius: "var(--radius-md)",
                     cursor: "pointer",
                     transition: "all 0.2s",
                   }}
@@ -527,7 +486,7 @@ const EnhancedChatPanel: React.FC = () => {
                     style={{
                       fontSize: "0.875rem",
                       fontWeight: "500",
-                      color: "#f1f5f9",
+                      color: "#ECDFCC",
                     }}
                   >
                     {user.username}
@@ -545,15 +504,15 @@ const EnhancedChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(10, 10, 15, 0.3)",
+          background: "rgba(236, 223, 204, 0.05)",
         }}
       >
         {/* Header with Search */}
         <div
           style={{
             padding: "1rem 1.25rem",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-            background: "rgba(10, 10, 15, 0.5)",
+            borderBottom: "1px solid rgba(236, 223, 204, 0.25)",
+            background: "rgba(236, 223, 204, 0.12)",
             backdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
@@ -566,32 +525,22 @@ const EnhancedChatPanel: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && searchMessages()}
+            className="input-modern"
             style={{
               flex: 1,
-              padding: "0.75rem 1rem",
+              padding: "0.5rem 0.75rem",
               fontSize: "0.875rem",
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              color: "#f1f5f9",
-              outline: "none",
             }}
           />
           <button
             onClick={searchMessages}
+            className="btn-secondary"
             style={{
-              padding: "0.75rem 1rem",
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              color: "#f1f5f9",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
+              padding: "0.5rem 1rem",
+              fontSize: "0.875rem",
             }}
           >
-            <MagnifyingGlassIcon style={{ width: "16px", height: "16px" }} />
+            Search
           </button>
         </div>
 
@@ -610,25 +559,26 @@ const EnhancedChatPanel: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                color: "#94a3b8",
+                color: "#ECDFCC",
                 padding: "3rem 1rem",
               }}
             >
-              <ChatBubbleLeftRightIcon
+              <div
                 style={{
                   width: "64px",
                   height: "64px",
+                  borderRadius: "50%",
+                  background: "rgba(236, 223, 204, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   margin: "0 auto 1rem",
-                  color: "#475569",
-                }}
-              />
-              <div
-                style={{
-                  fontSize: "0.9375rem",
-                  fontWeight: "500",
-                  color: "#f1f5f9",
+                  border: "1px solid rgba(236, 223, 204, 0.2)",
                 }}
               >
+                <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>CHAT</span>
+              </div>
+              <div style={{ fontSize: "0.9375rem", fontWeight: "500" }}>
                 {selectedChannel || selectedUser
                   ? "No messages yet. Start chatting!"
                   : "Select a channel or user to start chatting"}
@@ -640,23 +590,22 @@ const EnhancedChatPanel: React.FC = () => {
                 key={index}
                 style={{
                   padding: "0.75rem 0.875rem",
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "rgba(236, 223, 204, 0.15)",
                   backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "12px",
+                  border: "1px solid rgba(236, 223, 204, 0.25)",
+                  borderRadius: "var(--radius-md)",
                   transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background =
-                    "rgba(255, 255, 255, 0.08)";
+                  e.currentTarget.style.background = "rgba(236, 223, 204, 0.2)";
                   e.currentTarget.style.borderColor =
-                    "rgba(255, 255, 255, 0.12)";
+                    "rgba(236, 223, 204, 0.35)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background =
-                    "rgba(255, 255, 255, 0.05)";
+                    "rgba(236, 223, 204, 0.15)";
                   e.currentTarget.style.borderColor =
-                    "rgba(255, 255, 255, 0.08)";
+                    "rgba(236, 223, 204, 0.25)";
                 }}
               >
                 <div
@@ -672,12 +621,13 @@ const EnhancedChatPanel: React.FC = () => {
                       width: "24px",
                       height: "24px",
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                      background:
+                        "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: "0.75rem",
-                      color: "white",
+                      color: "#ECDFCC",
                       fontWeight: "600",
                     }}
                   >
@@ -686,7 +636,7 @@ const EnhancedChatPanel: React.FC = () => {
                   <span
                     style={{
                       fontSize: "0.8125rem",
-                      color: "#f1f5f9",
+                      color: "#ECDFCC",
                       fontWeight: "600",
                     }}
                   >
@@ -695,7 +645,8 @@ const EnhancedChatPanel: React.FC = () => {
                   <span
                     style={{
                       fontSize: "0.6875rem",
-                      color: "#94a3b8",
+                      color: "#ECDFCC",
+                      opacity: 0.6,
                       marginLeft: "auto",
                     }}
                   >
@@ -708,7 +659,7 @@ const EnhancedChatPanel: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.9375rem",
-                    color: "#f1f5f9",
+                    color: "#ECDFCC",
                     lineHeight: "1.5",
                     paddingLeft: "2rem",
                   }}
@@ -725,9 +676,9 @@ const EnhancedChatPanel: React.FC = () => {
         <div
           style={{
             padding: "1rem 1.25rem",
-            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-            background: "rgba(10, 10, 15, 0.5)",
-            backdropFilter: "blur(10px)",
+            borderTop: "1px solid rgba(236, 223, 204, 0.25)",
+            background: "rgba(236, 223, 204, 0.12)",
+            backdropFilter: "blur(15px)",
             display: "flex",
             gap: "0.75rem",
           }}
@@ -739,16 +690,8 @@ const EnhancedChatPanel: React.FC = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             disabled={!isConnected || (!selectedChannel && !selectedUser)}
-            style={{
-              flex: 1,
-              padding: "0.875rem 1rem",
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              color: "#f1f5f9",
-              fontSize: "0.9375rem",
-              outline: "none",
-            }}
+            className="input-modern"
+            style={{ flex: 1 }}
           />
           <button
             onClick={sendMessage}
@@ -757,32 +700,15 @@ const EnhancedChatPanel: React.FC = () => {
               !inputValue.trim() ||
               (!selectedChannel && !selectedUser)
             }
+            className="btn-primary"
             style={{
-              padding: "0.875rem 1.5rem",
+              padding: "0.75rem 1.5rem",
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
-              background:
-                !isConnected ||
-                !inputValue.trim() ||
-                (!selectedChannel && !selectedUser)
-                  ? "rgba(220, 38, 38, 0.5)"
-                  : "linear-gradient(135deg, #dc2626, #991b1b)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              cursor:
-                !isConnected ||
-                !inputValue.trim() ||
-                (!selectedChannel && !selectedUser)
-                  ? "not-allowed"
-                  : "pointer",
-              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
             }}
           >
-            <PaperAirplaneIcon style={{ width: "18px", height: "18px" }} />
+            <span>📤</span>
             <span>Send</span>
           </button>
         </div>
@@ -832,16 +758,12 @@ const CreateChannelModal: React.FC<{
       onClick={onClose}
     >
       <div
+        className="card-glass-solid"
         style={{
           maxWidth: "450px",
           width: "100%",
           padding: "2rem",
           margin: "1rem",
-          background: "rgba(17, 17, 24, 0.95)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-          borderRadius: "20px",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -849,8 +771,9 @@ const CreateChannelModal: React.FC<{
           style={{
             fontSize: "1.5rem",
             fontWeight: "700",
-            color: "#f1f5f9",
+            color: "#ECDFCC",
             marginBottom: "1.5rem",
+            textShadow: "0 2px 4px rgba(0,0,0,0.3)",
           }}
         >
           Create Channel
@@ -863,7 +786,7 @@ const CreateChannelModal: React.FC<{
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#f1f5f9",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
               }}
             >
@@ -875,16 +798,7 @@ const CreateChannelModal: React.FC<{
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., general, announcements"
               required
-              style={{
-                width: "100%",
-                padding: "0.75rem 1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.9375rem",
-                outline: "none",
-              }}
+              style={{ width: "100%" }}
             />
           </div>
 
@@ -894,7 +808,7 @@ const CreateChannelModal: React.FC<{
                 display: "block",
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                color: "#f1f5f9",
+                color: "#ECDFCC",
                 marginBottom: "0.5rem",
               }}
             >
@@ -905,16 +819,7 @@ const CreateChannelModal: React.FC<{
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What's this channel about?"
-              style={{
-                width: "100%",
-                padding: "0.75rem 1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.9375rem",
-                outline: "none",
-              }}
+              style={{ width: "100%" }}
             />
           </div>
 
@@ -925,36 +830,10 @@ const CreateChannelModal: React.FC<{
               justifyContent: "flex-end",
             }}
           >
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                padding: "0.75rem 1.5rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.9375rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
+            <button type="button" onClick={onClose} className="btn-secondary">
               Cancel
             </button>
-            <button
-              type="submit"
-              style={{
-                padding: "0.75rem 1.5rem",
-                background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                border: "none",
-                borderRadius: "12px",
-                color: "white",
-                fontSize: "0.9375rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-              }}
-            >
+            <button type="submit" className="btn-primary">
               Create Channel
             </button>
           </div>

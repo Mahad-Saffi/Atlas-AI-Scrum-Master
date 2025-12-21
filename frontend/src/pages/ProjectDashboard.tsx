@@ -2,16 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { taskService } from "../services/taskService";
 import NotificationBell from "../components/NotificationBell";
-import {
-  ClipboardDocumentListIcon,
-  DocumentTextIcon,
-  BoltIcon,
-  CheckCircleIcon,
-  ChatBubbleLeftRightIcon,
-  ExclamationTriangleIcon,
-  BugAntIcon,
-  RectangleStackIcon,
-} from "@heroicons/react/24/solid";
 
 interface Project {
   id: string;
@@ -24,6 +14,8 @@ interface Task {
   id: string;
   title: string;
   status: string;
+  assignee_id?: number;
+  due_date?: string;
 }
 
 interface ProjectStats {
@@ -38,13 +30,17 @@ const ProjectDashboard: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [stats, setStats] = useState<ProjectStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (isInitialLoad = false) => {
       try {
-        setLoading(true);
+        if (isInitialLoad) {
+          setLoading(true);
+        }
+
         const projects = await taskService.getProjects();
         const currentProject = projects.find(
           (p: Project) => p.id === projectId
@@ -56,6 +52,8 @@ const ProjectDashboard: React.FC = () => {
 
         if (projectId) {
           const fetchedTasks = await taskService.getTasks(projectId);
+          setTasks(fetchedTasks);
+
           const todoCount = fetchedTasks.filter(
             (t: Task) => t.status === "To Do"
           ).length;
@@ -80,11 +78,20 @@ const ProjectDashboard: React.FC = () => {
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
-        setLoading(false);
+        if (isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchData();
+    fetchData(true);
+
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      fetchData(false);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [projectId]);
 
   if (loading) {
@@ -92,35 +99,17 @@ const ProjectDashboard: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "#0a0a0f",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
-          style={{
-            background: "rgba(17, 17, 24, 0.7)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "20px",
-            padding: "3rem",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              width: "48px",
-              height: "48px",
-              border: "3px solid #1a1a24",
-              borderTop: "3px solid #dc2626",
-              borderRadius: "50%",
-              animation: "spin 0.8s linear infinite",
-              margin: "0 auto 1rem",
-            }}
-          />
-          <p style={{ color: "#94a3b8" }}>Loading dashboard...</p>
-        </div>
+          className="spinner"
+          style={{ width: "40px", height: "40px", borderWidth: "3px" }}
+        />
       </div>
     );
   }
@@ -130,142 +119,72 @@ const ProjectDashboard: React.FC = () => {
       <div
         style={{
           minHeight: "100vh",
-          background: "#0a0a0f",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div
+          className="card-glass-solid"
           style={{
-            background: "rgba(17, 17, 24, 0.7)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "20px",
-            padding: "3rem",
             textAlign: "center",
-            maxWidth: "500px",
+            padding: "3rem",
           }}
         >
           <div
             style={{
-              width: "80px",
-              height: "80px",
+              width: "64px",
+              height: "64px",
+              background: "rgba(236, 223, 204, 0.1)",
               borderRadius: "50%",
-              background: "rgba(239, 68, 68, 0.15)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 1.5rem",
+              margin: "0 auto 1rem",
+              border: "1px solid rgba(236, 223, 204, 0.2)",
             }}
           >
-            <ExclamationTriangleIcon
-              style={{ width: "48px", height: "48px", color: "#dc2626" }}
-            />
+            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>?</span>
           </div>
           <h2
             style={{
-              fontSize: "1.75rem",
+              fontSize: "1.5rem",
               fontWeight: "700",
-              color: "#f1f5f9",
-              marginBottom: "0.75rem",
+              color: "#f5f5f5",
+              marginBottom: "1rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             Project Not Found
           </h2>
-          <p style={{ color: "#94a3b8", marginBottom: "2rem" }}>
-            The project you're looking for doesn't exist or has been removed.
-          </p>
-          <button
-            onClick={() => navigate("/")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "linear-gradient(135deg, #dc2626, #991b1b)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-            }}
-          >
-            ← Back to Dashboard
+          <button onClick={() => navigate("/")} className="btn-primary">
+            Back to Dashboard
           </button>
         </div>
       </div>
     );
   }
 
-  const statCards = [
-    {
-      label: "Total Tasks",
-      value: stats?.totalTasks || 0,
-      Icon: ClipboardDocumentListIcon,
-      color: "#64748b",
-      bg: "rgba(100, 116, 139, 0.15)",
-    },
-    {
-      label: "To Do",
-      value: stats?.todoTasks || 0,
-      Icon: DocumentTextIcon,
-      color: "#94a3b8",
-      bg: "rgba(148, 163, 184, 0.15)",
-    },
-    {
-      label: "In Progress",
-      value: stats?.inProgressTasks || 0,
-      Icon: BoltIcon,
-      color: "#f59e0b",
-      bg: "rgba(245, 158, 11, 0.15)",
-    },
-    {
-      label: "Completed",
-      value: stats?.doneTasks || 0,
-      Icon: CheckCircleIcon,
-      color: "#22c55e",
-      bg: "rgba(34, 197, 94, 0.15)",
-    },
-  ];
+  const recentTasks = tasks.slice(0, 5);
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0a0f",
         position: "relative",
+        zIndex: 1,
       }}
     >
-      {/* Background Grid Pattern */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-          `,
-          backgroundSize: "50px 50px",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-
       {/* Header */}
       <header
+        className="glass-header"
         style={{
+          padding: "1rem 2rem",
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(17, 17, 24, 0.85)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          padding: "1.25rem 2rem",
         }}
       >
         <div
@@ -275,158 +194,70 @@ const ProjectDashboard: React.FC = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "2rem",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
             <button
               onClick={() => navigate("/")}
+              className="btn-secondary"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(220, 38, 38, 0.15)",
-                border: "1px solid rgba(220, 38, 38, 0.3)",
-                borderRadius: "12px",
-                color: "#dc2626",
-                fontSize: "0.9375rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.25)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.15)";
+                padding: "0.5rem 1rem",
               }}
             >
-              ← Back to Home
+              Back
             </button>
             <h1
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#f1f5f9",
-                letterSpacing: "-0.01em",
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#ECDFCC",
               }}
             >
               {project.name}
             </h1>
           </div>
 
-          {/* Action Buttons */}
           <div
-            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
           >
             <button
-              onClick={() => navigate("/task-board")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "linear-gradient(135deg, #dc2626, #991b1b)",
-                border: "none",
-                borderRadius: "12px",
-                color: "white",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                boxShadow: "0 4px 16px rgba(220, 38, 38, 0.4)",
-              }}
-            >
-              <ClipboardDocumentListIcon
-                style={{ width: "16px", height: "16px" }}
-              />
-              Task Board
-            </button>
-
-            <button
-              onClick={() => navigate("/chat")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <ChatBubbleLeftRightIcon
-                style={{ width: "16px", height: "16px" }}
-              />
-              Chat
-            </button>
-
-            <button
-              onClick={() => navigate(`/project/${projectId}/risks`)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <ExclamationTriangleIcon
-                style={{ width: "16px", height: "16px" }}
-              />
-              Risks
-            </button>
-
-            <button
-              onClick={() => navigate(`/project/${projectId}/issues`)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <BugAntIcon style={{ width: "16px", height: "16px" }} />
-              Issues
-            </button>
-
-            <button
+              id="btn-epics"
               onClick={() => navigate(`/project/${projectId}/epics`)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1.25rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
+              className="btn-secondary"
             >
-              <RectangleStackIcon style={{ width: "16px", height: "16px" }} />
               Epics
             </button>
-
+            <button
+              id="btn-risks"
+              onClick={() => navigate(`/project/${projectId}/risk-dashboard`)}
+              className="btn-secondary"
+            >
+              Risks
+            </button>
+            <button
+              id="btn-issues"
+              onClick={() => navigate(`/project/${projectId}/issues`)}
+              className="btn-secondary"
+            >
+              Issues
+            </button>
+            <button
+              id="btn-task-board"
+              onClick={() => navigate("/task-board")}
+              className="btn-secondary"
+            >
+              View Task Board
+            </button>
             <NotificationBell />
           </div>
         </div>
@@ -435,101 +266,183 @@ const ProjectDashboard: React.FC = () => {
       {/* Main Content */}
       <main
         style={{
-          position: "relative",
-          zIndex: 1,
-          padding: "2rem 3rem",
           maxWidth: "1400px",
           margin: "0 auto",
+          padding: "2rem",
+          position: "relative",
+          zIndex: 1,
         }}
       >
-        {/* Project Description */}
-        {project.description && (
+        {/* Project Info */}
+        <div
+          className="card-glass-solid"
+          style={{
+            marginBottom: "2rem",
+          }}
+        >
           <p
             style={{
-              fontSize: "1.125rem",
-              color: "#94a3b8",
+              fontSize: "0.9375rem",
+              color: "#ECDFCC",
+              lineHeight: "1.6",
+            }}
+          >
+            {project.description || "No description provided"}
+          </p>
+          <div
+            style={{
+              marginTop: "1rem",
+              fontSize: "0.8125rem",
+              color: "#ECDFCC",
+            }}
+          >
+            Created{" "}
+            {new Date(project.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        {stats && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+              gap: "1rem",
               marginBottom: "2rem",
             }}
           >
-            {project.description}
-          </p>
-        )}
-
-        {/* Stats Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "1.5rem",
-            marginBottom: "3rem",
-          }}
-        >
-          {statCards.map((stat, index) => (
             <div
-              key={stat.label}
+              className="card"
               style={{
-                background: "rgba(17, 17, 24, 0.7)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "20px",
-                padding: "1.25rem 1.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
+                padding: "1rem",
+                textAlign: "center",
               }}
             >
               <div
                 style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "12px",
-                  background: stat.bg,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
+                  fontSize: "0.75rem",
+                  color: "#ECDFCC",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
                 }}
               >
-                <stat.Icon
-                  style={{ width: "24px", height: "24px", color: stat.color }}
-                />
+                Total Tasks
               </div>
-              <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    fontSize: "1.75rem",
-                    fontWeight: "700",
-                    color: "#f1f5f9",
-                    lineHeight: 1,
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  {stat.value}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "#94a3b8",
-                    lineHeight: 1,
-                  }}
-                >
-                  {stat.label}
-                </div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {stats.totalTasks}
               </div>
             </div>
-          ))}
-        </div>
+
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  color: "#ECDFCC",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
+                }}
+              >
+                To Do
+              </div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {stats.todoTasks}
+              </div>
+            </div>
+
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                textAlign: "center",
+                background: "rgba(245, 158, 11, 0.15)",
+                border: "1px solid rgba(245, 158, 11, 0.4)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  color: "#ECDFCC",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
+                }}
+              >
+                In Progress
+              </div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {stats.inProgressTasks}
+              </div>
+            </div>
+
+            <div
+              className="card"
+              style={{
+                padding: "1rem",
+                textAlign: "center",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  color: "#ECDFCC",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
+                }}
+              >
+                Completed
+              </div>
+              <div
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {stats.doneTasks}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Progress Section */}
         {stats && (
           <div
+            className="card-glass-solid"
             style={{
-              background: "rgba(17, 17, 24, 0.7)",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "20px",
-              padding: "2rem",
-              marginBottom: "3rem",
+              marginBottom: "2rem",
             }}
           >
             <div
@@ -537,74 +450,171 @@ const ProjectDashboard: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: "1.5rem",
+                marginBottom: "1rem",
               }}
             >
               <h3
                 style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "600",
-                  color: "#f1f5f9",
+                  fontSize: "1.125rem",
+                  fontWeight: "700",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
-                Project Progress
+                Overall Progress
               </h3>
               <span
                 style={{
-                  fontSize: "2rem",
+                  fontSize: "1.5rem",
                   fontWeight: "700",
-                  color: "#dc2626",
+                  color: "#ECDFCC",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 {stats.completionPercentage}%
               </span>
             </div>
-
             <div
               style={{
                 width: "100%",
                 height: "12px",
-                background: "rgba(26, 26, 36, 0.9)",
-                borderRadius: "20px",
+                background: "rgba(24, 28, 20, 0.3)",
+                borderRadius: "8px",
                 overflow: "hidden",
+                border: "1px solid rgba(236, 223, 204, 0.2)",
               }}
             >
               <div
                 style={{
                   width: `${stats.completionPercentage}%`,
                   height: "100%",
-                  background: "linear-gradient(90deg, #dc2626, #ef4444)",
-                  borderRadius: "20px",
-                  transition: "width 0.4s ease",
+                  background:
+                    "linear-gradient(90deg, #10b981 0%, #34d399 100%)",
+                  transition: "width 0.5s ease",
+                  boxShadow: "0 0 10px rgba(16, 185, 129, 0.5)",
                 }}
               />
             </div>
+          </div>
+        )}
 
+        {/* Recent Tasks */}
+        <div className="card-glass-solid">
+          <h3
+            style={{
+              fontSize: "1.125rem",
+              fontWeight: "700",
+              color: "#ECDFCC",
+              marginBottom: "1.25rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            }}
+          >
+            Recent Tasks
+          </h3>
+          {recentTasks.length === 0 ? (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "2rem",
+                color: "#ECDFCC",
+              }}
+            >
+              No tasks yet. Create tasks to get started.
+            </div>
+          ) : (
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: "1rem",
-                fontSize: "0.9375rem",
-                color: "#94a3b8",
+                flexDirection: "column",
+                gap: "0.75rem",
               }}
             >
-              <span>
-                {stats.doneTasks} of {stats.totalTasks} tasks completed
-              </span>
-              <span>{stats.totalTasks - stats.doneTasks} remaining</span>
+              {recentTasks.map((task) => (
+                <div
+                  key={task.id}
+                  style={{
+                    padding: "1rem",
+                    background: "rgba(236, 223, 204, 0.1)",
+                    backdropFilter: "blur(10px)",
+                    borderRadius: "8px",
+                    border: "1px solid rgba(236, 223, 204, 0.25)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: "0.75rem",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(236, 223, 204, 0.15)";
+                    e.currentTarget.style.borderColor =
+                      "rgba(236, 223, 204, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(236, 223, 204, 0.1)";
+                    e.currentTarget.style.borderColor =
+                      "rgba(236, 223, 204, 0.25)";
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: "200px" }}>
+                    <div
+                      style={{
+                        fontSize: "0.9375rem",
+                        fontWeight: "600",
+                        color: "#ECDFCC",
+                        marginBottom: "0.25rem",
+                      }}
+                    >
+                      {task.title}
+                    </div>
+                    {task.due_date && (
+                      <div
+                        style={{
+                          fontSize: "0.8125rem",
+                          color: "#ECDFCC",
+                          opacity: 0.8,
+                        }}
+                      >
+                        Due: {new Date(task.due_date).toLocaleDateString()}
+                      </div>
+                    )}
+                  </div>
+                  <span
+                    style={{
+                      padding: "0.375rem 0.75rem",
+                      fontSize: "0.8125rem",
+                      fontWeight: "600",
+                      borderRadius: "8px",
+                      background:
+                        task.status === "Done"
+                          ? "rgba(16, 185, 129, 0.2)"
+                          : task.status === "In Progress"
+                          ? "rgba(245, 158, 11, 0.2)"
+                          : "rgba(236, 223, 204, 0.2)",
+                      color:
+                        task.status === "Done"
+                          ? "#10b981"
+                          : task.status === "In Progress"
+                          ? "#f59e0b"
+                          : "#ECDFCC",
+                      border:
+                        task.status === "Done"
+                          ? "1px solid rgba(16, 185, 129, 0.5)"
+                          : task.status === "In Progress"
+                          ? "1px solid rgba(245, 158, 11, 0.5)"
+                          : "1px solid rgba(236, 223, 204, 0.3)",
+                    }}
+                  >
+                    {task.status}
+                  </span>
+                </div>
+              ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };
