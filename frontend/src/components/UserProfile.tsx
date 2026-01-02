@@ -271,7 +271,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   fontWeight: "600",
                 }}
               >
-                {user.username.charAt(0).toUpperCase()}
+                {user.username?.charAt(0).toUpperCase() || "U"}
               </div>
               <span
                 style={{
@@ -280,7 +280,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   color: "var(--color-text-primary)",
                 }}
               >
-                {user.username}
+                {user.username || "User"}
               </span>
             </div>
 

@@ -1,9 +1,9 @@
+/* Import General Sans Font */
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import General Sans Font */
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 
 /* Design System - Based on Reference */
 :root {

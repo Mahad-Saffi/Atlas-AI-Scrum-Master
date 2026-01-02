@@ -79,7 +79,7 @@ class AIAutomationService:
                     if not recovered:
                         raise step_error
                 
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.1)
                 await self._send_screenshot(websocket)
             
             await self._send_update(websocket, "Task completed successfully!", "success")
