@@ -180,4 +180,67 @@ class ProjectService:
             return epic_list
 
 
+    async def delete_project(self, project_id: str, user_id: int) -> dict:
+        """Delete a project and all its related data (epics, stories, tasks, issues, risks)"""
+        from app.services.organization_service import organization_service
+        from sqlalchemy import delete
+        
+        async with SessionLocal() as session:
+            async with session.begin():
+                # Verify user has access to this project
+                org = await organization_service.get_user_organization(user_id)
+                if not org:
+                    raise ValueError("User does not belong to an organization")
+                
+                # Get the project
+                result = await session.execute(
+                    select(Project).where(
+                        Project.id == project_id,
+                        Project.organization_id == str(org.id)
+                    )
+                )
+                project = result.scalar_one_or_none()
+                
+                if not project:
+                    raise ValueError("Project not found or access denied")
+                
+                # Delete all issues related to this project (no cascade set up)
+                from app.models.issue import Issue
+                await session.execute(
+                    delete(Issue).where(Issue.project_id == project_id)
+                )
+                
+                # Delete all tasks related to this project (some may not have story_id)
+                from app.models.task import Task
+                await session.execute(
+                    delete(Task).where(Task.project_id == project_id)
+                )
+                
+                # Delete all stories (through epics cascade)
+                from app.models.story import Story
+                epic_ids_result = await session.execute(
+                    select(Epic.id).where(Epic.project_id == project_id)
+                )
+                epic_ids = [row[0] for row in epic_ids_result.fetchall()]
+                
+                if epic_ids:
+                    await session.execute(
+                        delete(Story).where(Story.epic_id.in_(epic_ids))
+                    )
+                
+                # Delete all epics
+                await session.execute(
+                    delete(Epic).where(Epic.project_id == project_id)
+                )
+                
+                # Delete the project itself
+                await session.delete(project)
+                await session.commit()
+                
+                return {
+                    "message": "Project deleted successfully",
+                    "project_id": project_id
+                }
+
+
 project_service = ProjectService()

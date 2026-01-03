@@ -79,3 +79,13 @@ async def get_project_epics(project_id: str, current_user: dict = Depends(get_cu
     """Get all epics with stories and tasks for a project"""
     epics = await project_service.get_project_epics(project_id)
     return epics
+
+@router.delete("/{project_id}")
+async def delete_project(project_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete a project and all its related data"""
+    try:
+        result = await project_service.delete_project(project_id, current_user['id'])
+        return result
+    except ValueError as e:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail=str(e))

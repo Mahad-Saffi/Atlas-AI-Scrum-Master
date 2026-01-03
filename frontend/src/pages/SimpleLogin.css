@@ -125,9 +125,9 @@
 }
 
 .demo-btn {
-  background: linear-gradient(135deg, #991b1b, #7f1d1d) !important;
+  background: linear-gradient(135deg, #dc2626, #991b1b) !important;
   color: #ffffff !important;
-  border: 2px solid rgba(220, 38, 38, 0.4) !important;
+  border: 2px solid rgba(220, 38, 38, 0.3) !important;
   margin-top: 0 !important;
 }
 

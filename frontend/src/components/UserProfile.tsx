@@ -37,6 +37,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<string>("default");
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [deletingProjectId, setDeletingProjectId] = useState<string | null>(
+    null
+  );
   const [taskStats, setTaskStats] = useState({
     completed: 0,
     inProgress: 0,
@@ -125,6 +128,50 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
       }
     } catch (error) {
       console.error("Error fetching task stats:", error);
+    }
+  };
+
+  const handleDeleteProject = async (
+    projectId: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation(); // Prevent card click
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this project? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setDeletingProjectId(projectId);
+
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch(
+        `http://localhost:8000/api/v1/projects/${projectId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Remove project from state
+        setProjects(projects.filter((p) => p.id !== projectId));
+        alert("Project deleted successfully!");
+      } else {
+        const error = await response.json();
+        alert(`Failed to delete project: ${error.detail || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      alert("Failed to delete project. Please try again.");
+    } finally {
+      setDeletingProjectId(null);
     }
   };
 
@@ -714,6 +761,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 }}
                 onClick={() => navigate(`/project/${project.id}`)}
               >
+                {/* Project Icon */}
                 <div
                   style={{
                     position: "absolute",
@@ -781,7 +829,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                         color: theme.colors.text.muted,
                       }}
                     >
-                      Due:
+                      Date Created:
                     </span>
                     <span
                       style={{
@@ -793,19 +841,87 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                       {new Date(project.created_at).toLocaleDateString()}
                     </span>
                   </div>
-                  <button
-                    className="btn-secondary"
+                  <div
                     style={{
-                      padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-                      fontSize: theme.typography.fontSize.sm,
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/task-board`);
+                      display: "flex",
+                      gap: theme.spacing.sm,
                     }}
                   >
-                    View Tasks
-                  </button>
+                    <button
+                      className="btn-secondary"
+                      style={{
+                        padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                        fontSize: theme.typography.fontSize.sm,
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/task-board`);
+                      }}
+                    >
+                      View Tasks
+                    </button>
+                    <button
+                      onClick={(e) => handleDeleteProject(project.id, e)}
+                      disabled={deletingProjectId === project.id}
+                      style={{
+                        padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                        fontSize: theme.typography.fontSize.sm,
+                        background:
+                          deletingProjectId === project.id
+                            ? theme.colors.text.muted
+                            : `${theme.colors.status.error}15`,
+                        border: `1px solid ${theme.colors.status.error}40`,
+                        borderRadius: theme.borderRadius.md,
+                        color: theme.colors.status.error,
+                        cursor:
+                          deletingProjectId === project.id
+                            ? "not-allowed"
+                            : "pointer",
+                        transition: theme.effects.transition.normal,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: theme.spacing.xs,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (deletingProjectId !== project.id) {
+                          e.currentTarget.style.background = `${theme.colors.status.error}25`;
+                          e.currentTarget.style.borderColor =
+                            theme.colors.status.error;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (deletingProjectId !== project.id) {
+                          e.currentTarget.style.background = `${theme.colors.status.error}15`;
+                          e.currentTarget.style.borderColor = `${theme.colors.status.error}40`;
+                        }
+                      }}
+                      title="Delete project"
+                    >
+                      {deletingProjectId === project.id ? (
+                        <div
+                          className="spinner"
+                          style={{
+                            width: "12px",
+                            height: "12px",
+                            borderWidth: "2px",
+                          }}
+                        />
+                      ) : (
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
