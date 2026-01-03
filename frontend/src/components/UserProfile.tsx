@@ -245,7 +245,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 display: "flex",
                 alignItems: "center",
                 gap: theme.spacing.sm,
-                background: `linear-gradient(135deg, ${theme.colors.status.success}33 0%, ${theme.colors.brand.primary}33 100%)`,
+                background: `linear-gradient(135deg, ${theme.colors.status.success}33 0%, ${theme.colors.brand.red}33 100%)`,
                 border: `1px solid ${theme.colors.status.success}66`,
               }}
             >
@@ -268,7 +268,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 style={{
                   width: "28px",
                   height: "28px",
-                  background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                  background: theme.colors.brand.redGradient,
                   borderRadius: theme.borderRadius.full,
                   display: "flex",
                   alignItems: "center",
@@ -625,7 +625,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 width: "80px",
                 height: "80px",
-                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                background: theme.colors.brand.redGradient,
                 borderRadius: theme.borderRadius.full,
                 display: "flex",
                 alignItems: "center",

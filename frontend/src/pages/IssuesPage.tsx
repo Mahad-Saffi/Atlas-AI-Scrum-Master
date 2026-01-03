@@ -239,11 +239,11 @@ const IssuesPage: React.FC = () => {
       case "high":
         return theme.colors.status.warning;
       case "medium":
-        return theme.colors.brand.primary;
+        return theme.colors.brand.red;
       case "low":
-        return theme.colors.brand.secondary;
+        return theme.colors.text.secondary;
       default:
-        return theme.colors.brand.secondary;
+        return theme.colors.text.secondary;
     }
   };
 
@@ -256,9 +256,9 @@ const IssuesPage: React.FC = () => {
       case "resolved":
         return theme.colors.status.success;
       case "closed":
-        return theme.colors.brand.secondary;
+        return theme.colors.text.secondary;
       default:
-        return theme.colors.brand.secondary;
+        return theme.colors.text.secondary;
     }
   };
 
@@ -301,7 +301,7 @@ const IssuesPage: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
                 borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
@@ -587,7 +587,7 @@ const IssuesPage: React.FC = () => {
               style={{
                 width: "80px",
                 height: "80px",
-                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
                 borderRadius: theme.borderRadius.full,
                 display: "flex",
                 alignItems: "center",

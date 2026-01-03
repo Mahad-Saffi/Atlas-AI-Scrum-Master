@@ -112,7 +112,7 @@ const AIAssistant: React.FC = () => {
       case "warning":
         return `${theme.colors.status.warning}33`;
       case "action":
-        return `${theme.colors.brand.primary}33`;
+        return `${theme.colors.brand.red}33`;
       default:
         return `${theme.colors.background.card}1a`;
     }
@@ -127,7 +127,7 @@ const AIAssistant: React.FC = () => {
       case "warning":
         return theme.colors.status.warning;
       case "action":
-        return theme.colors.brand.primary;
+        return theme.colors.brand.red;
       default:
         return theme.colors.border.default;
     }
@@ -199,7 +199,7 @@ const AIAssistant: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
                 borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
@@ -308,7 +308,7 @@ Examples:
                   color: theme.colors.text.primary,
                   fontFamily: theme.typography.fontFamily.primary,
                   fontSize: theme.typography.fontSize.sm,
-                  boxShadow: theme.shadows.inner,
+                  boxShadow: theme.shadows.sm,
                   resize: "none",
                 }}
               />
