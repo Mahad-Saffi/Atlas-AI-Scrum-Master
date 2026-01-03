@@ -88,9 +88,7 @@
             {
               "type": "click",
               "selector": "#btn-chat",
-              "fallback_selectors": [
-                "//button[contains(text(), 'Chat')]"
-              ],
+              "fallback_selectors": ["//button[contains(text(), 'Chat')]"],
               "description": "Click Chat button in header"
             },
             {
@@ -143,9 +141,7 @@
             {
               "type": "count_elements",
               "selector": ".project-card",
-              "fallback_selectors": [
-                "[id^='project-card-']"
-              ],
+              "fallback_selectors": ["[id^='project-card-']"],
               "description": "Count project cards"
             }
           ],
@@ -162,9 +158,7 @@
             {
               "type": "click",
               "selector": "#btn-sign-out",
-              "fallback_selectors": [
-                "//button[contains(text(), 'Sign out')]"
-              ],
+              "fallback_selectors": ["//button[contains(text(), 'Sign out')]"],
               "description": "Click Sign out button"
             },
             {
@@ -226,7 +220,12 @@
       "url": "http://localhost:5173/project/{project_id}",
       "identifiers": {
         "url_pattern": "/project/[a-f0-9-]+$",
-        "elements": ["#btn-task-board", "#btn-epics", "#btn-issues", "#btn-risks"]
+        "elements": [
+          "#btn-task-board",
+          "#btn-epics",
+          "#btn-issues",
+          "#btn-risks"
+        ]
       },
       "description": "Individual project dashboard with stats and recent tasks",
       "actions": {
@@ -255,9 +254,7 @@
             {
               "type": "click",
               "selector": "#btn-issues",
-              "fallback_selectors": [
-                "//button[contains(text(), 'Issues')]"
-              ],
+              "fallback_selectors": ["//button[contains(text(), 'Issues')]"],
               "description": "Click Issues button"
             },
             {
@@ -273,9 +270,7 @@
             {
               "type": "click",
               "selector": "#btn-epics",
-              "fallback_selectors": [
-                "//button[contains(text(), 'Epics')]"
-              ],
+              "fallback_selectors": ["//button[contains(text(), 'Epics')]"],
               "description": "Click Epics button"
             },
             {
@@ -291,9 +286,7 @@
             {
               "type": "click",
               "selector": "#btn-risks",
-              "fallback_selectors": [
-                "//button[contains(text(), 'Risks')]"
-              ],
+              "fallback_selectors": ["//button[contains(text(), 'Risks')]"],
               "description": "Click Risks button"
             },
             {
@@ -405,36 +398,28 @@
             {
               "type": "input",
               "selector": "#input-issue-title",
-              "fallback_selectors": [
-                "input[placeholder*='title' i]"
-              ],
+              "fallback_selectors": ["input[placeholder*='title' i]"],
               "param": "title",
               "description": "Enter issue title"
             },
             {
               "type": "input",
               "selector": "#input-issue-description",
-              "fallback_selectors": [
-                "textarea"
-              ],
+              "fallback_selectors": ["textarea"],
               "param": "description",
               "description": "Enter issue description"
             },
             {
               "type": "select",
               "selector": "#select-issue-type",
-              "fallback_selectors": [
-                "select:first-of-type"
-              ],
+              "fallback_selectors": ["select:first-of-type"],
               "param": "type",
               "description": "Select issue type"
             },
             {
               "type": "select",
               "selector": "#select-issue-priority",
-              "fallback_selectors": [
-                "select:last-of-type"
-              ],
+              "fallback_selectors": ["select:last-of-type"],
               "param": "priority",
               "description": "Select priority"
             },
@@ -458,6 +443,41 @@
             "method": "GET",
             "success_condition": "len(response) > previous_count"
           }
+        }
+      }
+    },
+    "ai_assistant": {
+      "url": "http://localhost:5173/ai-assistant",
+      "identifiers": {
+        "url_pattern": "/ai-assistant",
+        "elements": ["textarea", "button.btn-primary"]
+      },
+      "description": "AI Assistant automation page for browser-based task automation",
+      "actions": {
+        "run_automation": {
+          "description": "Run an automation task using AI",
+          "steps": [
+            {
+              "type": "input",
+              "selector": "textarea",
+              "fallback_selectors": ["textarea[placeholder*='task' i]"],
+              "param": "task",
+              "description": "Enter automation task description"
+            },
+            {
+              "type": "click",
+              "selector": "button.btn-primary",
+              "fallback_selectors": [
+                "//button[contains(text(), 'Start Automation')]"
+              ],
+              "description": "Click Start Automation button"
+            },
+            {
+              "type": "wait",
+              "seconds": 5,
+              "description": "Wait for automation to start"
+            }
+          ]
         }
       }
     }
