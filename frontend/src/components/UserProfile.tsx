@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import OrganizationInfo from "./OrganizationInfo";
+import {
+  RocketLaunchIcon,
+  FolderIcon,
+  HashtagIcon,
+  CheckCircleIcon,
+  ClockIcon,
+} from "@heroicons/react/24/solid";
+import theme from "../styles/theme";
 
 interface User {
   id: number;
@@ -132,7 +140,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
           position: "sticky",
           top: 0,
           zIndex: 100,
@@ -151,14 +159,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.75rem",
+              gap: theme.spacing.md,
             }}
           >
             <div
               style={{
                 width: "32px",
                 height: "32px",
-                borderRadius: "var(--radius-md)",
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -167,18 +175,18 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             >
               <img
                 src={logo}
-                alt="Atlas AI"
+                alt="Ideal Assistant"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
-              Atlas AI
+              Ideal Assistant
             </h1>
           </div>
 
@@ -186,7 +194,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <button
@@ -196,7 +204,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
+                gap: theme.spacing.sm,
               }}
             >
               <span>Chat</span>
@@ -209,7 +217,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
+                gap: theme.spacing.sm,
               }}
             >
               <span>Team</span>
@@ -222,7 +230,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
+                gap: theme.spacing.sm,
               }}
             >
               <span>+</span>
@@ -236,48 +244,47 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)",
-                border: "1px solid rgba(16, 185, 129, 0.4)",
+                gap: theme.spacing.sm,
+                background: `linear-gradient(135deg, ${theme.colors.status.success}33 0%, ${theme.colors.brand.primary}33 100%)`,
+                border: `1px solid ${theme.colors.status.success}66`,
               }}
             >
-              <span>AI Assistant</span>
+              <span>AI Automation</span>
             </button>
 
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.375rem 0.75rem",
-                background: "rgba(236, 223, 204, 0.8)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid rgba(236, 223, 204, 0.3)",
+                gap: theme.spacing.sm,
+                padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                background: `${theme.colors.background.card}cc`,
+                backdropFilter: theme.effects.backdropBlur.md,
+                borderRadius: theme.borderRadius.md,
+                border: `1px solid ${theme.colors.border.light}`,
               }}
             >
               <div
                 style={{
                   width: "28px",
                   height: "28px",
-                  background:
-                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                  borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                  borderRadius: theme.borderRadius.full,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#ECDFCC",
-                  fontSize: "0.8125rem",
-                  fontWeight: "600",
+                  color: theme.colors.text.primary,
+                  fontSize: theme.typography.fontSize.sm,
+                  fontWeight: theme.typography.fontWeight.semibold,
                 }}
               >
                 {user.username?.charAt(0).toUpperCase() || "U"}
               </div>
               <span
                 style={{
-                  fontSize: "0.875rem",
-                  fontWeight: "500",
-                  color: "var(--color-text-primary)",
+                  fontSize: theme.typography.fontSize.sm,
+                  fontWeight: theme.typography.fontWeight.medium,
+                  color: theme.colors.text.primary,
                 }}
               >
                 {user.username || "User"}
@@ -289,7 +296,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               onClick={onSignOut}
               className="btn-secondary"
               style={{
-                padding: "0.5rem 1rem",
+                padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
               }}
             >
               Sign out
@@ -303,13 +310,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "2rem",
+          padding: theme.spacing["2xl"],
           position: "relative",
           zIndex: 1,
         }}
       >
         {/* Organization Info */}
-        <div style={{ marginBottom: "2rem" }}>
+        <div style={{ marginBottom: theme.spacing["2xl"] }}>
           <OrganizationInfo />
         </div>
 
@@ -318,44 +325,55 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1rem",
-            marginBottom: "2rem",
+            gap: theme.spacing.lg,
+            marginBottom: theme.spacing["2xl"],
           }}
         >
           <div
             className="card"
             style={{
-              padding: "1.25rem 1.5rem",
+              padding: `${theme.spacing.xl} ${theme.spacing["2xl"]}`,
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: theme.colors.background.hover,
+                borderRadius: theme.borderRadius.md,
               }}
             >
-              #
+              <HashtagIcon
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  color: theme.colors.text.primary,
+                }}
+              />
             </div>
             <div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  lineHeight: "1",
-                  marginBottom: "0.375rem",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  lineHeight: theme.typography.lineHeight.tight,
+                  marginBottom: theme.spacing.sm,
                 }}
               >
                 {projects.length}
               </div>
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "#ECDFCC",
-                  fontWeight: "500",
+                  fontSize: theme.typography.fontSize.sm,
+                  color: theme.colors.text.secondary,
+                  fontWeight: theme.typography.fontWeight.medium,
                   whiteSpace: "nowrap",
                 }}
               >
@@ -367,37 +385,48 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           <div
             className="card"
             style={{
-              padding: "1.25rem 1.5rem",
+              padding: `${theme.spacing.xl} ${theme.spacing["2xl"]}`,
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: `rgba(34, 197, 94, 0.1)`,
+                borderRadius: theme.borderRadius.md,
               }}
             >
-              OK
+              <CheckCircleIcon
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  color: theme.colors.status.success,
+                }}
+              />
             </div>
             <div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  lineHeight: "1",
-                  marginBottom: "0.375rem",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  lineHeight: theme.typography.lineHeight.tight,
+                  marginBottom: theme.spacing.sm,
                 }}
               >
                 {taskStats.completed}
               </div>
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "#ECDFCC",
-                  fontWeight: "500",
+                  fontSize: theme.typography.fontSize.sm,
+                  color: theme.colors.text.secondary,
+                  fontWeight: theme.typography.fontWeight.medium,
                   whiteSpace: "nowrap",
                 }}
               >
@@ -409,37 +438,48 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           <div
             className="card"
             style={{
-              padding: "1.25rem 1.5rem",
+              padding: `${theme.spacing.xl} ${theme.spacing["2xl"]}`,
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <div
               style={{
-                fontSize: "2rem",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: `rgba(245, 158, 11, 0.1)`,
+                borderRadius: theme.borderRadius.md,
               }}
             >
-              IP
+              <ClockIcon
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  color: theme.colors.status.warning,
+                }}
+              />
             </div>
             <div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  lineHeight: "1",
-                  marginBottom: "0.375rem",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  lineHeight: theme.typography.lineHeight.tight,
+                  marginBottom: theme.spacing.sm,
                 }}
               >
                 {taskStats.inProgress}
               </div>
               <div
                 style={{
-                  fontSize: "0.875rem",
-                  color: "#ECDFCC",
-                  fontWeight: "500",
+                  fontSize: theme.typography.fontSize.sm,
+                  color: theme.colors.text.secondary,
+                  fontWeight: theme.typography.fontWeight.medium,
                   whiteSpace: "nowrap",
                 }}
               >
@@ -452,20 +492,20 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
         {/* Projects Section */}
         <div
           style={{
-            marginBottom: "1.5rem",
+            marginBottom: theme.spacing.xl,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "1rem",
+            gap: theme.spacing.lg,
           }}
         >
           <h2
             style={{
-              fontSize: "1.75rem",
-              fontWeight: "700",
-              color: "#ECDFCC",
-              textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+              fontSize: theme.typography.fontSize["2xl"],
+              fontWeight: theme.typography.fontWeight.bold,
+              color: theme.colors.text.primary,
+              textShadow: theme.effects.textShadow.md,
             }}
           >
             Your Projects
@@ -473,7 +513,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           <div
             style={{
               display: "flex",
-              gap: "0.75rem",
+              gap: theme.spacing.md,
               position: "relative",
             }}
           >
@@ -481,7 +521,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             <div style={{ position: "relative" }}>
               <button
                 className="btn-secondary"
-                style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
+                style={{
+                  padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+                  fontSize: theme.typography.fontSize.sm,
+                }}
                 onClick={() => setShowSortMenu(!showSortMenu)}
               >
                 Sort by
@@ -490,15 +533,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                 <div
                   style={{
                     position: "absolute",
-                    top: "calc(100% + 0.5rem)",
+                    top: `calc(100% + ${theme.spacing.sm})`,
                     right: 0,
-                    background: "rgba(236, 223, 204, 0.98)",
-                    border: "2px solid #697565",
-                    borderRadius: "8px",
-                    padding: "0.5rem",
+                    background: `${theme.colors.background.card}fa`,
+                    border: `2px solid ${theme.colors.border.default}`,
+                    borderRadius: theme.borderRadius.lg,
+                    padding: theme.spacing.sm,
                     minWidth: "180px",
                     zIndex: 1000,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    boxShadow: theme.shadows.lg,
                   }}
                 >
                   {[
@@ -515,24 +558,28 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                       }}
                       style={{
                         width: "100%",
-                        padding: "0.5rem 0.75rem",
+                        padding: `${theme.spacing.sm} ${theme.spacing.md}`,
                         textAlign: "left",
                         background:
                           sortBy === option.value
-                            ? "rgba(105, 117, 101, 0.3)"
+                            ? theme.colors.background.hover
                             : "transparent",
                         border: "none",
-                        borderRadius: "4px",
+                        borderRadius: theme.borderRadius.sm,
                         cursor: "pointer",
-                        fontSize: "0.875rem",
-                        color: "#181C14",
-                        fontWeight: sortBy === option.value ? "600" : "500",
-                        marginBottom: "0.25rem",
+                        fontSize: theme.typography.fontSize.sm,
+                        color: theme.colors.text.primary,
+                        fontWeight:
+                          sortBy === option.value
+                            ? theme.typography.fontWeight.semibold
+                            : theme.typography.fontWeight.medium,
+                        marginBottom: theme.spacing.xs,
+                        transition: theme.effects.transition.fast,
                       }}
                       onMouseEnter={(e) => {
                         if (sortBy !== option.value) {
                           e.currentTarget.style.background =
-                            "rgba(105, 117, 101, 0.15)";
+                            theme.colors.background.hover + "66";
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -557,7 +604,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              padding: "4rem",
+              padding: theme.spacing["4xl"],
             }}
           >
             <div
@@ -569,44 +616,44 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
           <div
             className="card-glass-solid"
             style={{
-              padding: "4rem 2rem",
+              padding: `${theme.spacing["4xl"]} ${theme.spacing["2xl"]}`,
               textAlign: "center",
-              border: "2px dashed rgba(236, 223, 204, 0.4)",
+              border: `2px dashed ${theme.colors.border.light}66`,
             }}
           >
             <div
               style={{
                 width: "80px",
                 height: "80px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "50%",
+                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                borderRadius: theme.borderRadius.full,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "3rem",
-                margin: "0 auto 1.5rem",
+                fontSize: theme.typography.fontSize["3xl"],
+                margin: `0 auto ${theme.spacing.xl}`,
               }}
             >
               T
             </div>
             <h3
               style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                marginBottom: "0.75rem",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["2xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.md,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               No projects yet
             </h3>
             <p
               style={{
-                fontSize: "1rem",
-                color: "#ECDFCC",
-                marginBottom: "2rem",
+                fontSize: theme.typography.fontSize.base,
+                color: theme.colors.text.secondary,
+                marginBottom: theme.spacing["2xl"],
                 maxWidth: "500px",
-                margin: "0 auto 2rem",
+                margin: `0 auto ${theme.spacing["2xl"]}`,
               }}
             >
               Create your first project to get started with AI-powered project
@@ -618,9 +665,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
               style={{
                 padding: "0.875rem 2rem",
                 fontSize: "1rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                margin: "0 auto",
               }}
             >
-              🚀 Create Your First Project
+              <RocketLaunchIcon style={{ width: "20px", height: "20px" }} />
+              Create Your First Project
             </button>
           </div>
         ) : (
@@ -628,7 +680,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-              gap: "1.25rem",
+              gap: theme.spacing.xl,
             }}
           >
             {(() => {
@@ -669,35 +721,39 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     right: "1rem",
                     width: "40px",
                     height: "40px",
-                    background:
-                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                    background: theme.colors.brand.redGradient,
                     borderRadius: "8px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "1.25rem",
                   }}
                 >
-                  📁
+                  <FolderIcon
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      color: theme.colors.text.primary,
+                    }}
+                  />
                 </div>
                 <h3
                   style={{
-                    fontSize: "1.25rem",
-                    fontWeight: "700",
-                    color: "#ECDFCC",
-                    marginBottom: "0.75rem",
-                    paddingRight: "3rem",
-                    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                    fontSize: theme.typography.fontSize.xl,
+                    fontWeight: theme.typography.fontWeight.bold,
+                    color: theme.colors.text.primary,
+                    marginBottom: theme.spacing.md,
+                    paddingRight: theme.spacing["3xl"],
+                    textShadow: theme.effects.textShadow.sm,
                   }}
                 >
                   {project.name}
                 </h3>
                 <p
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#ECDFCC",
-                    marginBottom: "1.25rem",
-                    lineHeight: "1.6",
+                    fontSize: theme.typography.fontSize.base,
+                    color: theme.colors.text.secondary,
+                    marginBottom: theme.spacing.xl,
+                    lineHeight: theme.typography.lineHeight.relaxed,
                     minHeight: "3rem",
                   }}
                 >
@@ -708,23 +764,30 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    paddingTop: "1rem",
-                    borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+                    paddingTop: theme.spacing.lg,
+                    borderTop: `1px solid ${theme.colors.border.light}`,
                   }}
                 >
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.5rem",
+                      gap: theme.spacing.sm,
                     }}
                   >
-                    <span style={{ fontSize: "0.75rem", color: "#a0a0a0" }}>Due:</span>
                     <span
                       style={{
-                        fontSize: "0.875rem",
-                        color: "#ECDFCC",
-                        fontWeight: "500",
+                        fontSize: theme.typography.fontSize.xs,
+                        color: theme.colors.text.muted,
+                      }}
+                    >
+                      Due:
+                    </span>
+                    <span
+                      style={{
+                        fontSize: theme.typography.fontSize.sm,
+                        color: theme.colors.text.secondary,
+                        fontWeight: theme.typography.fontWeight.medium,
                       }}
                     >
                       {new Date(project.created_at).toLocaleDateString()}
@@ -733,8 +796,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSignOut }) => {
                   <button
                     className="btn-secondary"
                     style={{
-                      padding: "0.375rem 0.875rem",
-                      fontSize: "0.8125rem",
+                      padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                      fontSize: theme.typography.fontSize.sm,
                     }}
                     onClick={(e) => {
                       e.stopPropagation();

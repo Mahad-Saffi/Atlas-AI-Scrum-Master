@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import EnhancedChatPanel from "../components/EnhancedChatPanel";
 import NotificationBell from "../components/NotificationBell";
+import theme from "../styles/theme";
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,23 +46,23 @@ const ChatPage: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
+                background: theme.colors.brand.redGradient,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.75rem",
-                fontWeight: "bold",
-                color: "#f5f5f5",
+                fontSize: theme.typography.fontSize.xs,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.white,
               }}
             >
               Chat
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               Team Chat

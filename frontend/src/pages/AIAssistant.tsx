@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import NotificationBell from "../components/NotificationBell";
+import theme from "../styles/theme";
 
 interface LogEntry {
   message: string;
@@ -105,30 +106,30 @@ const AIAssistant: React.FC = () => {
   const getLevelColor = (level: string) => {
     switch (level) {
       case "error":
-        return "rgba(239, 68, 68, 0.2)";
+        return `${theme.colors.status.error}33`;
       case "success":
-        return "rgba(16, 185, 129, 0.2)";
+        return `${theme.colors.status.success}33`;
       case "warning":
-        return "rgba(245, 158, 11, 0.2)";
+        return `${theme.colors.status.warning}33`;
       case "action":
-        return "rgba(59, 130, 246, 0.2)";
+        return `${theme.colors.brand.primary}33`;
       default:
-        return "rgba(236, 223, 204, 0.1)";
+        return `${theme.colors.background.card}1a`;
     }
   };
 
   const getLevelBorderColor = (level: string) => {
     switch (level) {
       case "error":
-        return "#ef4444";
+        return theme.colors.status.error;
       case "success":
-        return "#10b981";
+        return theme.colors.status.success;
       case "warning":
-        return "#f59e0b";
+        return theme.colors.status.warning;
       case "action":
-        return "#3b82f6";
+        return theme.colors.brand.primary;
       default:
-        return "rgba(236, 223, 204, 0.5)";
+        return theme.colors.border.default;
     }
   };
 
@@ -164,7 +165,7 @@ const AIAssistant: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "0.75rem 2rem",
+          padding: `${theme.spacing.md} ${theme.spacing["2xl"]}`,
           flexShrink: 0,
         }}
       >
@@ -177,11 +178,20 @@ const AIAssistant: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: theme.spacing.lg,
+            }}
+          >
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem", fontSize: "1.25rem" }}
+              style={{
+                padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+                fontSize: theme.typography.fontSize.xl,
+              }}
             >
               Back
             </button>
@@ -189,37 +199,43 @@ const AIAssistant: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
+                background: `linear-gradient(135deg, ${theme.colors.brand.secondary} 0%, ${theme.colors.brand.tertiary} 100%)`,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.875rem",
-                fontWeight: "bold",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
               }}
             >
               AI
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               AI Assistant
             </h1>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: theme.spacing.lg,
+            }}
+          >
             {isRunning && (
               <button
                 onClick={stopAutomation}
                 className="btn-secondary"
                 style={{
-                  background: "rgba(239, 68, 68, 0.2)",
-                  border: "1px solid rgba(239, 68, 68, 0.4)",
-                  color: "#ECDFCC",
+                  background: `${theme.colors.status.error}33`,
+                  border: `1px solid ${theme.colors.status.error}66`,
+                  color: theme.colors.text.primary,
                 }}
               >
                 Stop
@@ -235,7 +251,7 @@ const AIAssistant: React.FC = () => {
         style={{
           flex: 1,
           overflow: "hidden",
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
         }}
       >
         <div
@@ -245,7 +261,7 @@ const AIAssistant: React.FC = () => {
             height: "100%",
             display: "grid",
             gridTemplateColumns: "1fr 1.5fr",
-            gap: "1.5rem",
+            gap: theme.spacing.xl,
           }}
         >
           {/* Left Panel - Task Input and Logs */}
@@ -253,23 +269,20 @@ const AIAssistant: React.FC = () => {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "1rem",
+              gap: theme.spacing.lg,
               height: "100%",
               overflow: "hidden",
             }}
           >
             {/* Task Input */}
-            <div
-              className="card-glass-solid"
-              style={{ flexShrink: 0 }}
-            >
+            <div className="card-glass-solid" style={{ flexShrink: 0 }}>
               <h2
                 style={{
-                  fontSize: "1rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  marginBottom: "0.75rem",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize.base,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  marginBottom: theme.spacing.md,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 Task Input
@@ -287,15 +300,15 @@ Examples:
                 disabled={isRunning}
                 style={{
                   width: "100%",
-                  marginBottom: "0.75rem",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(236, 223, 204, 0.3)",
-                  backgroundColor: "#1a1a1a",
-                  color: "#f5f5f5",
-                  fontFamily: "inherit",
-                  fontSize: "0.875rem",
-                  boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.4)",
+                  marginBottom: theme.spacing.md,
+                  padding: theme.spacing.md,
+                  borderRadius: theme.borderRadius.lg,
+                  border: `1px solid ${theme.colors.border.light}`,
+                  backgroundColor: theme.colors.background.tertiary,
+                  color: theme.colors.text.primary,
+                  fontFamily: theme.typography.fontFamily.primary,
+                  fontSize: theme.typography.fontSize.sm,
+                  boxShadow: theme.shadows.inner,
                   resize: "none",
                 }}
               />
@@ -306,12 +319,12 @@ Examples:
                 className="btn-primary"
                 style={{
                   width: "100%",
-                  padding: "0.75rem",
-                  fontSize: "0.9375rem",
+                  padding: theme.spacing.md,
+                  fontSize: theme.typography.fontSize.base,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "0.5rem",
+                  gap: theme.spacing.sm,
                 }}
               >
                 {isRunning ? (
@@ -345,11 +358,11 @@ Examples:
             >
               <h3
                 style={{
-                  fontSize: "1rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  marginBottom: "0.75rem",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize.base,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  marginBottom: theme.spacing.md,
+                  textShadow: theme.effects.textShadow.sm,
                   flexShrink: 0,
                 }}
               >
@@ -359,10 +372,10 @@ Examples:
                 style={{
                   flex: 1,
                   overflowY: "auto",
-                  background: "#1a1a1a",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(236, 223, 204, 0.2)",
+                  background: theme.colors.background.tertiary,
+                  padding: theme.spacing.md,
+                  borderRadius: theme.borderRadius.lg,
+                  border: `1px solid ${theme.colors.border.light}`,
                   minHeight: 0,
                 }}
               >
@@ -370,9 +383,9 @@ Examples:
                   <div
                     style={{
                       textAlign: "center",
-                      padding: "2rem 1rem",
-                      color: "#a0a0a0",
-                      fontSize: "0.875rem",
+                      padding: `${theme.spacing["2xl"]} ${theme.spacing.lg}`,
+                      color: theme.colors.text.muted,
+                      fontSize: theme.typography.fontSize.sm,
                     }}
                   >
                     Logs will appear here when automation starts
@@ -382,34 +395,40 @@ Examples:
                     <div
                       key={idx}
                       style={{
-                        padding: "0.5rem 0.75rem",
-                        marginBottom: "0.375rem",
+                        padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+                        marginBottom: theme.spacing.xs,
                         background: getLevelColor(log.level),
-                        borderRadius: "4px",
-                        fontSize: "0.8125rem",
-                        color: "#f5f5f5",
-                        borderLeft: `3px solid ${getLevelBorderColor(log.level)}`,
+                        borderRadius: theme.borderRadius.sm,
+                        fontSize: theme.typography.fontSize.sm,
+                        color: theme.colors.text.primary,
+                        borderLeft: `3px solid ${getLevelBorderColor(
+                          log.level
+                        )}`,
                       }}
                     >
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "0.5rem",
-                          fontSize: "0.75rem",
+                          gap: theme.spacing.sm,
+                          fontSize: theme.typography.fontSize.xs,
                         }}
                       >
                         <span
                           style={{
-                            fontWeight: "600",
+                            fontWeight: theme.typography.fontWeight.semibold,
                             color: getLevelBorderColor(log.level),
                           }}
                         >
                           {getLevelLabel(log.level)}
                         </span>
-                        <span style={{ color: "#a0a0a0" }}>{log.timestamp}</span>
+                        <span style={{ color: theme.colors.text.muted }}>
+                          {log.timestamp}
+                        </span>
                       </div>
-                      <div style={{ marginTop: "0.25rem" }}>{log.message}</div>
+                      <div style={{ marginTop: theme.spacing.xs }}>
+                        {log.message}
+                      </div>
                     </div>
                   ))
                 )}
@@ -430,11 +449,11 @@ Examples:
           >
             <h2
               style={{
-                fontSize: "1rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                marginBottom: "0.75rem",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize.base,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.md,
+                textShadow: theme.effects.textShadow.sm,
                 flexShrink: 0,
               }}
             >
@@ -444,7 +463,7 @@ Examples:
               style={{
                 flex: 1,
                 overflow: "hidden",
-                borderRadius: "8px",
+                borderRadius: theme.borderRadius.lg,
                 minHeight: 0,
               }}
             >
@@ -457,26 +476,26 @@ Examples:
                       width: "100%",
                       height: "100%",
                       objectFit: "contain",
-                      border: "2px solid rgba(236, 223, 204, 0.3)",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                      border: `2px solid ${theme.colors.border.light}`,
+                      borderRadius: theme.borderRadius.lg,
+                      boxShadow: theme.shadows.lg,
                     }}
                   />
                   {isRunning && (
                     <div
                       style={{
                         position: "absolute",
-                        top: "0.75rem",
-                        right: "0.75rem",
-                        padding: "0.375rem 0.75rem",
-                        background: "#10b981",
+                        top: theme.spacing.md,
+                        right: theme.spacing.md,
+                        padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                        background: theme.colors.status.success,
                         color: "#ffffff",
-                        borderRadius: "6px",
-                        fontSize: "0.75rem",
-                        fontWeight: "600",
+                        borderRadius: theme.borderRadius.md,
+                        fontSize: theme.typography.fontSize.xs,
+                        fontWeight: theme.typography.fontWeight.semibold,
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.375rem",
+                        gap: theme.spacing.xs,
                       }}
                     >
                       <div
@@ -499,22 +518,22 @@ Examples:
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    background: "#1a1a1a",
-                    borderRadius: "8px",
-                    border: "2px dashed rgba(236, 223, 204, 0.3)",
+                    background: theme.colors.background.tertiary,
+                    borderRadius: theme.borderRadius.lg,
+                    border: `2px dashed ${theme.colors.border.light}`,
                   }}
                 >
                   <div
                     style={{
                       width: "48px",
                       height: "48px",
-                      background: "rgba(236, 223, 204, 0.1)",
-                      borderRadius: "8px",
+                      background: `${theme.colors.background.card}1a`,
+                      borderRadius: theme.borderRadius.lg,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: "1rem",
-                      border: "1px solid rgba(236, 223, 204, 0.3)",
+                      marginBottom: theme.spacing.lg,
+                      border: `1px solid ${theme.colors.border.light}`,
                     }}
                   >
                     <svg
@@ -522,7 +541,7 @@ Examples:
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#f5f5f5"
+                      stroke={theme.colors.text.primary}
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -534,17 +553,17 @@ Examples:
                   </div>
                   <p
                     style={{
-                      color: "#e0e0e0",
-                      fontSize: "0.875rem",
+                      color: theme.colors.text.secondary,
+                      fontSize: theme.typography.fontSize.sm,
                     }}
                   >
                     Browser view will appear here when automation starts
                   </p>
                   <p
                     style={{
-                      color: "#808080",
-                      fontSize: "0.75rem",
-                      marginTop: "0.5rem",
+                      color: theme.colors.text.muted,
+                      fontSize: theme.typography.fontSize.xs,
+                      marginTop: theme.spacing.sm,
                       textAlign: "center",
                       maxWidth: "300px",
                     }}

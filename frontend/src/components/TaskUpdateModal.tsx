@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import theme from "../styles/theme";
 
 interface TaskUpdateModalProps {
   task: any;
@@ -71,13 +72,13 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        background: "rgba(24, 28, 20, 0.7)",
-        backdropFilter: "blur(4px)",
+        background: theme.colors.overlay.light,
+        backdropFilter: theme.effects.backdropBlur.sm,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1000,
-        padding: "1rem",
+        padding: theme.spacing.lg,
       }}
       onClick={onClose}
     >
@@ -94,49 +95,49 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
       >
         <h2
           style={{
-            fontSize: "1.5rem",
-            fontWeight: "700",
-            color: "#181C14",
-            marginBottom: "1.5rem",
+            fontSize: theme.typography.fontSize["2xl"],
+            fontWeight: theme.typography.fontWeight.bold,
+            color: theme.colors.text.primary,
+            marginBottom: theme.spacing["2xl"],
           }}
         >
           Update Task
         </h2>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Task Name
             </label>
             <div
               style={{
-                padding: "0.75rem",
-                background: "rgba(236, 223, 204, 0.5)",
-                borderRadius: "var(--radius-md)",
-                fontSize: "0.9375rem",
-                color: "#181C14",
+                padding: theme.spacing.md,
+                background: theme.colors.background.hover,
+                borderRadius: theme.borderRadius.md,
+                fontSize: theme.typography.fontSize.base,
+                color: theme.colors.text.primary,
               }}
             >
               {task.title}
             </div>
           </div>
 
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Status
@@ -154,14 +155,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
             </select>
           </div>
 
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Assign To
@@ -182,14 +183,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
             </select>
           </div>
 
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Estimated Hours
@@ -206,14 +207,14 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
             />
           </div>
 
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Progress: {formData.progress_percentage}%
@@ -233,21 +234,21 @@ const TaskUpdateModal: React.FC<TaskUpdateModalProps> = ({
                 width: "100%",
                 height: "8px",
                 borderRadius: "4px",
-                background: `linear-gradient(to right, #697565 0%, #697565 ${formData.progress_percentage}%, #ECDFCC ${formData.progress_percentage}%, #ECDFCC 100%)`,
+                background: `linear-gradient(to right, ${theme.colors.brand.red} 0%, ${theme.colors.brand.red} ${formData.progress_percentage}%, ${theme.colors.background.hover} ${formData.progress_percentage}%, ${theme.colors.background.hover} 100%)`,
                 outline: "none",
                 appearance: "none",
               }}
             />
           </div>
 
-          <div style={{ marginBottom: "1.5rem" }}>
+          <div style={{ marginBottom: theme.spacing["2xl"] }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#3C3D37",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Due Date

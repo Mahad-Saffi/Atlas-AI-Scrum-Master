@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { taskService } from "../services/taskService";
 import NotificationBell from "../components/NotificationBell";
+import theme from "../styles/theme";
 
 interface Project {
   id: string;
@@ -130,31 +131,38 @@ const ProjectDashboard: React.FC = () => {
           className="card-glass-solid"
           style={{
             textAlign: "center",
-            padding: "3rem",
+            padding: theme.spacing["4xl"],
           }}
         >
           <div
             style={{
               width: "64px",
               height: "64px",
-              background: "rgba(236, 223, 204, 0.1)",
-              borderRadius: "50%",
+              background: `${theme.colors.background.card}1a`,
+              borderRadius: theme.borderRadius.full,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 1rem",
-              border: "1px solid rgba(236, 223, 204, 0.2)",
+              margin: `0 auto ${theme.spacing.lg}`,
+              border: `1px solid ${theme.colors.border.light}`,
             }}
           >
-            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>?</span>
+            <span
+              style={{
+                fontSize: theme.typography.fontSize["2xl"],
+                color: theme.colors.text.muted,
+              }}
+            >
+              ?
+            </span>
           </div>
           <h2
             style={{
-              fontSize: "1.5rem",
-              fontWeight: "700",
-              color: "#f5f5f5",
-              marginBottom: "1rem",
-              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              fontSize: theme.typography.fontSize["2xl"],
+              fontWeight: theme.typography.fontWeight.bold,
+              color: theme.colors.text.primary,
+              marginBottom: theme.spacing.lg,
+              textShadow: theme.effects.textShadow.sm,
             }}
           >
             Project Not Found
@@ -181,7 +189,7 @@ const ProjectDashboard: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
           position: "sticky",
           top: 0,
           zIndex: 100,
@@ -200,23 +208,23 @@ const ProjectDashboard: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
               style={{
-                padding: "0.5rem 1rem",
+                padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
               }}
             >
               Back
             </button>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               {project.name}
@@ -227,7 +235,7 @@ const ProjectDashboard: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <button
@@ -268,7 +276,7 @@ const ProjectDashboard: React.FC = () => {
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "2rem",
+          padding: theme.spacing["2xl"],
           position: "relative",
           zIndex: 1,
         }}
@@ -277,23 +285,23 @@ const ProjectDashboard: React.FC = () => {
         <div
           className="card-glass-solid"
           style={{
-            marginBottom: "2rem",
+            marginBottom: theme.spacing["2xl"],
           }}
         >
           <p
             style={{
-              fontSize: "0.9375rem",
-              color: "#ECDFCC",
-              lineHeight: "1.6",
+              fontSize: theme.typography.fontSize.base,
+              color: theme.colors.text.secondary,
+              lineHeight: theme.typography.lineHeight.relaxed,
             }}
           >
             {project.description || "No description provided"}
           </p>
           <div
             style={{
-              marginTop: "1rem",
-              fontSize: "0.8125rem",
-              color: "#ECDFCC",
+              marginTop: theme.spacing.lg,
+              fontSize: theme.typography.fontSize.sm,
+              color: theme.colors.text.muted,
             }}
           >
             Created{" "}
@@ -311,33 +319,33 @@ const ProjectDashboard: React.FC = () => {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-              gap: "1rem",
-              marginBottom: "2rem",
+              gap: theme.spacing.lg,
+              marginBottom: theme.spacing["2xl"],
             }}
           >
             <div
               className="card"
               style={{
-                padding: "1rem",
+                padding: theme.spacing.lg,
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "#ECDFCC",
-                  marginBottom: "0.5rem",
-                  fontWeight: "600",
+                  fontSize: theme.typography.fontSize.xs,
+                  color: theme.colors.text.secondary,
+                  marginBottom: theme.spacing.sm,
+                  fontWeight: theme.typography.fontWeight.semibold,
                 }}
               >
                 Total Tasks
               </div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 {stats.totalTasks}
@@ -347,26 +355,26 @@ const ProjectDashboard: React.FC = () => {
             <div
               className="card"
               style={{
-                padding: "1rem",
+                padding: theme.spacing.lg,
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "#ECDFCC",
-                  marginBottom: "0.5rem",
-                  fontWeight: "600",
+                  fontSize: theme.typography.fontSize.xs,
+                  color: theme.colors.text.secondary,
+                  marginBottom: theme.spacing.sm,
+                  fontWeight: theme.typography.fontWeight.semibold,
                 }}
               >
                 To Do
               </div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 {stats.todoTasks}
@@ -376,28 +384,28 @@ const ProjectDashboard: React.FC = () => {
             <div
               className="card"
               style={{
-                padding: "1rem",
+                padding: theme.spacing.lg,
                 textAlign: "center",
-                background: "rgba(245, 158, 11, 0.15)",
-                border: "1px solid rgba(245, 158, 11, 0.4)",
+                background: `${theme.colors.status.warning}26`,
+                border: `1px solid ${theme.colors.status.warning}66`,
               }}
             >
               <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "#ECDFCC",
-                  marginBottom: "0.5rem",
-                  fontWeight: "600",
+                  fontSize: theme.typography.fontSize.xs,
+                  color: theme.colors.text.secondary,
+                  marginBottom: theme.spacing.sm,
+                  fontWeight: theme.typography.fontWeight.semibold,
                 }}
               >
                 In Progress
               </div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 {stats.inProgressTasks}
@@ -407,28 +415,28 @@ const ProjectDashboard: React.FC = () => {
             <div
               className="card"
               style={{
-                padding: "1rem",
+                padding: theme.spacing.lg,
                 textAlign: "center",
-                background: "rgba(16, 185, 129, 0.15)",
-                border: "1px solid rgba(16, 185, 129, 0.4)",
+                background: `${theme.colors.status.success}26`,
+                border: `1px solid ${theme.colors.status.success}66`,
               }}
             >
               <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "#ECDFCC",
-                  marginBottom: "0.5rem",
-                  fontWeight: "600",
+                  fontSize: theme.typography.fontSize.xs,
+                  color: theme.colors.text.secondary,
+                  marginBottom: theme.spacing.sm,
+                  fontWeight: theme.typography.fontWeight.semibold,
                 }}
               >
                 Completed
               </div>
               <div
                 style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["3xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 {stats.doneTasks}
@@ -442,7 +450,7 @@ const ProjectDashboard: React.FC = () => {
           <div
             className="card-glass-solid"
             style={{
-              marginBottom: "2rem",
+              marginBottom: theme.spacing["2xl"],
             }}
           >
             <div
@@ -450,25 +458,25 @@ const ProjectDashboard: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: "1rem",
+                marginBottom: theme.spacing.lg,
               }}
             >
               <h3
                 style={{
-                  fontSize: "1.125rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize.lg,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 Overall Progress
               </h3>
               <span
                 style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize["2xl"],
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 {stats.completionPercentage}%
@@ -478,20 +486,19 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 width: "100%",
                 height: "12px",
-                background: "rgba(24, 28, 20, 0.3)",
-                borderRadius: "8px",
+                background: `${theme.colors.background.tertiary}4d`,
+                borderRadius: theme.borderRadius.lg,
                 overflow: "hidden",
-                border: "1px solid rgba(236, 223, 204, 0.2)",
+                border: `1px solid ${theme.colors.border.light}`,
               }}
             >
               <div
                 style={{
                   width: `${stats.completionPercentage}%`,
                   height: "100%",
-                  background:
-                    "linear-gradient(90deg, #10b981 0%, #34d399 100%)",
-                  transition: "width 0.5s ease",
-                  boxShadow: "0 0 10px rgba(16, 185, 129, 0.5)",
+                  background: `linear-gradient(90deg, ${theme.colors.status.success} 0%, #34d399 100%)`,
+                  transition: theme.effects.transition.base,
+                  boxShadow: `0 0 10px ${theme.colors.status.success}80`,
                 }}
               />
             </div>
@@ -502,11 +509,11 @@ const ProjectDashboard: React.FC = () => {
         <div className="card-glass-solid">
           <h3
             style={{
-              fontSize: "1.125rem",
-              fontWeight: "700",
-              color: "#ECDFCC",
-              marginBottom: "1.25rem",
-              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              fontSize: theme.typography.fontSize.lg,
+              fontWeight: theme.typography.fontWeight.bold,
+              color: theme.colors.text.primary,
+              marginBottom: theme.spacing.xl,
+              textShadow: theme.effects.textShadow.sm,
             }}
           >
             Recent Tasks
@@ -515,8 +522,8 @@ const ProjectDashboard: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                padding: "2rem",
-                color: "#ECDFCC",
+                padding: theme.spacing["2xl"],
+                color: theme.colors.text.secondary,
               }}
             >
               No tasks yet. Create tasks to get started.
@@ -526,45 +533,43 @@ const ProjectDashboard: React.FC = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "0.75rem",
+                gap: theme.spacing.md,
               }}
             >
               {recentTasks.map((task) => (
                 <div
                   key={task.id}
                   style={{
-                    padding: "1rem",
-                    background: "rgba(236, 223, 204, 0.1)",
-                    backdropFilter: "blur(10px)",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(236, 223, 204, 0.25)",
+                    padding: theme.spacing.lg,
+                    background: `${theme.colors.background.card}1a`,
+                    backdropFilter: theme.effects.backdropBlur.md,
+                    borderRadius: theme.borderRadius.lg,
+                    border: `1px solid ${theme.colors.border.light}`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexWrap: "wrap",
-                    gap: "0.75rem",
-                    transition: "all 0.2s ease",
+                    gap: theme.spacing.md,
+                    transition: theme.effects.transition.fast,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background =
-                      "rgba(236, 223, 204, 0.15)";
-                    e.currentTarget.style.borderColor =
-                      "rgba(236, 223, 204, 0.4)";
+                      theme.colors.background.hover;
+                    e.currentTarget.style.borderColor = `${theme.colors.border.light}66`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background =
-                      "rgba(236, 223, 204, 0.1)";
+                    e.currentTarget.style.background = `${theme.colors.background.card}1a`;
                     e.currentTarget.style.borderColor =
-                      "rgba(236, 223, 204, 0.25)";
+                      theme.colors.border.light;
                   }}
                 >
                   <div style={{ flex: 1, minWidth: "200px" }}>
                     <div
                       style={{
-                        fontSize: "0.9375rem",
-                        fontWeight: "600",
-                        color: "#ECDFCC",
-                        marginBottom: "0.25rem",
+                        fontSize: theme.typography.fontSize.base,
+                        fontWeight: theme.typography.fontWeight.semibold,
+                        color: theme.colors.text.primary,
+                        marginBottom: theme.spacing.xs,
                       }}
                     >
                       {task.title}
@@ -572,9 +577,8 @@ const ProjectDashboard: React.FC = () => {
                     {task.due_date && (
                       <div
                         style={{
-                          fontSize: "0.8125rem",
-                          color: "#ECDFCC",
-                          opacity: 0.8,
+                          fontSize: theme.typography.fontSize.sm,
+                          color: theme.colors.text.muted,
                         }}
                       >
                         Due: {new Date(task.due_date).toLocaleDateString()}
@@ -583,28 +587,28 @@ const ProjectDashboard: React.FC = () => {
                   </div>
                   <span
                     style={{
-                      padding: "0.375rem 0.75rem",
-                      fontSize: "0.8125rem",
-                      fontWeight: "600",
-                      borderRadius: "8px",
+                      padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                      fontSize: theme.typography.fontSize.sm,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      borderRadius: theme.borderRadius.lg,
                       background:
                         task.status === "Done"
-                          ? "rgba(16, 185, 129, 0.2)"
+                          ? `${theme.colors.status.success}33`
                           : task.status === "In Progress"
-                          ? "rgba(245, 158, 11, 0.2)"
-                          : "rgba(236, 223, 204, 0.2)",
+                          ? `${theme.colors.status.warning}33`
+                          : `${theme.colors.background.card}33`,
                       color:
                         task.status === "Done"
-                          ? "#10b981"
+                          ? theme.colors.status.success
                           : task.status === "In Progress"
-                          ? "#f59e0b"
-                          : "#ECDFCC",
+                          ? theme.colors.status.warning
+                          : theme.colors.text.secondary,
                       border:
                         task.status === "Done"
-                          ? "1px solid rgba(16, 185, 129, 0.5)"
+                          ? `1px solid ${theme.colors.status.success}80`
                           : task.status === "In Progress"
-                          ? "1px solid rgba(245, 158, 11, 0.5)"
-                          : "1px solid rgba(236, 223, 204, 0.3)",
+                          ? `1px solid ${theme.colors.status.warning}80`
+                          : `1px solid ${theme.colors.border.light}`,
                     }}
                   >
                     {task.status}

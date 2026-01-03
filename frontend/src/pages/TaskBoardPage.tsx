@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TaskBoard from "../components/tasks/TaskBoard";
 import { taskService } from "../services/taskService";
 import NotificationBell from "../components/NotificationBell";
+import theme from "../styles/theme";
 
 interface Task {
   id: string;
@@ -185,7 +186,7 @@ const TaskBoardPage: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "20px",
+          padding: theme.spacing.xl,
           position: "relative",
           zIndex: 1,
         }}
@@ -194,7 +195,7 @@ const TaskBoardPage: React.FC = () => {
           className="card-glass-solid"
           style={{
             textAlign: "center",
-            padding: "3rem",
+            padding: theme.spacing["4xl"],
             maxWidth: "500px",
           }}
         >
@@ -202,33 +203,40 @@ const TaskBoardPage: React.FC = () => {
             style={{
               width: "64px",
               height: "64px",
-              background: "rgba(236, 223, 204, 0.1)",
-              borderRadius: "50%",
+              background: `${theme.colors.background.card}1a`,
+              borderRadius: theme.borderRadius.full,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 1rem",
-              border: "1px solid rgba(236, 223, 204, 0.2)",
+              margin: `0 auto ${theme.spacing.lg}`,
+              border: `1px solid ${theme.colors.border.light}`,
             }}
           >
-            <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>!</span>
+            <span
+              style={{
+                fontSize: theme.typography.fontSize["2xl"],
+                color: theme.colors.text.muted,
+              }}
+            >
+              !
+            </span>
           </div>
           <h2
             style={{
-              fontSize: "1.5rem",
-              fontWeight: "700",
-              color: "#f5f5f5",
-              marginBottom: "0.5rem",
-              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              fontSize: theme.typography.fontSize["2xl"],
+              fontWeight: theme.typography.fontWeight.bold,
+              color: theme.colors.text.primary,
+              marginBottom: theme.spacing.sm,
+              textShadow: theme.effects.textShadow.sm,
             }}
           >
             Oops!
           </h2>
           <p
             style={{
-              fontSize: "0.9375rem",
-              color: "#a0a0a0",
-              marginBottom: "1.5rem",
+              fontSize: theme.typography.fontSize.base,
+              color: theme.colors.text.muted,
+              marginBottom: theme.spacing.xl,
             }}
           >
             {error}
@@ -256,7 +264,7 @@ const TaskBoardPage: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
           position: "sticky",
           top: 0,
           zIndex: 100,
@@ -275,23 +283,23 @@ const TaskBoardPage: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
               style={{
-                padding: "0.5rem 1rem",
+                padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
               }}
             >
               Back
             </button>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               Task Board
@@ -302,7 +310,7 @@ const TaskBoardPage: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             {/* Search */}
@@ -325,11 +333,11 @@ const TaskBoardPage: React.FC = () => {
               <span
                 style={{
                   position: "absolute",
-                  left: "1rem",
+                  left: theme.spacing.lg,
                   top: "50%",
                   transform: "translateY(-50%)",
-                  color: "#a0a0a0",
-                  fontSize: "0.875rem",
+                  color: theme.colors.text.muted,
+                  fontSize: theme.typography.fontSize.sm,
                 }}
               >
                 Search
@@ -346,7 +354,7 @@ const TaskBoardPage: React.FC = () => {
         style={{
           maxWidth: "1600px",
           margin: "0 auto",
-          padding: "2rem",
+          padding: theme.spacing["2xl"],
         }}
       >
         {/* Stats Bar */}
@@ -354,33 +362,33 @@ const TaskBoardPage: React.FC = () => {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: "1rem",
-            marginBottom: "2rem",
+            gap: theme.spacing.lg,
+            marginBottom: theme.spacing["2xl"],
           }}
         >
           <div
             className="card"
             style={{
-              padding: "1rem",
+              padding: theme.spacing.lg,
               textAlign: "center",
             }}
           >
             <div
               style={{
-                fontSize: "0.75rem",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
-                fontWeight: "600",
+                fontSize: theme.typography.fontSize.xs,
+                color: theme.colors.text.secondary,
+                marginBottom: theme.spacing.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
               }}
             >
               Total Tasks
             </div>
             <div
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["3xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               {taskStats.total}
@@ -390,26 +398,26 @@ const TaskBoardPage: React.FC = () => {
           <div
             className="card"
             style={{
-              padding: "1rem",
+              padding: theme.spacing.lg,
               textAlign: "center",
             }}
           >
             <div
               style={{
-                fontSize: "0.75rem",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
-                fontWeight: "600",
+                fontSize: theme.typography.fontSize.xs,
+                color: theme.colors.text.secondary,
+                marginBottom: theme.spacing.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
               }}
             >
               To Do
             </div>
             <div
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["3xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               {taskStats.todo}
@@ -419,28 +427,28 @@ const TaskBoardPage: React.FC = () => {
           <div
             className="card"
             style={{
-              padding: "1rem",
+              padding: theme.spacing.lg,
               textAlign: "center",
-              background: "rgba(245, 158, 11, 0.15)",
-              border: "1px solid rgba(245, 158, 11, 0.4)",
+              background: `${theme.colors.status.warning}26`,
+              border: `1px solid ${theme.colors.status.warning}66`,
             }}
           >
             <div
               style={{
-                fontSize: "0.75rem",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
-                fontWeight: "600",
+                fontSize: theme.typography.fontSize.xs,
+                color: theme.colors.text.secondary,
+                marginBottom: theme.spacing.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
               }}
             >
               In Progress
             </div>
             <div
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["3xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               {taskStats.inProgress}
@@ -450,28 +458,28 @@ const TaskBoardPage: React.FC = () => {
           <div
             className="card"
             style={{
-              padding: "1rem",
+              padding: theme.spacing.lg,
               textAlign: "center",
-              background: "rgba(16, 185, 129, 0.15)",
-              border: "1px solid rgba(16, 185, 129, 0.4)",
+              background: `${theme.colors.status.success}26`,
+              border: `1px solid ${theme.colors.status.success}66`,
             }}
           >
             <div
               style={{
-                fontSize: "0.75rem",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
-                fontWeight: "600",
+                fontSize: theme.typography.fontSize.xs,
+                color: theme.colors.text.secondary,
+                marginBottom: theme.spacing.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
               }}
             >
               Done
             </div>
             <div
               style={{
-                fontSize: "1.75rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["3xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               {taskStats.done}
@@ -483,22 +491,27 @@ const TaskBoardPage: React.FC = () => {
         <div
           className="card-glass-solid"
           style={{
-            marginBottom: "1.5rem",
+            marginBottom: theme.spacing.xl,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "1rem",
+            gap: theme.spacing.lg,
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
-            <span style={{ fontWeight: "600", color: "#ECDFCC" }}>
+            <span
+              style={{
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+              }}
+            >
               Project:
             </span>
             {projects.length > 0 && (
@@ -506,9 +519,9 @@ const TaskBoardPage: React.FC = () => {
                 value={selectedProjectId || ""}
                 onChange={(e) => setSelectedProjectId(e.target.value)}
                 style={{
-                  padding: "0.625rem 1rem",
-                  fontSize: "0.875rem",
-                  fontWeight: "500",
+                  padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+                  fontSize: theme.typography.fontSize.sm,
+                  fontWeight: theme.typography.fontWeight.medium,
                   minWidth: "200px",
                 }}
               >

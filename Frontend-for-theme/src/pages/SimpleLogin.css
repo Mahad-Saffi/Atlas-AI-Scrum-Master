@@ -1,0 +1,277 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ===== LOGIN PAGE - SINGLE CARD MOCKUP MATCH ===== */
+.login-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0a0a0f;
+  position: relative;
+  z-index: 1;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+/* Grid Pattern */
+.login-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Red Glow Center */
+.login-page::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(220, 38, 38, 0.15) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ===== LOGIN CARD ===== */
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: rgba(17, 17, 24, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 80px rgba(220, 38, 38, 0.1);
+  position: relative;
+}
+
+/* Logo */
+.logo-icon-container {
+  margin-bottom: 16px;
+}
+
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  position: relative;
+}
+
+.logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.6));
+}
+
+/* Red Glow behind Logo */
+.logo-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(220, 38, 38, 0.6) 0%,
+    transparent 70%
+  );
+  z-index: -1;
+  filter: blur(10px);
+  animation: glow-pulse 3s infinite ease-in-out;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* App Title */
+.app-title {
+  font-size: 2rem;
+  font-weight: 500; /* As per mockup, looks regular/medium */
+  color: #f1f5f9; /* White color as per mockup */
+  margin: 0 0 24px 0;
+  letter-spacing: -0.01em;
+}
+
+/* Form Styles */
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.input-group input {
+  width: 100%;
+  background: rgba(10, 10, 15, 0.6); /* Very dark background */
+  border: 1px solid rgba(220, 38, 38, 0.3); /* Reddish border as per mockup */
+  border-radius: 30px; /* Pill shape inputs as per mockup */
+  padding: 14px 20px;
+  color: #f1f5f9;
+  font-size: 14px;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input-group input::placeholder {
+  color: #64748b;
+}
+
+.input-group input:focus {
+  border-color: #dc2626;
+  background: rgba(10, 10, 15, 0.8);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.15);
+}
+
+/* Forgot Link inside Input */
+.forgot-link {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.forgot-link:hover {
+  color: #f1f5f9;
+}
+
+/* Primary Button */
+.primary-btn {
+  width: 100%;
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+  border: none;
+  border-radius: 30px; /* Pill shape */
+  padding: 14px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 16px 0;
+  color: #dc2626; /* Red divider lines based on mockup hint? Or subtle? */
+}
+
+/* Mockup shows very subtle red lines */
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.divider span {
+  padding: 0 12px;
+  color: #64748b;
+  font-size: 13px;
+  text-transform: lowercase;
+}
+
+/* Demo Button */
+.demo-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.demo-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Auth Toggle */
+.auth-toggle {
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.auth-toggle span {
+  color: #f1f5f9;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.auth-toggle span:hover {
+  text-decoration: underline;
+}
+
+/* Error Message */
+.error-message {
+  margin-bottom: 16px;
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+}

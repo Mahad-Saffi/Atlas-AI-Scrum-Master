@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { authService } from "../services/auth";
+import theme from "../styles/theme";
 
 const SignIn: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,10 +39,9 @@ const SignIn: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#0d1b2a",
+        backgroundColor: theme.colors.background.primary,
         padding: "20px",
-        fontFamily:
-          'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontFamily: theme.typography.fontFamily.primary,
         position: "relative",
         overflow: "hidden",
       }}
@@ -51,7 +51,7 @@ const SignIn: React.FC = () => {
         style={{
           position: "absolute",
           inset: "0",
-          background: "linear-gradient(135deg, #0d1b2a 0%, #1b263b 40%, #415a77 100%)",
+          background: theme.colors.brand.redGradient,
           zIndex: "1",
         }}
       />
@@ -66,8 +66,7 @@ const SignIn: React.FC = () => {
           width: "120vh",
           height: "60vh",
           borderRadius: "0 0 50% 50%",
-          background:
-            "radial-gradient(ellipse, rgba(119, 141, 169, 0.15) 0%, transparent 70%)",
+          background: `radial-gradient(ellipse, ${theme.colors.brand.red}33 0%, transparent 70%)`,
           filter: "blur(80px)",
           zIndex: 1,
         }}
@@ -82,8 +81,7 @@ const SignIn: React.FC = () => {
           width: "90vh",
           height: "90vh",
           borderRadius: "50% 50% 0 0",
-          background:
-            "radial-gradient(ellipse, rgba(65, 90, 119, 0.2) 0%, transparent 70%)",
+          background: `radial-gradient(ellipse, ${theme.colors.brand.redDark}33 0%, transparent 70%)`,
           filter: "blur(60px)",
           zIndex: 1,
           animation: "pulse 6s ease-in-out infinite",
@@ -98,7 +96,7 @@ const SignIn: React.FC = () => {
           top: "25%",
           width: "300px",
           height: "300px",
-          background: "rgba(224, 225, 221, 0.03)",
+          background: `${theme.colors.brand.red}08`,
           borderRadius: "50%",
           filter: "blur(100px)",
           animation: "float 8s ease-in-out infinite",
@@ -113,7 +111,7 @@ const SignIn: React.FC = () => {
           bottom: "25%",
           width: "300px",
           height: "300px",
-          background: "rgba(119, 141, 169, 0.05)",
+          background: `${theme.colors.brand.redLight}0D`,
           borderRadius: "50%",
           filter: "blur(100px)",
           animation: "float 8s ease-in-out infinite reverse",
@@ -148,15 +146,13 @@ const SignIn: React.FC = () => {
             style={{
               position: "relative",
               width: "100%",
-              backgroundColor: "rgba(27, 38, 59, 0.95)",
-              border: "1px solid rgba(119, 141, 169, 0.3)",
-              borderRadius: "20px",
+              backgroundColor: theme.colors.background.card,
+              border: `1px solid ${theme.colors.border.red}`,
+              borderRadius: theme.borderRadius.xl,
               padding: "32px",
-              boxShadow:
-                "0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(119, 141, 169, 0.1)",
-              backdropFilter: "blur(20px)",
-              background:
-                "linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(27, 38, 59, 0.9) 100%)",
+              boxShadow: `${theme.shadows.lg}, 0 0 0 1px ${theme.colors.border.red}`,
+              backdropFilter: theme.effects.backdropBlur.lg,
+              background: `linear-gradient(135deg, ${theme.colors.background.card} 0%, ${theme.colors.background.secondary} 100%)`,
               overflow: "hidden",
             }}
           >
@@ -168,7 +164,7 @@ const SignIn: React.FC = () => {
                 left: "-1px",
                 right: "-1px",
                 bottom: "-1px",
-                borderRadius: "20px",
+                borderRadius: theme.borderRadius.xl,
                 overflow: "hidden",
               }}
             >
@@ -180,8 +176,7 @@ const SignIn: React.FC = () => {
                   left: "0",
                   height: "3px",
                   width: "50%",
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(217, 223, 232, 0.8), transparent)",
+                  background: `linear-gradient(90deg, transparent, ${theme.colors.brand.red}CC, transparent)`,
                   animation: "slideRight 3s ease-in-out infinite",
                   filter: "blur(1px)",
                 }}
@@ -195,8 +190,7 @@ const SignIn: React.FC = () => {
                   right: "0",
                   height: "50%",
                   width: "3px",
-                  background:
-                    "linear-gradient(180deg, transparent, rgba(217, 223, 232, 0.8), transparent)",
+                  background: `linear-gradient(180deg, transparent, ${theme.colors.brand.red}CC, transparent)`,
                   animation: "slideDown 3s ease-in-out infinite",
                   animationDelay: "0.75s",
                   filter: "blur(1px)",
@@ -211,8 +205,7 @@ const SignIn: React.FC = () => {
                   right: "0",
                   height: "3px",
                   width: "50%",
-                  background:
-                    "linear-gradient(270deg, transparent, rgba(217, 223, 232, 0.8), transparent)",
+                  background: `linear-gradient(270deg, transparent, ${theme.colors.brand.red}CC, transparent)`,
                   animation: "slideLeft 3s ease-in-out infinite",
                   animationDelay: "1.5s",
                   filter: "blur(1px)",
@@ -227,8 +220,7 @@ const SignIn: React.FC = () => {
                   left: "0",
                   height: "50%",
                   width: "3px",
-                  background:
-                    "linear-gradient(0deg, transparent, rgba(217, 223, 232, 0.8), transparent)",
+                  background: `linear-gradient(0deg, transparent, ${theme.colors.brand.red}CC, transparent)`,
                   animation: "slideUp 3s ease-in-out infinite",
                   animationDelay: "2.25s",
                   filter: "blur(1px)",
@@ -245,7 +237,7 @@ const SignIn: React.FC = () => {
                 width: "6px",
                 height: "6px",
                 borderRadius: "50%",
-                background: "rgba(119, 141, 169, 0.6)",
+                background: `${theme.colors.brand.red}99`,
                 filter: "blur(2px)",
                 animation: "glow 2s ease-in-out infinite",
               }}
@@ -258,7 +250,7 @@ const SignIn: React.FC = () => {
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                background: "rgba(224, 225, 221, 0.4)",
+                background: `${theme.colors.brand.redLight}66`,
                 filter: "blur(2px)",
                 animation: "glow 2.4s ease-in-out infinite",
                 animationDelay: "0.5s",
@@ -272,7 +264,7 @@ const SignIn: React.FC = () => {
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                background: "rgba(119, 141, 169, 0.6)",
+                background: `${theme.colors.brand.red}99`,
                 filter: "blur(2px)",
                 animation: "glow 2.2s ease-in-out infinite",
                 animationDelay: "1s",
@@ -286,7 +278,7 @@ const SignIn: React.FC = () => {
                 width: "6px",
                 height: "6px",
                 borderRadius: "50%",
-                background: "rgba(224, 225, 221, 0.4)",
+                background: `${theme.colors.brand.redLight}66`,
                 filter: "blur(2px)",
                 animation: "glow 2.3s ease-in-out infinite",
                 animationDelay: "1.5s",
@@ -299,8 +291,7 @@ const SignIn: React.FC = () => {
                 position: "absolute",
                 inset: "0",
                 opacity: "0.02",
-                backgroundImage:
-                  "linear-gradient(135deg, #e0e1dd 0.5px, transparent 0.5px), linear-gradient(45deg, #e0e1dd 0.5px, transparent 0.5px)",
+                backgroundImage: `linear-gradient(135deg, ${theme.colors.text.primary} 0.5px, transparent 0.5px), linear-gradient(45deg, ${theme.colors.text.primary} 0.5px, transparent 0.5px)`,
                 backgroundSize: "30px 30px",
               }}
             />
@@ -337,8 +328,7 @@ const SignIn: React.FC = () => {
                       transform: "translate(-50%, -50%)",
                       width: "120px",
                       height: "120px",
-                      background:
-                        "radial-gradient(circle, rgba(119, 141, 169, 0.2) 0%, rgba(119, 141, 169, 0.1) 40%, transparent 70%)",
+                      background: `radial-gradient(circle, ${theme.colors.brand.red}33 0%, ${theme.colors.brand.red}1A 40%, transparent 70%)`,
                       borderRadius: "50%",
                       filter: "blur(20px)",
                       zIndex: 1,
@@ -349,28 +339,25 @@ const SignIn: React.FC = () => {
                   {/* Logo */}
                   <img
                     src={logo}
-                    alt="Atlas AI Scrum Master"
+                    alt="Ideal Assistant Scrum Master"
                     style={{
                       width: "72px",
                       height: "72px",
                       position: "relative",
                       zIndex: 2,
-                      filter:
-                        "drop-shadow(0 8px 20px rgba(119, 141, 169, 0.4)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                      filter: `drop-shadow(0 8px 20px ${theme.colors.brand.red}66) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))`,
                       transition: "all 0.3s ease",
                       animation: "logoFloat 6s ease-in-out infinite",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform =
                         "scale(1.1) translateZ(20px)";
-                      e.currentTarget.style.filter =
-                        "drop-shadow(0 12px 30px rgba(119, 141, 169, 0.6)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))";
+                      e.currentTarget.style.filter = `drop-shadow(0 12px 30px ${theme.colors.brand.red}99) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))`;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform =
                         "scale(1) translateZ(0px)";
-                      e.currentTarget.style.filter =
-                        "drop-shadow(0 8px 20px rgba(119, 141, 169, 0.4)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))";
+                      e.currentTarget.style.filter = `drop-shadow(0 8px 20px ${theme.colors.brand.red}66) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))`;
                     }}
                   />
                 </div>
@@ -379,13 +366,12 @@ const SignIn: React.FC = () => {
               <div style={{ marginBottom: "8px" }}>
                 <span
                   style={{
-                    color: "#e0e1dd",
+                    color: theme.colors.text.primary,
                     fontSize: "22px",
                     fontWeight: "bold",
                     letterSpacing: "0.5px",
                     textShadow: "0 2px 6px rgba(0,0,0,0.4)",
-                    background:
-                      "linear-gradient(135deg, #e0e1dd 0%, #f5f5f5 100%)",
+                    background: `linear-gradient(135deg, ${theme.colors.text.primary} 0%, ${theme.colors.text.white} 100%)`,
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -398,7 +384,7 @@ const SignIn: React.FC = () => {
 
               <div
                 style={{
-                  color: "#778da9",
+                  color: theme.colors.brand.red,
                   fontSize: "12px",
                   letterSpacing: "2px",
                   fontWeight: "600",
@@ -412,7 +398,7 @@ const SignIn: React.FC = () => {
             {/* Title */}
             <h1
               style={{
-                color: "#e0e1dd",
+                color: theme.colors.text.primary,
                 fontSize: "20px",
                 fontWeight: "600",
                 textAlign: "center",
@@ -434,8 +420,8 @@ const SignIn: React.FC = () => {
                 style={{
                   position: "absolute",
                   inset: "0",
-                  background: "rgba(224, 225, 221, 0.1)",
-                  borderRadius: "12px",
+                  background: `${theme.colors.text.primary}1A`,
+                  borderRadius: theme.borderRadius.md,
                   filter: "blur(10px)",
                   opacity: "0",
                   transition: "opacity 0.3s ease",
@@ -451,16 +437,15 @@ const SignIn: React.FC = () => {
                 style={{
                   width: "100%",
                   padding: "14px 20px",
-                  borderRadius: "12px",
+                  borderRadius: theme.borderRadius.md,
                   fontSize: "16px",
                   fontWeight: "600",
                   backgroundColor: isLoading
-                    ? "rgba(224, 225, 221, 0.7)"
-                    : "#e0e1dd",
-                  color: "#0d1b2a",
-                  border: "1px solid rgba(224, 225, 221, 0.4)",
-                  boxShadow:
-                    "0 8px 20px rgba(224, 225, 221, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1)",
+                    ? `${theme.colors.text.primary}B3`
+                    : theme.colors.text.primary,
+                  color: theme.colors.background.primary,
+                  border: `1px solid ${theme.colors.border.light}`,
+                  boxShadow: `0 8px 20px ${theme.colors.text.primary}33, 0 3px 6px rgba(0, 0, 0, 0.1)`,
                   cursor: isLoading ? "not-allowed" : "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -474,11 +459,11 @@ const SignIn: React.FC = () => {
                 }}
                 onMouseEnter={(e) => {
                   if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = "#f0f1ed";
+                    e.currentTarget.style.backgroundColor =
+                      theme.colors.text.white;
                     e.currentTarget.style.transform =
                       "translateY(-3px) translateZ(10px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 15px 40px rgba(224, 225, 221, 0.4)";
+                    e.currentTarget.style.boxShadow = `0 15px 40px ${theme.colors.text.primary}66`;
                     (
                       e.currentTarget.previousElementSibling as HTMLElement
                     ).style.opacity = "0.7";
@@ -486,11 +471,11 @@ const SignIn: React.FC = () => {
                 }}
                 onMouseLeave={(e) => {
                   if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = "#e0e1dd";
+                    e.currentTarget.style.backgroundColor =
+                      theme.colors.text.primary;
                     e.currentTarget.style.transform =
                       "translateY(0px) translateZ(0px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 8px 20px rgba(224, 225, 221, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1)";
+                    e.currentTarget.style.boxShadow = `0 8px 20px ${theme.colors.text.primary}33, 0 3px 6px rgba(0, 0, 0, 0.1)`;
                     (
                       e.currentTarget.previousElementSibling as HTMLElement
                     ).style.opacity = "0";
@@ -516,8 +501,8 @@ const SignIn: React.FC = () => {
                       style={{
                         width: "20px",
                         height: "20px",
-                        border: "2px solid rgba(13, 27, 42, 0.3)",
-                        borderTop: "2px solid #0d1b2a",
+                        border: `2px solid ${theme.colors.background.primary}4D`,
+                        borderTop: `2px solid ${theme.colors.background.primary}`,
                         borderRadius: "50%",
                         animation: "spin 1s linear infinite",
                       }}
@@ -545,7 +530,7 @@ const SignIn: React.FC = () => {
               style={{
                 textAlign: "center",
                 fontSize: "14px",
-                color: "rgba(119, 141, 169, 0.8)",
+                color: theme.colors.text.secondary,
                 marginBottom: "0",
                 position: "relative",
                 zIndex: 2,
@@ -572,7 +557,7 @@ const SignIn: React.FC = () => {
         <p
           style={{
             fontSize: "12px",
-            color: "rgba(119, 141, 169, 0.6)",
+            color: theme.colors.text.tertiary,
             margin: 0,
             animation: "fadeInOut 6s ease-in-out infinite",
           }}

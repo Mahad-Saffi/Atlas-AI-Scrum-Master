@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import theme from "../styles/theme";
 
 interface Task {
   id: string;
@@ -106,21 +107,21 @@ const EpicView: React.FC = () => {
     switch (status) {
       case "Done":
         return {
-          bg: "rgba(16, 185, 129, 0.2)",
-          border: "rgba(16, 185, 129, 0.4)",
-          text: "#ECDFCC",
+          bg: `rgba(34, 197, 94, 0.2)`,
+          border: `${theme.colors.status.success}66`,
+          text: theme.colors.text.primary,
         };
       case "In Progress":
         return {
-          bg: "rgba(245, 158, 11, 0.2)",
-          border: "rgba(245, 158, 11, 0.4)",
-          text: "#ECDFCC",
+          bg: `rgba(245, 158, 11, 0.2)`,
+          border: `${theme.colors.status.warning}66`,
+          text: theme.colors.text.primary,
         };
       default:
         return {
-          bg: "rgba(236, 223, 204, 0.2)",
-          border: "rgba(236, 223, 204, 0.3)",
-          text: "#ECDFCC",
+          bg: theme.colors.background.hover,
+          border: theme.colors.border.light,
+          text: theme.colors.text.primary,
         };
     }
   };
@@ -187,23 +188,23 @@ const EpicView: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
+                background: theme.colors.brand.redGradient,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.75rem",
-                fontWeight: "bold",
-                color: "#f5f5f5",
+                fontSize: theme.typography.fontSize.xs,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.white,
               }}
             >
               EP
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               Epics & Stories
@@ -262,29 +263,41 @@ const EpicView: React.FC = () => {
               style={{
                 width: "64px",
                 height: "64px",
-                background: "rgba(236, 223, 204, 0.1)",
+                background: theme.colors.background.hover,
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: "0 auto 1rem",
-                border: "1px solid rgba(236, 223, 204, 0.2)",
+                border: `1px solid ${theme.colors.border.light}`,
               }}
             >
-              <span style={{ fontSize: "1.5rem", color: "#a0a0a0" }}>EP</span>
+              <span
+                style={{
+                  fontSize: theme.typography.fontSize["2xl"],
+                  color: theme.colors.text.muted,
+                }}
+              >
+                EP
+              </span>
             </div>
             <h3
               style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                color: "#f5f5f5",
-                marginBottom: "0.5rem",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["2xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
+                textShadow: theme.shadows.sm,
               }}
             >
               No Epics Yet
             </h3>
-            <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
+            <p
+              style={{
+                fontSize: theme.typography.fontSize.lg,
+                color: theme.colors.text.secondary,
+              }}
+            >
               Create a project with AI to generate epics and stories
             </p>
           </div>
@@ -313,13 +326,12 @@ const EpicView: React.FC = () => {
                       style={{
                         width: "48px",
                         height: "48px",
-                        background:
-                          "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                        borderRadius: "var(--radius-md)",
+                        background: theme.colors.brand.redGradient,
+                        borderRadius: theme.borderRadius.md,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: "1.5rem",
+                        fontSize: theme.typography.fontSize["2xl"],
                         flexShrink: 0,
                       }}
                     >
@@ -328,20 +340,20 @@ const EpicView: React.FC = () => {
                     <div style={{ flex: 1 }}>
                       <h2
                         style={{
-                          fontSize: "1.25rem",
-                          fontWeight: "700",
-                          color: "#ECDFCC",
-                          marginBottom: "0.25rem",
-                          textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                          fontSize: theme.typography.fontSize.xl,
+                          fontWeight: theme.typography.fontWeight.bold,
+                          color: theme.colors.text.primary,
+                          marginBottom: theme.spacing.xs,
+                          textShadow: theme.shadows.sm,
                         }}
                       >
                         {epic.name}
                       </h2>
                       <p
                         style={{
-                          fontSize: "0.875rem",
-                          color: "#ECDFCC",
-                          marginBottom: "0.5rem",
+                          fontSize: theme.typography.fontSize.sm,
+                          color: theme.colors.text.secondary,
+                          marginBottom: theme.spacing.sm,
                         }}
                       >
                         {epic.description}
@@ -350,14 +362,14 @@ const EpicView: React.FC = () => {
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "1rem",
+                          gap: theme.spacing.lg,
                         }}
                       >
                         <div
                           style={{
-                            fontSize: "0.8125rem",
-                            color: "#ECDFCC",
-                            fontWeight: "600",
+                            fontSize: theme.typography.fontSize.sm,
+                            color: theme.colors.text.primary,
+                            fontWeight: theme.typography.fontWeight.semibold,
                           }}
                         >
                           {epic.stories.length} Stories •{" "}
@@ -372,29 +384,28 @@ const EpicView: React.FC = () => {
                             flex: 1,
                             maxWidth: "200px",
                             height: "8px",
-                            background: "rgba(24, 28, 20, 0.3)",
+                            background: theme.colors.background.tertiary,
                             borderRadius: "4px",
                             overflow: "hidden",
-                            border: "1px solid rgba(236, 223, 204, 0.2)",
+                            border: `1px solid ${theme.colors.border.light}`,
                           }}
                         >
                           <div
                             style={{
                               width: `${progress}%`,
                               height: "100%",
-                              background:
-                                "linear-gradient(90deg, #ECDFCC, #D4C7B4)",
+                              background: theme.colors.brand.redGradient,
                               transition: "width 0.3s",
-                              boxShadow: "0 0 8px rgba(236, 223, 204, 0.5)",
+                              boxShadow: theme.shadows.red,
                             }}
                           />
                         </div>
                         <div
                           style={{
-                            fontSize: "0.8125rem",
-                            fontWeight: "700",
-                            color: "#ECDFCC",
-                            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                            fontSize: theme.typography.fontSize.sm,
+                            fontWeight: theme.typography.fontWeight.bold,
+                            color: theme.colors.text.primary,
+                            textShadow: theme.shadows.sm,
                           }}
                         >
                           {progress}%
@@ -431,11 +442,11 @@ const EpicView: React.FC = () => {
                           <div
                             key={story.id}
                             style={{
-                              background: "rgba(236, 223, 204, 0.15)",
-                              backdropFilter: "blur(10px)",
-                              borderRadius: "var(--radius-lg)",
-                              padding: "1.25rem",
-                              border: "1px solid rgba(236, 223, 204, 0.3)",
+                              background: theme.colors.background.hover,
+                              backdropFilter: theme.effects.backdropBlur.sm,
+                              borderRadius: theme.borderRadius.lg,
+                              padding: theme.spacing.xl,
+                              border: `1px solid ${theme.colors.border.light}`,
                             }}
                           >
                             {/* Story Header */}
@@ -444,23 +455,26 @@ const EpicView: React.FC = () => {
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.75rem",
+                                gap: theme.spacing.md,
                                 cursor: "pointer",
-                                marginBottom: isStoryExpanded ? "1rem" : "0",
+                                marginBottom: isStoryExpanded
+                                  ? theme.spacing.lg
+                                  : "0",
                               }}
                             >
                               <div
                                 style={{
                                   width: "32px",
                                   height: "32px",
-                                  background: "rgba(236, 223, 204, 0.3)",
-                                  borderRadius: "var(--radius-sm)",
+                                  background:
+                                    theme.colors.background.hoverStrong,
+                                  borderRadius: theme.borderRadius.sm,
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  fontSize: "0.875rem",
-                                  fontWeight: "700",
-                                  color: "#ECDFCC",
+                                  fontSize: theme.typography.fontSize.sm,
+                                  fontWeight: theme.typography.fontWeight.bold,
+                                  color: theme.colors.text.primary,
                                   flexShrink: 0,
                                 }}
                               >
@@ -469,20 +483,20 @@ const EpicView: React.FC = () => {
                               <div style={{ flex: 1 }}>
                                 <h3
                                   style={{
-                                    fontSize: "1rem",
-                                    fontWeight: "600",
-                                    color: "#ECDFCC",
-                                    marginBottom: "0.25rem",
+                                    fontSize: theme.typography.fontSize.lg,
+                                    fontWeight:
+                                      theme.typography.fontWeight.semibold,
+                                    color: theme.colors.text.primary,
+                                    marginBottom: theme.spacing.xs,
                                   }}
                                 >
                                   {story.name}
                                 </h3>
                                 <p
                                   style={{
-                                    fontSize: "0.8125rem",
-                                    color: "#ECDFCC",
-                                    marginBottom: "0.5rem",
-                                    opacity: 0.9,
+                                    fontSize: theme.typography.fontSize.sm,
+                                    color: theme.colors.text.secondary,
+                                    marginBottom: theme.spacing.sm,
                                   }}
                                 >
                                   {story.description}
@@ -491,14 +505,15 @@ const EpicView: React.FC = () => {
                                   style={{
                                     display: "flex",
                                     alignItems: "center",
-                                    gap: "0.75rem",
+                                    gap: theme.spacing.md,
                                   }}
                                 >
                                   <div
                                     style={{
-                                      fontSize: "0.75rem",
-                                      color: "#ECDFCC",
-                                      fontWeight: "600",
+                                      fontSize: theme.typography.fontSize.xs,
+                                      color: theme.colors.text.primary,
+                                      fontWeight:
+                                        theme.typography.fontWeight.semibold,
                                     }}
                                   >
                                     {story.tasks.length} Tasks
@@ -508,29 +523,29 @@ const EpicView: React.FC = () => {
                                       flex: 1,
                                       maxWidth: "150px",
                                       height: "6px",
-                                      background: "rgba(24, 28, 20, 0.3)",
+                                      background:
+                                        theme.colors.background.tertiary,
                                       borderRadius: "3px",
                                       overflow: "hidden",
-                                      border:
-                                        "1px solid rgba(236, 223, 204, 0.2)",
+                                      border: `1px solid ${theme.colors.border.light}`,
                                     }}
                                   >
                                     <div
                                       style={{
                                         width: `${storyProgress}%`,
                                         height: "100%",
-                                        background: "#ECDFCC",
+                                        background: theme.colors.brand.red,
                                         transition: "width 0.3s",
-                                        boxShadow:
-                                          "0 0 6px rgba(236, 223, 204, 0.5)",
+                                        boxShadow: theme.shadows.red,
                                       }}
                                     />
                                   </div>
                                   <div
                                     style={{
-                                      fontSize: "0.75rem",
-                                      fontWeight: "700",
-                                      color: "#ECDFCC",
+                                      fontSize: theme.typography.fontSize.xs,
+                                      fontWeight:
+                                        theme.typography.fontWeight.bold,
+                                      color: theme.colors.text.primary,
                                     }}
                                   >
                                     {storyProgress}%
@@ -567,12 +582,13 @@ const EpicView: React.FC = () => {
                                       style={{
                                         display: "flex",
                                         alignItems: "center",
-                                        gap: "0.75rem",
-                                        padding: "0.75rem",
+                                        gap: theme.spacing.md,
+                                        padding: theme.spacing.md,
                                         background: colors.bg,
-                                        backdropFilter: "blur(10px)",
+                                        backdropFilter:
+                                          theme.effects.backdropBlur.sm,
                                         border: `1px solid ${colors.border}`,
-                                        borderRadius: "var(--radius-md)",
+                                        borderRadius: theme.borderRadius.md,
                                       }}
                                     >
                                       <div
@@ -588,19 +604,25 @@ const EpicView: React.FC = () => {
                                       <div style={{ flex: 1 }}>
                                         <div
                                           style={{
-                                            fontSize: "0.875rem",
-                                            fontWeight: "500",
-                                            color: "#ECDFCC",
-                                            marginBottom: "0.25rem",
+                                            fontSize:
+                                              theme.typography.fontSize.sm,
+                                            fontWeight:
+                                              theme.typography.fontWeight
+                                                .medium,
+                                            color: theme.colors.text.primary,
+                                            marginBottom: theme.spacing.xs,
                                           }}
                                         >
                                           {task.title}
                                         </div>
                                         <div
                                           style={{
-                                            fontSize: "0.75rem",
+                                            fontSize:
+                                              theme.typography.fontSize.xs,
                                             color: colors.text,
-                                            fontWeight: "600",
+                                            fontWeight:
+                                              theme.typography.fontWeight
+                                                .semibold,
                                           }}
                                         >
                                           {task.status}
@@ -608,13 +630,15 @@ const EpicView: React.FC = () => {
                                       </div>
                                       <div
                                         style={{
-                                          fontSize: "0.75rem",
-                                          fontWeight: "700",
-                                          color: "#ECDFCC",
-                                          padding: "0.25rem 0.5rem",
+                                          fontSize:
+                                            theme.typography.fontSize.xs,
+                                          fontWeight:
+                                            theme.typography.fontWeight.bold,
+                                          color: theme.colors.text.primary,
+                                          padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
                                           background:
-                                            "rgba(236, 223, 204, 0.2)",
-                                          borderRadius: "var(--radius-sm)",
+                                            theme.colors.background.hover,
+                                          borderRadius: theme.borderRadius.sm,
                                         }}
                                       >
                                         {task.progress_percentage}%

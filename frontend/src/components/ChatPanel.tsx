@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import theme from "../styles/theme";
 
 interface Message {
   id: number;
@@ -110,21 +112,21 @@ const ChatPanel: React.FC = () => {
       <div
         style={{
           width: "240px",
-          borderRight: "1px solid rgba(236, 223, 204, 0.3)",
-          padding: "1.25rem",
-          background: "rgba(236, 223, 204, 0.5)",
-          backdropFilter: "blur(10px)",
+          borderRight: `1px solid ${theme.colors.border.light}`,
+          padding: theme.spacing.xl,
+          background: theme.colors.background.secondary,
+          backdropFilter: theme.effects.backdropBlur.sm,
         }}
       >
         <h3
           style={{
-            fontSize: "0.875rem",
-            fontWeight: "600",
-            marginBottom: "1rem",
-            color: "#181C14",
+            fontSize: theme.typography.fontSize.sm,
+            fontWeight: theme.typography.fontWeight.semibold,
+            marginBottom: theme.spacing.lg,
+            color: theme.colors.text.primary,
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
+            gap: theme.spacing.sm,
           }}
         >
           <span
@@ -132,7 +134,7 @@ const ChatPanel: React.FC = () => {
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              background: "#10b981",
+              background: theme.colors.status.success,
               display: "inline-block",
             }}
           ></span>
@@ -151,23 +153,24 @@ const ChatPanel: React.FC = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.75rem",
-                padding: "0.75rem",
-                background: "rgba(255, 255, 255, 0.6)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid rgba(236, 223, 204, 0.3)",
-                fontSize: "0.875rem",
-                color: "#181C14",
-                transition: "all 0.2s",
+                gap: theme.spacing.md,
+                padding: theme.spacing.md,
+                background: theme.colors.background.card,
+                backdropFilter: theme.effects.backdropBlur.sm,
+                borderRadius: theme.borderRadius.md,
+                border: `1px solid ${theme.colors.border.light}`,
+                fontSize: theme.typography.fontSize.sm,
+                color: theme.colors.text.primary,
+                transition: theme.effects.transition.normal,
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.8)";
+                e.currentTarget.style.background =
+                  theme.colors.background.hover;
                 e.currentTarget.style.transform = "translateX(4px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.6)";
+                e.currentTarget.style.background = theme.colors.background.card;
                 e.currentTarget.style.transform = "translateX(0)";
               }}
             >
@@ -178,7 +181,7 @@ const ChatPanel: React.FC = () => {
                   width: "32px",
                   height: "32px",
                   borderRadius: "50%",
-                  border: "2px solid #ECDFCC",
+                  border: `2px solid ${theme.colors.status.success}`,
                   objectFit: "cover",
                 }}
               />
@@ -194,23 +197,23 @@ const ChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.3)",
+          background: theme.colors.background.tertiary,
         }}
       >
         {/* Connection Status */}
         <div
           style={{
-            padding: "0.75rem 1.25rem",
-            borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
+            padding: `${theme.spacing.md} ${theme.spacing.xl}`,
+            borderBottom: `1px solid ${theme.colors.border.light}`,
             background: isConnected
-              ? "rgba(16, 185, 129, 0.1)"
-              : "rgba(239, 68, 68, 0.1)",
-            fontSize: "0.875rem",
-            fontWeight: "600",
-            color: "#181C14",
+              ? `rgba(34, 197, 94, 0.1)`
+              : `rgba(239, 68, 68, 0.1)`,
+            fontSize: theme.typography.fontSize.sm,
+            fontWeight: theme.typography.fontWeight.semibold,
+            color: theme.colors.text.primary,
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
+            gap: theme.spacing.sm,
           }}
         >
           <span
@@ -218,7 +221,9 @@ const ChatPanel: React.FC = () => {
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              background: isConnected ? "#10b981" : "#ef4444",
+              background: isConnected
+                ? theme.colors.status.success
+                : theme.colors.status.error,
               display: "inline-block",
             }}
           ></span>
@@ -240,7 +245,7 @@ const ChatPanel: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                color: "#697565",
+                color: theme.colors.text.secondary,
                 padding: "3rem 1rem",
               }}
             >
@@ -249,17 +254,30 @@ const ChatPanel: React.FC = () => {
                   width: "64px",
                   height: "64px",
                   borderRadius: "50%",
-                  background: "rgba(236, 223, 204, 0.1)",
+                  background: theme.colors.background.hover,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   margin: "0 auto 1rem",
-                  border: "1px solid rgba(236, 223, 204, 0.2)",
+                  border: `1px solid ${theme.colors.border.light}`,
                 }}
               >
-                <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>CHAT</span>
+                <span
+                  style={{
+                    fontSize: theme.typography.fontSize.sm,
+                    color: theme.colors.text.muted,
+                    fontWeight: theme.typography.fontWeight.bold,
+                  }}
+                >
+                  CHAT
+                </span>
               </div>
-              <div style={{ fontSize: "0.9375rem", fontWeight: "500" }}>
+              <div
+                style={{
+                  fontSize: theme.typography.fontSize.base,
+                  fontWeight: theme.typography.fontWeight.medium,
+                }}
+              >
                 No messages yet. Start chatting!
               </div>
             </div>
@@ -269,29 +287,29 @@ const ChatPanel: React.FC = () => {
                 key={index}
                 className="card"
                 style={{
-                  padding: "1rem",
-                  background: "rgba(255, 255, 255, 0.8)",
-                  backdropFilter: "blur(15px)",
-                  border: "1px solid rgba(236, 223, 204, 0.4)",
-                  borderRadius: "var(--radius-md)",
-                  boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                  padding: theme.spacing.lg,
+                  background: theme.colors.background.card,
+                  backdropFilter: theme.effects.backdropBlur.md,
+                  border: `1px solid ${theme.colors.border.light}`,
+                  borderRadius: theme.borderRadius.md,
+                  boxShadow: theme.shadows.sm,
                 }}
               >
                 <div
                   style={{
-                    fontSize: "0.75rem",
-                    color: "#697565",
-                    marginBottom: "0.5rem",
-                    fontWeight: "600",
+                    fontSize: theme.typography.fontSize.xs,
+                    color: theme.colors.text.secondary,
+                    marginBottom: theme.spacing.sm,
+                    fontWeight: theme.typography.fontWeight.semibold,
                   }}
                 >
                   User #{msg.sender_id}
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#181C14",
-                    lineHeight: "1.5",
+                    fontSize: theme.typography.fontSize.base,
+                    color: theme.colors.text.primary,
+                    lineHeight: theme.typography.lineHeight.normal,
                   }}
                 >
                   {msg.content}
@@ -305,12 +323,12 @@ const ChatPanel: React.FC = () => {
         {/* Input Area */}
         <div
           style={{
-            padding: "1.25rem",
-            borderTop: "1px solid rgba(236, 223, 204, 0.3)",
-            background: "rgba(236, 223, 204, 0.5)",
-            backdropFilter: "blur(10px)",
+            padding: theme.spacing.xl,
+            borderTop: `1px solid ${theme.colors.border.light}`,
+            background: theme.colors.background.secondary,
+            backdropFilter: theme.effects.backdropBlur.sm,
             display: "flex",
-            gap: "0.75rem",
+            gap: theme.spacing.md,
           }}
         >
           <input
@@ -330,13 +348,13 @@ const ChatPanel: React.FC = () => {
             disabled={!isConnected || !inputValue.trim()}
             className="btn-primary"
             style={{
-              padding: "0.75rem 1.5rem",
+              padding: `${theme.spacing.md} ${theme.spacing.xl}`,
               display: "flex",
               alignItems: "center",
-              gap: "0.5rem",
+              gap: theme.spacing.sm,
             }}
           >
-            <span>📤</span>
+            <PaperAirplaneIcon style={{ width: "20px", height: "20px" }} />
             <span>Send</span>
           </button>
         </div>

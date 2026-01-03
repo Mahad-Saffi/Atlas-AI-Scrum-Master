@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import theme from "../styles/theme";
 
 interface Toast {
   id: number;
@@ -46,26 +47,26 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     switch (type) {
       case "success":
         return {
-          background: "rgba(16, 185, 129, 0.95)",
-          border: "1px solid rgba(16, 185, 129, 0.5)",
+          background: `${theme.colors.status.success}f2`,
+          border: `1px solid ${theme.colors.status.success}80`,
           icon: "✓",
         };
       case "error":
         return {
-          background: "rgba(239, 68, 68, 0.95)",
-          border: "1px solid rgba(239, 68, 68, 0.5)",
+          background: `${theme.colors.status.error}f2`,
+          border: `1px solid ${theme.colors.status.error}80`,
           icon: "✕",
         };
       case "warning":
         return {
-          background: "rgba(245, 158, 11, 0.95)",
-          border: "1px solid rgba(245, 158, 11, 0.5)",
+          background: `${theme.colors.status.warning}f2`,
+          border: `1px solid ${theme.colors.status.warning}80`,
           icon: "!",
         };
       default:
         return {
-          background: "rgba(59, 130, 246, 0.95)",
-          border: "1px solid rgba(59, 130, 246, 0.5)",
+          background: `${theme.colors.status.info}f2`,
+          border: `1px solid ${theme.colors.status.info}80`,
           icon: "i",
         };
     }
@@ -93,25 +94,25 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
               key={toast.id}
               style={{
                 background: styles.background,
-                backdropFilter: "blur(10px)",
+                backdropFilter: theme.effects.backdropBlur.sm,
                 border: styles.border,
-                borderRadius: "var(--radius-md)",
-                padding: "1rem 1.25rem",
+                borderRadius: theme.borderRadius.md,
+                padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
                 minWidth: "300px",
                 maxWidth: "500px",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                boxShadow: theme.shadows.md,
                 display: "flex",
                 alignItems: "center",
-                gap: "0.75rem",
+                gap: theme.spacing.md,
                 pointerEvents: "auto",
                 animation: "slideIn 0.3s ease-out",
               }}
             >
               <span
                 style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
+                  fontSize: theme.typography.fontSize.xl,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.white,
                 }}
               >
                 {styles.icon}
@@ -119,9 +120,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
               <span
                 style={{
                   flex: 1,
-                  fontSize: "0.9375rem",
-                  color: "#ECDFCC",
-                  fontWeight: "500",
+                  fontSize: theme.typography.fontSize.base,
+                  color: theme.colors.text.white,
+                  fontWeight: theme.typography.fontWeight.medium,
                 }}
               >
                 {toast.message}
@@ -131,9 +132,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "#ECDFCC",
+                  color: theme.colors.text.white,
                   cursor: "pointer",
-                  fontSize: "1.25rem",
+                  fontSize: theme.typography.fontSize.xl,
                   padding: "0",
                   lineHeight: "1",
                   opacity: 0.7,

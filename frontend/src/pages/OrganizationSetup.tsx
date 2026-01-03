@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import theme from "../styles/theme";
 
 const OrganizationSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -226,7 +227,7 @@ const OrganizationSetup: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                borderRadius: "var(--radius-md)",
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -235,7 +236,7 @@ const OrganizationSetup: React.FC = () => {
             >
               <img
                 src={logo}
-                alt="Atlas AI"
+                alt="Ideal Assistant"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
@@ -243,7 +244,7 @@ const OrganizationSetup: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
               }}
             >
               {hasOrganization ? "Team Management" : "Organization Setup"}
@@ -268,15 +269,14 @@ const OrganizationSetup: React.FC = () => {
                 style={{
                   width: "80px",
                   height: "80px",
-                  background:
-                    "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                  background: theme.colors.brand.redGradient,
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "1.25rem",
                   fontWeight: "bold",
-                  color: "#f5f5f5",
+                  color: theme.colors.text.primary,
                   margin: "0 auto 1rem",
                 }}
               >
@@ -286,14 +286,16 @@ const OrganizationSetup: React.FC = () => {
                 style={{
                   fontSize: "1.75rem",
                   fontWeight: "700",
-                  color: "#f5f5f5",
+                  color: theme.colors.text.primary,
                   marginBottom: "0.5rem",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
               >
                 Create Your Organization
               </h2>
-              <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
+              <p
+                style={{ fontSize: "1rem", color: theme.colors.text.secondary }}
+              >
                 Set up your organization to start managing projects and team
                 members
               </p>
@@ -309,7 +311,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#f5f5f5",
+                    color: theme.colors.text.primary,
                   }}
                 >
                   Organization Name *
@@ -332,7 +334,7 @@ const OrganizationSetup: React.FC = () => {
                     display: "block",
                     marginBottom: "0.5rem",
                     fontWeight: "600",
-                    color: "#f5f5f5",
+                    color: theme.colors.text.primary,
                   }}
                 >
                   Description
@@ -380,14 +382,19 @@ const OrganizationSetup: React.FC = () => {
                     style={{
                       fontSize: "1.5rem",
                       fontWeight: "700",
-                      color: "#ECDFCC",
+                      color: theme.colors.text.primary,
                       marginBottom: "0.25rem",
                       textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                     }}
                   >
                     {organization.name}
                   </h2>
-                  <p style={{ fontSize: "0.9375rem", color: "#ECDFCC" }}>
+                  <p
+                    style={{
+                      fontSize: "0.9375rem",
+                      color: theme.colors.text.primary,
+                    }}
+                  >
                     {organization.description || "No description"}
                   </p>
                 </div>
@@ -423,7 +430,7 @@ const OrganizationSetup: React.FC = () => {
                     style={{
                       fontSize: "1.25rem",
                       fontWeight: "700",
-                      color: "#ECDFCC",
+                      color: theme.colors.text.primary,
                       textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                     }}
                   >
@@ -454,7 +461,7 @@ const OrganizationSetup: React.FC = () => {
                           display: "block",
                           marginBottom: "0.5rem",
                           fontWeight: "600",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           fontSize: "0.875rem",
                         }}
                       >
@@ -481,7 +488,7 @@ const OrganizationSetup: React.FC = () => {
                           display: "block",
                           marginBottom: "0.5rem",
                           fontWeight: "600",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           fontSize: "0.875rem",
                         }}
                       >
@@ -508,7 +515,7 @@ const OrganizationSetup: React.FC = () => {
                           display: "block",
                           marginBottom: "0.5rem",
                           fontWeight: "600",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           fontSize: "0.875rem",
                         }}
                       >
@@ -535,7 +542,7 @@ const OrganizationSetup: React.FC = () => {
                           display: "block",
                           marginBottom: "0.5rem",
                           fontWeight: "600",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           fontSize: "0.875rem",
                         }}
                       >
@@ -564,7 +571,7 @@ const OrganizationSetup: React.FC = () => {
                         display: "block",
                         marginBottom: "0.5rem",
                         fontWeight: "600",
-                        color: "#ECDFCC",
+                        color: theme.colors.text.primary,
                         fontSize: "0.875rem",
                       }}
                     >
@@ -601,7 +608,7 @@ const OrganizationSetup: React.FC = () => {
                 style={{
                   fontSize: "1.25rem",
                   fontWeight: "700",
-                  color: "#ECDFCC",
+                  color: theme.colors.text.primary,
                   marginBottom: "1.5rem",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
                 }}
@@ -638,13 +645,12 @@ const OrganizationSetup: React.FC = () => {
                         style={{
                           width: "48px",
                           height: "48px",
-                          background:
-                            "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                          background: theme.colors.brand.redGradient,
                           borderRadius: "50%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           fontSize: "1.25rem",
                           fontWeight: "700",
                         }}
@@ -664,7 +670,7 @@ const OrganizationSetup: React.FC = () => {
                             style={{
                               fontSize: "1rem",
                               fontWeight: "600",
-                              color: "#ECDFCC",
+                              color: theme.colors.text.primary,
                             }}
                           >
                             {member.username}
@@ -673,7 +679,7 @@ const OrganizationSetup: React.FC = () => {
                             style={{
                               padding: "0.25rem 0.75rem",
                               background: "rgba(236, 223, 204, 0.3)",
-                              color: "#ECDFCC",
+                              color: theme.colors.text.primary,
                               borderRadius: "12px",
                               fontSize: "0.75rem",
                               fontWeight: "600",
@@ -682,14 +688,19 @@ const OrganizationSetup: React.FC = () => {
                             {member.role}
                           </span>
                         </div>
-                        <div style={{ fontSize: "0.875rem", color: "#ECDFCC" }}>
+                        <div
+                          style={{
+                            fontSize: "0.875rem",
+                            color: theme.colors.text.primary,
+                          }}
+                        >
                           {member.email}
                         </div>
                         {member.description && (
                           <div
                             style={{
                               fontSize: "0.8125rem",
-                              color: "#ECDFCC",
+                              color: theme.colors.text.primary,
                               marginTop: "0.25rem",
                               opacity: 0.9,
                             }}
@@ -717,7 +728,7 @@ const OrganizationSetup: React.FC = () => {
                   style={{
                     textAlign: "center",
                     padding: "2rem",
-                    color: "#ECDFCC",
+                    color: theme.colors.text.primary,
                   }}
                 >
                   No team members yet. Add your first team member to get

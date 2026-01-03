@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import ChatInterface from "../components/chat/ChatInterface";
+import theme from "../styles/theme";
 
 const ProjectCreation: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ProjectCreation: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
           position: "sticky",
           top: 0,
           zIndex: 100,
@@ -37,14 +38,14 @@ const ProjectCreation: React.FC = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
             }}
           >
             <button
               onClick={() => navigate("/")}
               className="btn-secondary"
               style={{
-                padding: "0.5rem 1rem",
+                padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
               }}
             >
               Back
@@ -53,7 +54,7 @@ const ProjectCreation: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                borderRadius: "var(--radius-md)",
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -62,15 +63,15 @@ const ProjectCreation: React.FC = () => {
             >
               <img
                 src={logo}
-                alt="Atlas AI"
+                alt="Ideal Assistant"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               Create New Project
@@ -84,7 +85,7 @@ const ProjectCreation: React.FC = () => {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "2rem",
+          padding: theme.spacing["2xl"],
           position: "relative",
           zIndex: 1,
         }}
@@ -95,7 +96,7 @@ const ProjectCreation: React.FC = () => {
           style={{
             padding: "1.25rem",
             marginBottom: "1.5rem",
-            background: "rgba(236, 223, 204, 0.95)",
+            background: theme.colors.background.card,
             backdropFilter: "blur(20px)",
             textAlign: "center",
           }}
@@ -105,7 +106,7 @@ const ProjectCreation: React.FC = () => {
               fontSize: "1.25rem",
               fontWeight: "700",
               marginBottom: "0.5rem",
-              color: "#181C14",
+              color: theme.colors.background.primary,
             }}
           >
             Let's create your project together
@@ -113,7 +114,7 @@ const ProjectCreation: React.FC = () => {
           <p
             style={{
               fontSize: "0.875rem",
-              color: "#3C3D37",
+              color: theme.colors.brand.redDark,
               lineHeight: "1.5",
             }}
           >
@@ -142,14 +143,14 @@ const ProjectCreation: React.FC = () => {
           style={{
             marginTop: "1.5rem",
             padding: "1rem",
-            background: "rgba(236, 223, 204, 0.9)",
+            background: theme.colors.background.card,
             backdropFilter: "blur(15px)",
           }}
         >
           <div
             style={{
               fontSize: "0.875rem",
-              color: "#3C3D37",
+              color: theme.colors.brand.redDark,
               display: "flex",
               alignItems: "flex-start",
               gap: "0.5rem",
@@ -159,7 +160,7 @@ const ProjectCreation: React.FC = () => {
             <div>
               <strong
                 style={{
-                  color: "#181C14",
+                  color: theme.colors.background.primary,
                   display: "block",
                   marginBottom: "0.25rem",
                 }}

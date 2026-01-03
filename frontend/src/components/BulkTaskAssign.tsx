@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import theme from "../styles/theme";
 
 interface BulkTaskAssignProps {
   selectedTasks: string[];
@@ -56,7 +57,7 @@ const BulkTaskAssign: React.FC<BulkTaskAssignProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        background: "rgba(24, 28, 20, 0.7)",
+        background: theme.colors.overlay.light,
         backdropFilter: "blur(4px)",
         display: "flex",
         alignItems: "center",
@@ -79,7 +80,7 @@ const BulkTaskAssign: React.FC<BulkTaskAssignProps> = ({
           style={{
             fontSize: "1.5rem",
             fontWeight: "700",
-            color: "#181C14",
+            color: theme.colors.text.primary,
             marginBottom: "1rem",
           }}
         >
@@ -89,7 +90,7 @@ const BulkTaskAssign: React.FC<BulkTaskAssignProps> = ({
         <p
           style={{
             fontSize: "0.875rem",
-            color: "#697565",
+            color: theme.colors.text.secondary,
             marginBottom: "1.5rem",
           }}
         >
@@ -103,7 +104,7 @@ const BulkTaskAssign: React.FC<BulkTaskAssignProps> = ({
               display: "block",
               fontSize: "0.875rem",
               fontWeight: "600",
-              color: "#3C3D37",
+              color: theme.colors.text.primary,
               marginBottom: "0.5rem",
             }}
           >
