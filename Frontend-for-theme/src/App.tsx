@@ -1,0 +1,111 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import SignIn from "./pages/SignIn";
+import SimpleLogin from "./pages/SimpleLogin";
+import AuthCallback from "./pages/AuthCallback";
+import ProjectCreation from "./pages/ProjectCreation";
+import TaskBoardPage from "./pages/TaskBoardPage";
+import ProjectDashboard from "./pages/ProjectDashboard";
+import ChatPage from "./pages/ChatPage";
+import DebugAuth from "./pages/DebugAuth";
+import OrganizationSetup from "./pages/OrganizationSetup";
+import IssuesPage from "./pages/IssuesPage";
+import ProjectRisks from "./pages/ProjectRisks";
+import RiskDashboard from "./pages/RiskDashboard";
+import TeamMembers from "./pages/TeamMembers";
+import EpicView from "./pages/EpicView";
+import "./App.css";
+import { authService, type User } from "./services/auth";
+import UserProfile from "./components/UserProfile";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { ToastProvider } from "./components/Toast";
+
+function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleSignOut = () => {
+    authService.signOut().then(() => {
+      setUser(null);
+      setIsAuthenticated(false);
+      window.location.reload();
+    });
+  };
+
+  return (
+    <ErrorBoundary>
+      <ToastProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<SimpleLogin />} />
+            <Route path="/github-login" element={<SignIn />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/debug-auth" element={<DebugAuth />} />
+            <Route
+              path="/organization-setup"
+              element={
+                isAuthenticated ? <OrganizationSetup /> : <SimpleLogin />
+              }
+            />
+            <Route
+              path="/create-project"
+              element={isAuthenticated ? <ProjectCreation /> : <SimpleLogin />}
+            />
+            <Route
+              path="/task-board"
+              element={isAuthenticated ? <TaskBoardPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId"
+              element={isAuthenticated ? <ProjectDashboard /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/issues"
+              element={isAuthenticated ? <IssuesPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/risks"
+              element={isAuthenticated ? <ProjectRisks /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/risk-dashboard"
+              element={isAuthenticated ? <RiskDashboard /> : <SimpleLogin />}
+            />
+            <Route
+              path="/project/:projectId/epics"
+              element={isAuthenticated ? <EpicView /> : <SimpleLogin />}
+            />
+            <Route
+              path="/team-members"
+              element={isAuthenticated ? <TeamMembers /> : <SimpleLogin />}
+            />
+            <Route
+              path="/chat"
+              element={isAuthenticated ? <ChatPage /> : <SimpleLogin />}
+            />
+            <Route
+              path="/"
+              element={
+                isAuthenticated && user ? (
+                  <UserProfile user={user} onSignOut={handleSignOut} />
+                ) : (
+                  <SimpleLogin />
+                )
+              }
+            />
+          </Routes>
+        </Router>
+      </ToastProvider>
+    </ErrorBoundary>
+  );
+}
+
+export default App;

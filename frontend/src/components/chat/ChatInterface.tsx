@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { aiService } from "../../services/aiService";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import theme from "../../styles/theme";
 
 interface Message {
   sender: "user" | "ai";
@@ -11,7 +13,7 @@ const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: "ai",
-      text: "👋 Hey there! What project are you thinking of building today?",
+      text: "Hey there! What project are you thinking of building today?",
     },
   ]);
   const [inputValue, setInputValue] = useState("");
@@ -54,7 +56,7 @@ const ChatInterface: React.FC = () => {
         ...prevMessages,
         {
           sender: "ai",
-          text: "😅 Oops! Something went wrong. Mind trying that again?",
+          text: "Oops! Something went wrong. Mind trying that again?",
         },
       ]);
     } finally {
@@ -67,11 +69,11 @@ const ChatInterface: React.FC = () => {
       style={{
         width: "100%",
         height: "100%",
-        background: "rgba(236, 223, 204, 0.3)",
-        backdropFilter: "blur(15px)",
+        background: theme.colors.background.secondary,
+        backdropFilter: theme.effects.backdropBlur.md,
         display: "flex",
         flexDirection: "column",
-        borderRadius: "var(--radius-xl)",
+        borderRadius: theme.borderRadius.xl,
       }}
     >
       {/* Messages Area */}
@@ -97,30 +99,33 @@ const ChatInterface: React.FC = () => {
             <div
               style={{
                 maxWidth: "75%",
-                padding: "1rem 1.25rem",
-                borderRadius: "var(--radius-lg)",
+                padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
+                borderRadius: theme.borderRadius.lg,
                 background:
                   msg.sender === "user"
-                    ? "linear-gradient(145deg, #ECDFCC, #D4C7B4)"
-                    : "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(15px)",
-                border: "1px solid rgba(236, 223, 204, 0.4)",
-                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                    ? theme.colors.brand.redGradient
+                    : theme.colors.background.card,
+                backdropFilter: theme.effects.backdropBlur.md,
+                border: `1px solid ${theme.colors.border.light}`,
+                boxShadow: theme.shadows.sm,
                 fontFamily: "inherit",
-                fontSize: "0.9375rem",
-                lineHeight: "1.6",
-                color: "#181C14",
+                fontSize: theme.typography.fontSize.base,
+                lineHeight: theme.typography.lineHeight.relaxed,
+                color: theme.colors.text.primary,
               }}
             >
               <div
                 style={{
-                  fontWeight: "600",
-                  marginBottom: "0.5rem",
-                  fontSize: "0.8125rem",
-                  color: msg.sender === "user" ? "#3C3D37" : "#697565",
+                  fontWeight: theme.typography.fontWeight.semibold,
+                  marginBottom: theme.spacing.sm,
+                  fontSize: theme.typography.fontSize.sm,
+                  color:
+                    msg.sender === "user"
+                      ? theme.colors.text.white
+                      : theme.colors.text.secondary,
                 }}
               >
-                {msg.sender === "ai" ? "Atlas AI" : "You"}
+                {msg.sender === "ai" ? "Ideal Assistant" : "You"}
               </div>
               {msg.sender === "ai" ? (
                 <ReactMarkdown>{msg.text}</ReactMarkdown>
@@ -140,18 +145,18 @@ const ChatInterface: React.FC = () => {
           >
             <div
               style={{
-                padding: "1rem 1.25rem",
-                borderRadius: "var(--radius-lg)",
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(15px)",
-                border: "1px solid rgba(236, 223, 204, 0.4)",
-                boxShadow: "0 2px 8px rgba(24, 28, 20, 0.08)",
+                padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
+                borderRadius: theme.borderRadius.lg,
+                background: theme.colors.background.card,
+                backdropFilter: theme.effects.backdropBlur.md,
+                border: `1px solid ${theme.colors.border.light}`,
+                boxShadow: theme.shadows.sm,
                 fontFamily: "inherit",
-                color: "#697565",
-                fontSize: "0.9375rem",
+                color: theme.colors.text.secondary,
+                fontSize: theme.typography.fontSize.base,
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
+                gap: theme.spacing.sm,
               }}
             >
               <span className="spinner"></span>
@@ -186,14 +191,14 @@ const ChatInterface: React.FC = () => {
       {/* Input Area */}
       <div
         style={{
-          padding: "1.25rem",
-          borderTop: "1px solid rgba(236, 223, 204, 0.3)",
+          padding: theme.spacing.xl,
+          borderTop: `1px solid ${theme.colors.border.light}`,
           display: "flex",
-          gap: "0.75rem",
-          background: "rgba(236, 223, 204, 0.5)",
-          backdropFilter: "blur(10px)",
-          borderBottomLeftRadius: "var(--radius-xl)",
-          borderBottomRightRadius: "var(--radius-xl)",
+          gap: theme.spacing.md,
+          background: theme.colors.background.secondary,
+          backdropFilter: theme.effects.backdropBlur.sm,
+          borderBottomLeftRadius: theme.borderRadius.xl,
+          borderBottomRightRadius: theme.borderRadius.xl,
         }}
       >
         <input
@@ -219,7 +224,7 @@ const ChatInterface: React.FC = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
+            gap: theme.spacing.sm,
           }}
         >
           {isLoading ? (
@@ -229,7 +234,7 @@ const ChatInterface: React.FC = () => {
             </>
           ) : (
             <>
-              <span>📤</span>
+              <PaperAirplaneIcon style={{ width: "20px", height: "20px" }} />
               <span>Send</span>
             </>
           )}

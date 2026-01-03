@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../components/Toast";
+import theme from "../styles/theme";
 
 interface Issue {
   id: number;
@@ -234,30 +235,30 @@ const IssuesPage: React.FC = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "critical":
-        return "#ef4444";
+        return theme.colors.status.error;
       case "high":
-        return "#f59e0b";
+        return theme.colors.status.warning;
       case "medium":
-        return "#3b82f6";
+        return theme.colors.brand.red;
       case "low":
-        return "#697565";
+        return theme.colors.text.secondary;
       default:
-        return "#697565";
+        return theme.colors.text.secondary;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "open":
-        return "#ef4444";
+        return theme.colors.status.error;
       case "in_progress":
-        return "#f59e0b";
+        return theme.colors.status.warning;
       case "resolved":
-        return "#10b981";
+        return theme.colors.status.success;
       case "closed":
-        return "#697565";
+        return theme.colors.text.secondary;
       default:
-        return "#697565";
+        return theme.colors.text.secondary;
     }
   };
 
@@ -267,7 +268,7 @@ const IssuesPage: React.FC = () => {
       <header
         className="glass-header"
         style={{
-          padding: "1rem 2rem",
+          padding: `${theme.spacing.lg} ${theme.spacing["2xl"]}`,
           position: "sticky",
           top: 0,
           zIndex: 100,
@@ -282,11 +283,17 @@ const IssuesPage: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: theme.spacing.lg,
+            }}
+          >
             <button
               onClick={() => navigate(`/project/${projectId}`)}
               className="btn-secondary"
-              style={{ padding: "0.5rem 1rem" }}
+              style={{ padding: `${theme.spacing.sm} ${theme.spacing.lg}` }}
             >
               Back
             </button>
@@ -294,23 +301,23 @@ const IssuesPage: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
+                background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.625rem",
-                fontWeight: "bold",
-                color: "#f5f5f5",
+                fontSize: theme.typography.fontSize.xs,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
               }}
             >
               BUG
             </div>
             <h1
               style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.xl,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
               }}
             >
               Issues & Bugs
@@ -320,7 +327,7 @@ const IssuesPage: React.FC = () => {
             id="btn-report-issue"
             onClick={() => setShowCreateForm(true)}
             className="btn-primary"
-            style={{ padding: "0.75rem 1.5rem" }}
+            style={{ padding: `${theme.spacing.md} ${theme.spacing.xl}` }}
           >
             + Report Issue
           </button>
@@ -331,7 +338,7 @@ const IssuesPage: React.FC = () => {
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: "2rem",
+          padding: theme.spacing["2xl"],
           position: "relative",
           zIndex: 1,
         }}
@@ -340,18 +347,25 @@ const IssuesPage: React.FC = () => {
         <div
           className="card-glass-solid"
           style={{
-            marginBottom: "2rem",
+            marginBottom: theme.spacing["2xl"],
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: theme.spacing.lg,
               flexWrap: "wrap",
             }}
           >
-            <span style={{ fontWeight: "600", color: "#ECDFCC" }}>Filter:</span>
+            <span
+              style={{
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+              }}
+            >
+              Filter:
+            </span>
             {["all", "open", "in_progress", "resolved", "closed"].map(
               (status) => (
                 <button
@@ -360,7 +374,10 @@ const IssuesPage: React.FC = () => {
                   className={
                     filterStatus === status ? "btn-primary" : "btn-secondary"
                   }
-                  style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}
+                  style={{
+                    padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+                    fontSize: theme.typography.fontSize.sm,
+                  }}
                 >
                   {status.replace("_", " ").toUpperCase()}
                 </button>
@@ -374,7 +391,7 @@ const IssuesPage: React.FC = () => {
           <div
             className="card-glass-solid"
             style={{
-              marginBottom: "2rem",
+              marginBottom: theme.spacing["2xl"],
             }}
           >
             <div
@@ -382,15 +399,15 @@ const IssuesPage: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: "1.5rem",
+                marginBottom: theme.spacing.xl,
               }}
             >
               <h3
                 style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: theme.typography.fontSize.xl,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  textShadow: theme.effects.textShadow.sm,
                 }}
               >
                 Report New Issue
@@ -398,21 +415,21 @@ const IssuesPage: React.FC = () => {
               <button
                 onClick={() => setShowCreateForm(false)}
                 className="btn-secondary"
-                style={{ padding: "0.5rem 1rem" }}
+                style={{ padding: `${theme.spacing.sm} ${theme.spacing.lg}` }}
               >
                 Cancel
               </button>
             </div>
 
             <form onSubmit={handleCreateIssue}>
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: theme.spacing.xl }}>
                 <label
                   style={{
                     display: "block",
-                    marginBottom: "0.5rem",
-                    fontWeight: "600",
-                    color: "#f5f5f5",
-                    fontSize: "0.875rem",
+                    marginBottom: theme.spacing.sm,
+                    fontWeight: theme.typography.fontWeight.semibold,
+                    color: theme.colors.text.primary,
+                    fontSize: theme.typography.fontSize.sm,
                   }}
                 >
                   Title *
@@ -429,14 +446,14 @@ const IssuesPage: React.FC = () => {
                 />
               </div>
 
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: theme.spacing.xl }}>
                 <label
                   style={{
                     display: "block",
-                    marginBottom: "0.5rem",
-                    fontWeight: "600",
-                    color: "#f5f5f5",
-                    fontSize: "0.875rem",
+                    marginBottom: theme.spacing.sm,
+                    fontWeight: theme.typography.fontWeight.semibold,
+                    color: theme.colors.text.primary,
+                    fontSize: theme.typography.fontSize.sm,
                   }}
                 >
                   Description *
@@ -452,14 +469,14 @@ const IssuesPage: React.FC = () => {
                   rows={4}
                   style={{
                     width: "100%",
-                    padding: "1em",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(236, 223, 204, 0.3)",
-                    backgroundColor: "#1a1a1a",
-                    color: "#f5f5f5",
-                    fontFamily: "inherit",
-                    fontSize: "0.9375rem",
-                    boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.4)",
+                    padding: theme.spacing.lg,
+                    borderRadius: theme.borderRadius.lg,
+                    border: `1px solid ${theme.colors.border.light}`,
+                    backgroundColor: theme.colors.background.tertiary,
+                    color: theme.colors.text.primary,
+                    fontFamily: theme.typography.fontFamily.primary,
+                    fontSize: theme.typography.fontSize.base,
+                    boxShadow: theme.shadows.inner,
                     resize: "vertical",
                   }}
                 />
@@ -469,18 +486,18 @@ const IssuesPage: React.FC = () => {
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                  gap: "1rem",
-                  marginBottom: "1.5rem",
+                  gap: theme.spacing.lg,
+                  marginBottom: theme.spacing.xl,
                 }}
               >
                 <div>
                   <label
                     style={{
                       display: "block",
-                      marginBottom: "0.5rem",
-                      fontWeight: "600",
-                      color: "#f5f5f5",
-                      fontSize: "0.875rem",
+                      marginBottom: theme.spacing.sm,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      color: theme.colors.text.primary,
+                      fontSize: theme.typography.fontSize.sm,
                     }}
                   >
                     Type *
@@ -503,10 +520,10 @@ const IssuesPage: React.FC = () => {
                   <label
                     style={{
                       display: "block",
-                      marginBottom: "0.5rem",
-                      fontWeight: "600",
-                      color: "#f5f5f5",
-                      fontSize: "0.875rem",
+                      marginBottom: theme.spacing.sm,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      color: theme.colors.text.primary,
+                      fontSize: theme.typography.fontSize.sm,
                     }}
                   >
                     Priority *
@@ -531,7 +548,9 @@ const IssuesPage: React.FC = () => {
                 id="btn-submit-issue"
                 type="submit"
                 className="btn-primary"
-                style={{ padding: "0.75rem 2rem" }}
+                style={{
+                  padding: `${theme.spacing.md} ${theme.spacing["2xl"]}`,
+                }}
                 disabled={loading}
               >
                 {loading ? "Creating..." : "Create Issue"}
@@ -547,7 +566,7 @@ const IssuesPage: React.FC = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              padding: "4rem",
+              padding: theme.spacing["4xl"],
             }}
           >
             <div
@@ -559,40 +578,45 @@ const IssuesPage: React.FC = () => {
           <div
             className="card-glass-solid"
             style={{
-              padding: "4rem 2rem",
+              padding: `${theme.spacing["4xl"]} ${theme.spacing["2xl"]}`,
               textAlign: "center",
-              border: "2px dashed rgba(236, 223, 204, 0.4)",
+              border: `2px dashed ${theme.colors.border.light}66`,
             }}
           >
             <div
               style={{
                 width: "80px",
                 height: "80px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "50%",
+                background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
+                borderRadius: theme.borderRadius.full,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "1rem",
-                fontWeight: "bold",
-                color: "#f5f5f5",
-                margin: "0 auto 1.5rem",
+                fontSize: theme.typography.fontSize.base,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                margin: `0 auto ${theme.spacing.xl}`,
               }}
             >
               OK
             </div>
             <h3
               style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                color: "#f5f5f5",
-                marginBottom: "0.75rem",
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: theme.typography.fontSize["2xl"],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.md,
+                textShadow: theme.effects.textShadow.sm,
               }}
             >
               No issues found
             </h3>
-            <p style={{ fontSize: "1rem", color: "#a0a0a0" }}>
+            <p
+              style={{
+                fontSize: theme.typography.fontSize.base,
+                color: theme.colors.text.muted,
+              }}
+            >
               {filterStatus === "all"
                 ? "Great! No issues reported yet."
                 : `No ${filterStatus.replace("_", " ")} issues.`}
@@ -636,7 +660,7 @@ const IssuesPage: React.FC = () => {
                         style={{
                           fontSize: "1.125rem",
                           fontWeight: "700",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           flex: 1,
                           textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                         }}
@@ -647,7 +671,7 @@ const IssuesPage: React.FC = () => {
                         style={{
                           padding: "0.25rem 0.75rem",
                           background: getStatusColor(issue.status),
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           borderRadius: "12px",
                           fontSize: "0.75rem",
                           fontWeight: "600",
@@ -659,7 +683,7 @@ const IssuesPage: React.FC = () => {
                         style={{
                           padding: "0.25rem 0.75rem",
                           background: getPriorityColor(issue.priority),
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           borderRadius: "12px",
                           fontSize: "0.75rem",
                           fontWeight: "600",
@@ -672,7 +696,7 @@ const IssuesPage: React.FC = () => {
                     <p
                       style={{
                         fontSize: "0.9375rem",
-                        color: "#ECDFCC",
+                        color: theme.colors.text.primary,
                         marginBottom: "1rem",
                         lineHeight: "1.6",
                       }}
@@ -714,13 +738,18 @@ const IssuesPage: React.FC = () => {
                           style={{
                             fontSize: "0.8125rem",
                             fontWeight: "600",
-                            color: "#ECDFCC",
+                            color: theme.colors.text.primary,
                             marginBottom: "0.25rem",
                           }}
                         >
                           Resolution:
                         </div>
-                        <div style={{ fontSize: "0.875rem", color: "#ECDFCC" }}>
+                        <div
+                          style={{
+                            fontSize: "0.875rem",
+                            color: theme.colors.text.primary,
+                          }}
+                        >
                           {issue.resolution}
                         </div>
                       </div>
@@ -743,9 +772,9 @@ const IssuesPage: React.FC = () => {
                           padding: "0.5rem 1rem",
                           fontSize: "0.875rem",
                           borderRadius: "0.5em",
-                          border: "1px solid #697565",
-                          background: "#ECDFCC",
-                          color: "#181C14",
+                          border: `1px solid ${theme.colors.border.light}`,
+                          background: theme.colors.text.primary,
+                          color: theme.colors.background.primary,
                           cursor: "pointer",
                         }}
                       >

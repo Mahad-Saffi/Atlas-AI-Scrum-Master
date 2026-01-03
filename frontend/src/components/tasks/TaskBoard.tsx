@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { taskService } from "../../services/taskService";
 import { useToast } from "../Toast";
+import theme from "../../styles/theme";
 
 interface Task {
   id: string;
@@ -110,10 +111,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
           {/* Column Header */}
           <div
             style={{
-              padding: "0.75rem 1rem",
-              background: "rgba(236, 223, 204, 0.2)",
-              borderRadius: "var(--radius-md)",
-              marginBottom: "1rem",
+              padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+              background: theme.colors.background.hover,
+              borderRadius: theme.borderRadius.md,
+              marginBottom: theme.spacing.lg,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -121,9 +122,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
           >
             <h3
               style={{
-                fontSize: "0.9375rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
+                fontSize: theme.typography.fontSize.base,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
                 margin: 0,
               }}
             >
@@ -131,12 +132,12 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
             </h3>
             <span
               style={{
-                fontSize: "0.8125rem",
-                fontWeight: "500",
-                color: "#ECDFCC",
-                background: "rgba(236, 223, 204, 0.3)",
-                padding: "0.25rem 0.625rem",
-                borderRadius: "var(--radius-sm)",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.medium,
+                color: theme.colors.text.primary,
+                background: theme.colors.background.hoverStrong,
+                padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
+                borderRadius: theme.borderRadius.sm,
               }}
             >
               {tasksInStatus.length}
@@ -157,11 +158,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                 style={{
                   padding: "2rem 1rem",
                   textAlign: "center",
-                  color: "#ECDFCC",
-                  fontSize: "0.875rem",
-                  background: "rgba(236, 223, 204, 0.1)",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px dashed rgba(236, 223, 204, 0.3)",
+                  color: theme.colors.text.primary,
+                  fontSize: theme.typography.fontSize.sm,
+                  background: theme.colors.background.hover,
+                  borderRadius: theme.borderRadius.md,
+                  border: `1px dashed ${theme.colors.border.light}`,
                 }}
               >
                 No tasks
@@ -170,7 +171,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
               tasksInStatus.map((task, taskIndex) => (
                 <div
                   key={task.id}
-                  id={`task-card-${status.toLowerCase().replace(' ', '-')}-${taskIndex}`}
+                  id={`task-card-${status
+                    .toLowerCase()
+                    .replace(" ", "-")}-${taskIndex}`}
                   data-task-id={task.id}
                   className="card task-card"
                   style={{
@@ -295,9 +298,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                         })}
                       </span>
                     )}
-                    {task.estimate_hours && (
-                      <span>{task.estimate_hours}h</span>
-                    )}
+                    {task.estimate_hours && <span>{task.estimate_hours}h</span>}
                   </div>
 
                   {/* Action Button */}
@@ -350,14 +351,14 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   {status === "Done" && (
                     <div
                       style={{
-                        padding: "0.5rem",
+                        padding: theme.spacing.sm,
                         textAlign: "center",
-                        background: "rgba(16, 185, 129, 0.2)",
-                        borderRadius: "var(--radius-sm)",
-                        fontSize: "0.8125rem",
-                        fontWeight: "600",
-                        color: "#ECDFCC",
-                        border: "1px solid rgba(16, 185, 129, 0.4)",
+                        background: `rgba(34, 197, 94, 0.2)`,
+                        borderRadius: theme.borderRadius.sm,
+                        fontSize: theme.typography.fontSize.sm,
+                        fontWeight: theme.typography.fontWeight.semibold,
+                        color: theme.colors.text.primary,
+                        border: `1px solid ${theme.colors.status.success}66`,
                       }}
                     >
                       ✓ Completed

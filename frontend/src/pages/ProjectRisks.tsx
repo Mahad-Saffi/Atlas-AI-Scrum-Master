@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import theme from "../styles/theme";
 
 interface Risk {
   task_id: string;
@@ -68,13 +69,13 @@ const ProjectRisks: React.FC = () => {
   const getRiskColor = (level: string) => {
     switch (level) {
       case "high":
-        return "#ef4444";
+        return theme.colors.status.error;
       case "medium":
-        return "#f59e0b";
+        return theme.colors.status.warning;
       case "low":
-        return "#10b981";
+        return theme.colors.status.success;
       default:
-        return "#697565";
+        return theme.colors.text.secondary;
     }
   };
 
@@ -129,8 +130,8 @@ const ProjectRisks: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                borderRadius: "var(--radius-md)",
+                background: theme.colors.brand.redGradient,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -145,7 +146,7 @@ const ProjectRisks: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
               }}
             >
               Project Risks
@@ -190,15 +191,15 @@ const ProjectRisks: React.FC = () => {
             style={{
               padding: "4rem 2rem",
               textAlign: "center",
-              background: "rgba(236, 223, 204, 0.95)",
-              border: "2px dashed #697565",
+              background: theme.colors.background.card,
+              border: `2px dashed ${theme.colors.border.light}`,
             }}
           >
             <h3
               style={{
                 fontSize: "1.5rem",
                 fontWeight: "700",
-                color: "#181C14",
+                color: theme.colors.background.primary,
               }}
             >
               No risk data available
@@ -340,8 +341,8 @@ const ProjectRisks: React.FC = () => {
               style={{
                 padding: "1rem",
                 marginBottom: "2rem",
-                background: "rgba(236, 223, 204, 0.95)",
-                border: "2px solid #697565",
+                background: theme.colors.background.card,
+                border: `2px solid ${theme.colors.border.light}`,
               }}
             >
               <div
@@ -352,7 +353,12 @@ const ProjectRisks: React.FC = () => {
                   flexWrap: "wrap",
                 }}
               >
-                <span style={{ fontWeight: "600", color: "#181C14" }}>
+                <span
+                  style={{
+                    fontWeight: "600",
+                    color: theme.colors.background.primary,
+                  }}
+                >
                   Filter by Risk:
                 </span>
                 {["all", "high", "medium", "low"].map((level) => (
@@ -377,16 +383,15 @@ const ProjectRisks: React.FC = () => {
                 style={{
                   padding: "4rem 2rem",
                   textAlign: "center",
-                  background: "rgba(236, 223, 204, 0.95)",
-                  border: "2px dashed #697565",
+                  background: theme.colors.background.card,
+                  border: `2px dashed ${theme.colors.border.light}`,
                 }}
               >
                 <div
                   style={{
                     width: "80px",
                     height: "80px",
-                    background:
-                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                    background: theme.colors.brand.redGradient,
                     borderRadius: "50%",
                     display: "flex",
                     alignItems: "center",
@@ -421,7 +426,7 @@ const ProjectRisks: React.FC = () => {
                     className="card"
                     style={{
                       padding: "1.5rem",
-                      background: "rgba(236, 223, 204, 0.9)",
+                      background: theme.colors.background.card,
                       border: `2px solid ${getRiskColor(task.risk_level)}`,
                       transition: "all 0.3s ease",
                     }}
@@ -464,7 +469,7 @@ const ProjectRisks: React.FC = () => {
                             style={{
                               fontSize: "1.125rem",
                               fontWeight: "700",
-                              color: "#181C14",
+                              color: theme.colors.background.primary,
                               flex: 1,
                             }}
                           >
@@ -474,7 +479,7 @@ const ProjectRisks: React.FC = () => {
                             style={{
                               padding: "0.25rem 0.75rem",
                               background: getRiskColor(task.risk_level),
-                              color: "#ECDFCC",
+                              color: theme.colors.text.primary,
                               borderRadius: "12px",
                               fontSize: "0.75rem",
                               fontWeight: "600",
@@ -490,7 +495,7 @@ const ProjectRisks: React.FC = () => {
                             style={{
                               fontSize: "0.875rem",
                               fontWeight: "600",
-                              color: "#181C14",
+                              color: theme.colors.background.primary,
                               marginBottom: "0.5rem",
                             }}
                           >
@@ -508,11 +513,11 @@ const ProjectRisks: React.FC = () => {
                                 key={index}
                                 style={{
                                   padding: "0.25rem 0.75rem",
-                                  background: "rgba(105, 117, 101, 0.2)",
-                                  color: "#3C3D37",
+                                  background: theme.colors.background.hover,
+                                  color: theme.colors.brand.redDark,
                                   borderRadius: "8px",
                                   fontSize: "0.8125rem",
-                                  border: "1px solid #697565",
+                                  border: `1px solid ${theme.colors.border.light}`,
                                 }}
                               >
                                 {factor}
@@ -529,13 +534,16 @@ const ProjectRisks: React.FC = () => {
                               "repeat(auto-fit, minmax(150px, 1fr))",
                             gap: "1rem",
                             fontSize: "0.875rem",
-                            color: "#697565",
+                            color: theme.colors.text.secondary,
                           }}
                         >
                           {task.assignee_username && (
                             <div>
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{
+                                  fontWeight: "600",
+                                  color: theme.colors.brand.redDark,
+                                }}
                               >
                                 Assignee:
                               </span>{" "}
@@ -545,7 +553,10 @@ const ProjectRisks: React.FC = () => {
                           {task.due_date && (
                             <div>
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{
+                                  fontWeight: "600",
+                                  color: theme.colors.brand.redDark,
+                                }}
                               >
                                 Due Date:
                               </span>{" "}
@@ -555,7 +566,10 @@ const ProjectRisks: React.FC = () => {
                           {task.progress_percentage !== undefined && (
                             <div>
                               <span
-                                style={{ fontWeight: "600", color: "#3C3D37" }}
+                                style={{
+                                  fontWeight: "600",
+                                  color: theme.colors.brand.redDark,
+                                }}
                               >
                                 Progress:
                               </span>{" "}
@@ -565,7 +579,10 @@ const ProjectRisks: React.FC = () => {
                           {task.estimated_delay_days !== undefined &&
                             task.estimated_delay_days > 0 && (
                               <div
-                                style={{ color: "#ef4444", fontWeight: "600" }}
+                                style={{
+                                  color: theme.colors.status.error,
+                                  fontWeight: "600",
+                                }}
                               >
                                 Estimated Delay: {task.estimated_delay_days}{" "}
                                 days
@@ -580,7 +597,7 @@ const ProjectRisks: React.FC = () => {
                               style={{
                                 width: "100%",
                                 height: "8px",
-                                background: "rgba(105, 117, 101, 0.2)",
+                                background: theme.colors.background.hover,
                                 borderRadius: "4px",
                                 overflow: "hidden",
                               }}

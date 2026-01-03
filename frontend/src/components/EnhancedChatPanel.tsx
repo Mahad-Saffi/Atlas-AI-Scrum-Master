@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { PaperAirplaneIcon, MegaphoneIcon } from "@heroicons/react/24/solid";
+import theme from "../styles/theme";
 
 interface Message {
   id: number;
@@ -266,30 +268,29 @@ const EnhancedChatPanel: React.FC = () => {
         height: "calc(100vh - 135px)",
         maxHeight: "850px",
         overflow: "hidden",
-        background: "rgba(236, 223, 204, 0.25)",
-        backdropFilter: "blur(25px)",
-        border: "1px solid rgba(236, 223, 204, 0.35)",
-        borderRadius: "var(--radius-lg)",
-        boxShadow:
-          "0 8px 32px 0 rgba(24, 28, 20, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)",
+        background: theme.colors.background.secondary,
+        backdropFilter: theme.effects.backdropBlur.lg,
+        border: `1px solid ${theme.colors.border.light}`,
+        borderRadius: theme.borderRadius.lg,
+        boxShadow: theme.shadows.lg,
       }}
     >
       {/* Sidebar */}
       <div
         style={{
           width: "280px",
-          borderRight: "1px solid rgba(236, 223, 204, 0.3)",
+          borderRight: `1px solid ${theme.colors.border.light}`,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.1)",
-          backdropFilter: "blur(15px)",
+          background: theme.colors.background.tertiary,
+          backdropFilter: theme.effects.backdropBlur.md,
         }}
       >
         {/* Tabs */}
         <div
           style={{
             display: "flex",
-            borderBottom: "1px solid rgba(236, 223, 204, 0.3)",
+            borderBottom: `1px solid ${theme.colors.border.light}`,
           }}
         >
           <button
@@ -299,23 +300,27 @@ const EnhancedChatPanel: React.FC = () => {
             }}
             style={{
               flex: 1,
-              padding: "0.875rem",
+              padding: theme.spacing.md,
               background:
                 activeView === "channels"
-                  ? "rgba(236, 223, 204, 0.3)"
+                  ? theme.colors.background.hover
                   : "transparent",
               border: "none",
               borderBottom:
                 activeView === "channels"
-                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  ? `2px solid ${theme.colors.brand.red}`
                   : "none",
-              fontSize: "0.875rem",
-              fontWeight: "600",
-              color: "#ECDFCC",
+              fontSize: theme.typography.fontSize.sm,
+              fontWeight: theme.typography.fontWeight.semibold,
+              color: theme.colors.text.primary,
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: theme.spacing.sm,
             }}
           >
-            📢 Channels
+            <MegaphoneIcon style={{ width: "16px", height: "16px" }} />
+            Channels
           </button>
           <button
             onClick={() => {
@@ -324,19 +329,19 @@ const EnhancedChatPanel: React.FC = () => {
             }}
             style={{
               flex: 1,
-              padding: "0.875rem",
+              padding: theme.spacing.md,
               background:
                 activeView === "dms"
-                  ? "rgba(236, 223, 204, 0.3)"
+                  ? theme.colors.background.hover
                   : "transparent",
               border: "none",
               borderBottom:
                 activeView === "dms"
-                  ? "2px solid rgba(236, 223, 204, 0.5)"
+                  ? `2px solid ${theme.colors.brand.red}`
                   : "none",
-              fontSize: "0.875rem",
-              fontWeight: "600",
-              color: "#ECDFCC",
+              fontSize: theme.typography.fontSize.sm,
+              fontWeight: theme.typography.fontWeight.semibold,
+              color: theme.colors.text.primary,
               cursor: "pointer",
             }}
           >
@@ -370,37 +375,37 @@ const EnhancedChatPanel: React.FC = () => {
                   onMouseEnter={(e) => {
                     if (selectedChannel !== channel.id) {
                       e.currentTarget.style.background =
-                        "rgba(236, 223, 204, 0.18)";
+                        theme.colors.background.hoverStrong;
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (selectedChannel !== channel.id) {
                       e.currentTarget.style.background =
-                        "rgba(236, 223, 204, 0.1)";
+                        theme.colors.background.hover;
                     }
                   }}
                   style={{
-                    padding: "0.75rem",
-                    marginBottom: "0.5rem",
+                    padding: theme.spacing.md,
+                    marginBottom: theme.spacing.sm,
                     background:
                       selectedChannel === channel.id
-                        ? "rgba(236, 223, 204, 0.25)"
-                        : "rgba(236, 223, 204, 0.1)",
-                    backdropFilter: "blur(10px)",
+                        ? theme.colors.background.hoverStrong
+                        : theme.colors.background.hover,
+                    backdropFilter: theme.effects.backdropBlur.sm,
                     border:
                       selectedChannel === channel.id
-                        ? "1px solid rgba(236, 223, 204, 0.4)"
-                        : "1px solid rgba(236, 223, 204, 0.2)",
-                    borderRadius: "var(--radius-md)",
+                        ? `1px solid ${theme.colors.border.light}`
+                        : `1px solid ${theme.colors.border.default}`,
+                    borderRadius: theme.borderRadius.md,
                     cursor: "pointer",
-                    transition: "all 0.2s",
+                    transition: theme.effects.transition.normal,
                   }}
                 >
                   <div
                     style={{
-                      fontSize: "0.875rem",
-                      fontWeight: "600",
-                      color: "#ECDFCC",
+                      fontSize: theme.typography.fontSize.sm,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      color: theme.colors.text.primary,
                     }}
                   >
                     # {channel.name}
@@ -408,10 +413,9 @@ const EnhancedChatPanel: React.FC = () => {
                   {channel.description && (
                     <div
                       style={{
-                        fontSize: "0.75rem",
-                        color: "#ECDFCC",
-                        opacity: 0.8,
-                        marginTop: "0.25rem",
+                        fontSize: theme.typography.fontSize.xs,
+                        color: theme.colors.text.secondary,
+                        marginTop: theme.spacing.xs,
                       }}
                     >
                       {channel.description}
@@ -424,11 +428,11 @@ const EnhancedChatPanel: React.FC = () => {
             <>
               <h3
                 style={{
-                  fontSize: "0.75rem",
-                  fontWeight: "700",
-                  color: "#ECDFCC",
+                  fontSize: theme.typography.fontSize.xs,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
                   textTransform: "uppercase",
-                  marginBottom: "0.75rem",
+                  marginBottom: theme.spacing.md,
                 }}
               >
                 Online ({onlineUsers.length})
@@ -443,33 +447,33 @@ const EnhancedChatPanel: React.FC = () => {
                   onMouseEnter={(e) => {
                     if (selectedUser !== user.id) {
                       e.currentTarget.style.background =
-                        "rgba(236, 223, 204, 0.18)";
+                        theme.colors.background.hoverStrong;
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (selectedUser !== user.id) {
                       e.currentTarget.style.background =
-                        "rgba(236, 223, 204, 0.1)";
+                        theme.colors.background.hover;
                     }
                   }}
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.75rem",
-                    padding: "0.75rem",
-                    marginBottom: "0.5rem",
+                    gap: theme.spacing.md,
+                    padding: theme.spacing.md,
+                    marginBottom: theme.spacing.sm,
                     background:
                       selectedUser === user.id
-                        ? "rgba(236, 223, 204, 0.25)"
-                        : "rgba(236, 223, 204, 0.1)",
-                    backdropFilter: "blur(10px)",
+                        ? theme.colors.background.hoverStrong
+                        : theme.colors.background.hover,
+                    backdropFilter: theme.effects.backdropBlur.sm,
                     border:
                       selectedUser === user.id
-                        ? "1px solid rgba(236, 223, 204, 0.4)"
-                        : "1px solid rgba(236, 223, 204, 0.2)",
-                    borderRadius: "var(--radius-md)",
+                        ? `1px solid ${theme.colors.border.light}`
+                        : `1px solid ${theme.colors.border.default}`,
+                    borderRadius: theme.borderRadius.md,
                     cursor: "pointer",
-                    transition: "all 0.2s",
+                    transition: theme.effects.transition.normal,
                   }}
                 >
                   <img
@@ -479,14 +483,14 @@ const EnhancedChatPanel: React.FC = () => {
                       width: "32px",
                       height: "32px",
                       borderRadius: "50%",
-                      border: "2px solid #10b981",
+                      border: `2px solid ${theme.colors.status.success}`,
                     }}
                   />
                   <span
                     style={{
-                      fontSize: "0.875rem",
-                      fontWeight: "500",
-                      color: "#ECDFCC",
+                      fontSize: theme.typography.fontSize.sm,
+                      fontWeight: theme.typography.fontWeight.medium,
+                      color: theme.colors.text.primary,
                     }}
                   >
                     {user.username}
@@ -504,19 +508,19 @@ const EnhancedChatPanel: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(236, 223, 204, 0.05)",
+          background: theme.colors.background.tertiary,
         }}
       >
         {/* Header with Search */}
         <div
           style={{
-            padding: "1rem 1.25rem",
-            borderBottom: "1px solid rgba(236, 223, 204, 0.25)",
-            background: "rgba(236, 223, 204, 0.12)",
-            backdropFilter: "blur(10px)",
+            padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
+            borderBottom: `1px solid ${theme.colors.border.light}`,
+            background: theme.colors.background.secondary,
+            backdropFilter: theme.effects.backdropBlur.sm,
             display: "flex",
             alignItems: "center",
-            gap: "0.75rem",
+            gap: theme.spacing.md,
           }}
         >
           <input
@@ -559,7 +563,7 @@ const EnhancedChatPanel: React.FC = () => {
             <div
               style={{
                 textAlign: "center",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
                 padding: "3rem 1rem",
               }}
             >
@@ -568,17 +572,30 @@ const EnhancedChatPanel: React.FC = () => {
                   width: "64px",
                   height: "64px",
                   borderRadius: "50%",
-                  background: "rgba(236, 223, 204, 0.1)",
+                  background: theme.colors.background.hover,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   margin: "0 auto 1rem",
-                  border: "1px solid rgba(236, 223, 204, 0.2)",
+                  border: `1px solid ${theme.colors.border.light}`,
                 }}
               >
-                <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>CHAT</span>
+                <span
+                  style={{
+                    fontSize: theme.typography.fontSize.sm,
+                    color: theme.colors.text.muted,
+                    fontWeight: theme.typography.fontWeight.bold,
+                  }}
+                >
+                  CHAT
+                </span>
               </div>
-              <div style={{ fontSize: "0.9375rem", fontWeight: "500" }}>
+              <div
+                style={{
+                  fontSize: theme.typography.fontSize.base,
+                  fontWeight: theme.typography.fontWeight.medium,
+                }}
+              >
                 {selectedChannel || selectedUser
                   ? "No messages yet. Start chatting!"
                   : "Select a channel or user to start chatting"}
@@ -589,31 +606,31 @@ const EnhancedChatPanel: React.FC = () => {
               <div
                 key={index}
                 style={{
-                  padding: "0.75rem 0.875rem",
-                  background: "rgba(236, 223, 204, 0.15)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(236, 223, 204, 0.25)",
-                  borderRadius: "var(--radius-md)",
-                  transition: "all 0.2s ease",
+                  padding: `${theme.spacing.md} ${theme.spacing.md}`,
+                  background: theme.colors.background.hover,
+                  backdropFilter: theme.effects.backdropBlur.sm,
+                  border: `1px solid ${theme.colors.border.light}`,
+                  borderRadius: theme.borderRadius.md,
+                  transition: theme.effects.transition.normal,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(236, 223, 204, 0.2)";
+                  e.currentTarget.style.background =
+                    theme.colors.background.hoverStrong;
                   e.currentTarget.style.borderColor =
-                    "rgba(236, 223, 204, 0.35)";
+                    theme.colors.border.medium;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background =
-                    "rgba(236, 223, 204, 0.15)";
-                  e.currentTarget.style.borderColor =
-                    "rgba(236, 223, 204, 0.25)";
+                    theme.colors.background.hover;
+                  e.currentTarget.style.borderColor = theme.colors.border.light;
                 }}
               >
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.5rem",
-                    marginBottom: "0.5rem",
+                    gap: theme.spacing.sm,
+                    marginBottom: theme.spacing.sm,
                   }}
                 >
                   <div
@@ -621,32 +638,30 @@ const EnhancedChatPanel: React.FC = () => {
                       width: "24px",
                       height: "24px",
                       borderRadius: "50%",
-                      background:
-                        "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                      background: theme.colors.brand.redGradient,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "0.75rem",
-                      color: "#ECDFCC",
-                      fontWeight: "600",
+                      fontSize: theme.typography.fontSize.xs,
+                      color: theme.colors.text.white,
+                      fontWeight: theme.typography.fontWeight.semibold,
                     }}
                   >
                     {msg.sender_id}
                   </div>
                   <span
                     style={{
-                      fontSize: "0.8125rem",
-                      color: "#ECDFCC",
-                      fontWeight: "600",
+                      fontSize: theme.typography.fontSize.sm,
+                      color: theme.colors.text.primary,
+                      fontWeight: theme.typography.fontWeight.semibold,
                     }}
                   >
                     User #{msg.sender_id}
                   </span>
                   <span
                     style={{
-                      fontSize: "0.6875rem",
-                      color: "#ECDFCC",
-                      opacity: 0.6,
+                      fontSize: theme.typography.fontSize.xs,
+                      color: theme.colors.text.secondary,
                       marginLeft: "auto",
                     }}
                   >
@@ -658,10 +673,10 @@ const EnhancedChatPanel: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9375rem",
-                    color: "#ECDFCC",
-                    lineHeight: "1.5",
-                    paddingLeft: "2rem",
+                    fontSize: theme.typography.fontSize.base,
+                    color: theme.colors.text.primary,
+                    lineHeight: theme.typography.lineHeight.normal,
+                    paddingLeft: theme.spacing["2xl"],
                   }}
                 >
                   {msg.content}
@@ -675,12 +690,12 @@ const EnhancedChatPanel: React.FC = () => {
         {/* Input Area */}
         <div
           style={{
-            padding: "1rem 1.25rem",
-            borderTop: "1px solid rgba(236, 223, 204, 0.25)",
-            background: "rgba(236, 223, 204, 0.12)",
-            backdropFilter: "blur(15px)",
+            padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
+            borderTop: `1px solid ${theme.colors.border.light}`,
+            background: theme.colors.background.secondary,
+            backdropFilter: theme.effects.backdropBlur.md,
             display: "flex",
-            gap: "0.75rem",
+            gap: theme.spacing.md,
           }}
         >
           <input
@@ -702,13 +717,13 @@ const EnhancedChatPanel: React.FC = () => {
             }
             className="btn-primary"
             style={{
-              padding: "0.75rem 1.5rem",
+              padding: `${theme.spacing.md} ${theme.spacing.xl}`,
               display: "flex",
               alignItems: "center",
-              gap: "0.5rem",
+              gap: theme.spacing.sm,
             }}
           >
-            <span>📤</span>
+            <PaperAirplaneIcon style={{ width: "20px", height: "20px" }} />
             <span>Send</span>
           </button>
         </div>
@@ -748,8 +763,8 @@ const CreateChannelModal: React.FC<{
         left: 0,
         right: 0,
         bottom: 0,
-        background: "rgba(24, 28, 20, 0.7)",
-        backdropFilter: "blur(4px)",
+        background: theme.colors.overlay.light,
+        backdropFilter: theme.effects.backdropBlur.sm,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -769,25 +784,25 @@ const CreateChannelModal: React.FC<{
       >
         <h2
           style={{
-            fontSize: "1.5rem",
-            fontWeight: "700",
-            color: "#ECDFCC",
-            marginBottom: "1.5rem",
-            textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            fontSize: theme.typography.fontSize["2xl"],
+            fontWeight: theme.typography.fontWeight.bold,
+            color: theme.colors.text.primary,
+            marginBottom: theme.spacing["2xl"],
+            textShadow: theme.shadows.sm,
           }}
         >
           Create Channel
         </h2>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "1.25rem" }}>
+          <div style={{ marginBottom: theme.spacing.xl }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Channel Name
@@ -802,14 +817,14 @@ const CreateChannelModal: React.FC<{
             />
           </div>
 
-          <div style={{ marginBottom: "1.5rem" }}>
+          <div style={{ marginBottom: theme.spacing["2xl"] }}>
             <label
               style={{
                 display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                color: "#ECDFCC",
-                marginBottom: "0.5rem",
+                fontSize: theme.typography.fontSize.sm,
+                fontWeight: theme.typography.fontWeight.semibold,
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
               }}
             >
               Description (Optional)

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import theme from "../styles/theme";
 
 interface Organization {
   id: string;
@@ -72,13 +73,13 @@ const OrganizationInfo: React.FC = () => {
           width: "40px",
           height: "40px",
           borderRadius: "8px",
-          background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+          background: theme.colors.brand.redGradient,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#f5f5f5",
-          fontWeight: "bold",
-          fontSize: "0.625rem",
+          color: theme.colors.text.white,
+          fontWeight: theme.typography.fontWeight.bold,
+          fontSize: theme.typography.fontSize.xs,
         }}
       >
         ORG
@@ -88,17 +89,17 @@ const OrganizationInfo: React.FC = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
-            marginBottom: "0.25rem",
+            gap: theme.spacing.sm,
+            marginBottom: theme.spacing.xs,
           }}
         >
           <h3
             style={{
-              fontSize: "1.6rem",
-              fontWeight: "700",
-              color: "#ECDFCC",
+              fontSize: theme.typography.fontSize["2xl"],
+              fontWeight: theme.typography.fontWeight.bold,
+              color: theme.colors.text.primary,
               margin: 0,
-              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              textShadow: theme.shadows.sm,
             }}
           >
             {org.name}
@@ -106,12 +107,12 @@ const OrganizationInfo: React.FC = () => {
           {org.is_owner && (
             <span
               style={{
-                fontSize: "0.625rem",
-                fontWeight: "700",
-                color: "#ECDFCC",
-                padding: "0.125rem 0.375rem",
-                background: "rgba(236, 223, 204, 0.2)",
-                borderRadius: "var(--radius-sm)",
+                fontSize: theme.typography.fontSize.xs,
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
+                background: theme.colors.background.hover,
+                borderRadius: theme.borderRadius.sm,
                 textTransform: "uppercase",
               }}
             >
@@ -119,7 +120,12 @@ const OrganizationInfo: React.FC = () => {
             </span>
           )}
         </div>
-        <div style={{ fontSize: "0.75rem", color: "#ECDFCC" }}>
+        <div
+          style={{
+            fontSize: theme.typography.fontSize.xs,
+            color: theme.colors.text.secondary,
+          }}
+        >
           Created: {new Date(org.created_at).toLocaleDateString()}
         </div>
       </div>

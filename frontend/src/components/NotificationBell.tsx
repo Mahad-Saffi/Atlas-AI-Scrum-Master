@@ -3,6 +3,8 @@ import {
   notificationService,
   type Notification,
 } from "../services/notificationService";
+import { BellIcon, InboxIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import theme from "../styles/theme";
 
 const NotificationBell: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -108,28 +110,36 @@ const NotificationBell: React.FC = () => {
         className="btn-secondary"
         style={{
           position: "relative",
-          padding: "10px 14px",
-          fontSize: "20px",
+          padding: theme.spacing.md,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        🔔
+        <BellIcon
+          style={{
+            width: "20px",
+            height: "20px",
+            color: theme.colors.text.primary,
+          }}
+        />
         {unreadCount > 0 && (
           <span
             style={{
               position: "absolute",
               top: "-8px",
               right: "-8px",
-              backgroundColor: "#ef4444",
-              color: "#ECDFCC",
-              borderRadius: "50%",
+              backgroundColor: theme.colors.status.error,
+              color: theme.colors.text.white,
+              borderRadius: theme.borderRadius.full,
               width: "24px",
               height: "24px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "bold",
-              border: "2px solid #ECDFCC",
+              fontSize: theme.typography.fontSize.xs,
+              fontWeight: theme.typography.fontWeight.bold,
+              border: `2px solid ${theme.colors.background.primary}`,
             }}
           >
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -146,20 +156,21 @@ const NotificationBell: React.FC = () => {
             right: "0",
             width: "400px",
             maxHeight: "500px",
-            background: "rgba(236, 223, 204, 0.98)",
-            backdropFilter: "blur(20px)",
-            border: "2px solid #697565",
-            borderRadius: "12px",
-            zIndex: 1000,
+            background: theme.colors.background.card,
+            backdropFilter: theme.effects.backdropBlur.lg,
+            border: `1px solid ${theme.colors.border.light}`,
+            borderRadius: theme.borderRadius.lg,
+            zIndex: theme.zIndex.dropdown,
             overflow: "hidden",
+            boxShadow: theme.shadows.lg,
           }}
         >
           {/* Header */}
           <div
             style={{
-              padding: "16px",
-              borderBottom: "2px solid #697565",
-              background: "rgba(105, 117, 101, 0.1)",
+              padding: theme.spacing.lg,
+              borderBottom: `1px solid ${theme.colors.border.default}`,
+              background: theme.colors.background.hover,
             }}
           >
             <div
@@ -167,39 +178,43 @@ const NotificationBell: React.FC = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "12px",
+                marginBottom: theme.spacing.md,
               }}
             >
               <h3
                 style={{
                   margin: 0,
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  color: "#181C14",
+                  fontSize: theme.typography.fontSize.lg,
+                  fontWeight: theme.typography.fontWeight.bold,
+                  color: theme.colors.text.primary,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: theme.spacing.sm,
                 }}
               >
-                🔔 Notifications
+                <BellIcon style={{ width: "20px", height: "20px" }} />
+                Notifications
               </h3>
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
                   className="btn-secondary"
                   style={{
-                    padding: "6px 12px",
-                    fontSize: "12px",
+                    padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+                    fontSize: theme.typography.fontSize.xs,
                   }}
                 >
                   Mark all read
                 </button>
               )}
             </div>
-            <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ display: "flex", gap: theme.spacing.sm }}>
               <button
                 onClick={() => setShowUnreadOnly(false)}
                 className={!showUnreadOnly ? "btn-primary" : "btn-secondary"}
                 style={{
-                  padding: "6px 12px",
-                  fontSize: "12px",
+                  padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+                  fontSize: theme.typography.fontSize.xs,
                   flex: 1,
                 }}
               >
@@ -209,8 +224,8 @@ const NotificationBell: React.FC = () => {
                 onClick={() => setShowUnreadOnly(true)}
                 className={showUnreadOnly ? "btn-primary" : "btn-secondary"}
                 style={{
-                  padding: "6px 12px",
-                  fontSize: "12px",
+                  padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+                  fontSize: theme.typography.fontSize.xs,
                   flex: 1,
                 }}
               >
@@ -229,9 +244,9 @@ const NotificationBell: React.FC = () => {
             {loading ? (
               <div
                 style={{
-                  padding: "40px",
+                  padding: theme.spacing["4xl"],
                   textAlign: "center",
-                  color: "#3C3D37",
+                  color: theme.colors.text.secondary,
                 }}
               >
                 <div
@@ -242,7 +257,7 @@ const NotificationBell: React.FC = () => {
             ) : notifications.length === 0 ? (
               <div
                 style={{
-                  padding: "40px",
+                  padding: theme.spacing["4xl"],
                   textAlign: "center",
                 }}
               >
@@ -250,32 +265,36 @@ const NotificationBell: React.FC = () => {
                   style={{
                     width: "64px",
                     height: "64px",
-                    background:
-                      "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
-                    borderRadius: "50%",
+                    background: theme.colors.background.hover,
+                    borderRadius: theme.borderRadius.full,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "32px",
-                    margin: "0 auto 16px",
+                    margin: `0 auto ${theme.spacing.lg}`,
                   }}
                 >
-                  📭
+                  <InboxIcon
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      color: theme.colors.text.secondary,
+                    }}
+                  />
                 </div>
                 <div
                   style={{
-                    fontSize: "16px",
-                    fontWeight: "600",
-                    color: "#181C14",
-                    marginBottom: "8px",
+                    fontSize: theme.typography.fontSize.md,
+                    fontWeight: theme.typography.fontWeight.semibold,
+                    color: theme.colors.text.primary,
+                    marginBottom: theme.spacing.sm,
                   }}
                 >
                   No notifications yet
                 </div>
                 <div
                   style={{
-                    fontSize: "14px",
-                    color: "#697565",
+                    fontSize: theme.typography.fontSize.sm,
+                    color: theme.colors.text.secondary,
                   }}
                 >
                   You're all caught up!
@@ -286,22 +305,22 @@ const NotificationBell: React.FC = () => {
                 <div
                   key={notif.id}
                   style={{
-                    padding: "16px",
-                    borderBottom: "1px solid rgba(105, 117, 101, 0.3)",
+                    padding: theme.spacing.lg,
+                    borderBottom: `1px solid ${theme.colors.border.default}`,
                     backgroundColor: notif.read
                       ? "transparent"
-                      : "rgba(105, 117, 101, 0.1)",
+                      : theme.colors.background.hover,
                     cursor: notif.link ? "pointer" : "default",
-                    transition: "all 0.2s ease",
+                    transition: theme.effects.transition.normal,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(105, 117, 101, 0.15)";
+                      theme.colors.background.hoverStrong;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = notif.read
                       ? "transparent"
-                      : "rgba(105, 117, 101, 0.1)";
+                      : theme.colors.background.hover;
                   }}
                   onClick={() => {
                     if (!notif.read) {
@@ -317,14 +336,14 @@ const NotificationBell: React.FC = () => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "flex-start",
-                      marginBottom: "8px",
+                      marginBottom: theme.spacing.sm,
                     }}
                   >
                     <div
                       style={{
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        color: "#181C14",
+                        fontWeight: theme.typography.fontWeight.bold,
+                        fontSize: theme.typography.fontSize.sm,
+                        color: theme.colors.text.primary,
                         flex: 1,
                       }}
                     >
@@ -339,27 +358,35 @@ const NotificationBell: React.FC = () => {
                         backgroundColor: "transparent",
                         border: "none",
                         cursor: "pointer",
-                        fontSize: "16px",
-                        padding: "0 4px",
+                        padding: theme.spacing.xs,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                       title="Delete"
                     >
-                      ✕
+                      <XMarkIcon
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          color: theme.colors.text.secondary,
+                        }}
+                      />
                     </button>
                   </div>
                   <div
                     style={{
-                      fontSize: "13px",
-                      color: "#3C3D37",
-                      marginBottom: "8px",
+                      fontSize: theme.typography.fontSize.sm,
+                      color: theme.colors.text.secondary,
+                      marginBottom: theme.spacing.sm,
                     }}
                   >
                     {notif.message}
                   </div>
                   <div
                     style={{
-                      fontSize: "11px",
-                      color: "#697565",
+                      fontSize: theme.typography.fontSize.xs,
+                      color: theme.colors.text.tertiary,
                     }}
                   >
                     {getTimeAgo(notif.created_at)}

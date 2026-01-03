@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import theme from "../styles/theme";
 
 interface RiskTask {
   id: string;
@@ -122,8 +123,8 @@ const RiskDashboard: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
-                borderRadius: "var(--radius-md)",
+                background: theme.colors.brand.redGradient,
+                borderRadius: theme.borderRadius.md,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -138,7 +139,7 @@ const RiskDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
               }}
             >
               Risk Dashboard
@@ -373,7 +374,15 @@ const RiskDashboard: React.FC = () => {
                 border: "1px solid rgba(16, 185, 129, 0.4)",
               }}
             >
-              <span style={{ fontSize: "1.5rem", color: "#10b981", fontWeight: "bold" }}>OK</span>
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#10b981",
+                  fontWeight: "bold",
+                }}
+              >
+                OK
+              </span>
             </div>
             <h3
               style={{
@@ -396,7 +405,7 @@ const RiskDashboard: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "700",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
                 marginBottom: "1rem",
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
@@ -453,11 +462,11 @@ const RiskDashboard: React.FC = () => {
                           style={{
                             fontSize: "0.75rem",
                             fontWeight: "700",
-                            color: "#dc2626",
+                            color: theme.colors.brand.red,
                             textTransform: "uppercase",
                             padding: "0.25rem 0.75rem",
                             background: "rgba(255, 255, 255, 0.5)",
-                            borderRadius: "var(--radius-sm)",
+                            borderRadius: theme.borderRadius.sm,
                           }}
                         >
                           HIGH RISK
@@ -467,7 +476,7 @@ const RiskDashboard: React.FC = () => {
                         style={{
                           fontSize: "1.125rem",
                           fontWeight: "700",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                           marginBottom: "0.75rem",
                           textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                         }}
@@ -479,13 +488,12 @@ const RiskDashboard: React.FC = () => {
                           display: "flex",
                           gap: "1.5rem",
                           fontSize: "0.875rem",
-                          color: "#ECDFCC",
+                          color: theme.colors.text.primary,
                         }}
                       >
                         {task.due_date && (
                           <div>
-                            Due:{" "}
-                            {new Date(task.due_date).toLocaleDateString()}
+                            Due: {new Date(task.due_date).toLocaleDateString()}
                           </div>
                         )}
                         <div>Progress: {task.progress}%</div>

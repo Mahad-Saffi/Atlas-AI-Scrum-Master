@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import theme from "../styles/theme";
 
 interface TeamMember {
   id: number;
@@ -131,14 +132,14 @@ const TeamMembers: React.FC = () => {
               style={{
                 width: "32px",
                 height: "32px",
-                background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                background: theme.colors.brand.redGradient,
                 borderRadius: "var(--radius-md)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "0.625rem",
                 fontWeight: "bold",
-                color: "#f5f5f5",
+                color: theme.colors.text.primary,
               }}
             >
               TEAM
@@ -147,7 +148,7 @@ const TeamMembers: React.FC = () => {
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "600",
-                color: "#ECDFCC",
+                color: theme.colors.text.primary,
               }}
             >
               Team Members
@@ -196,11 +197,11 @@ const TeamMembers: React.FC = () => {
               width: "48px",
               height: "48px",
               borderRadius: "50%",
-              background: "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+              background: theme.colors.brand.redGradient,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#f5f5f5",
+              color: theme.colors.text.primary,
               fontWeight: "bold",
               fontSize: "0.75rem",
             }}
@@ -267,7 +268,15 @@ const TeamMembers: React.FC = () => {
                 border: "1px solid rgba(236, 223, 204, 0.2)",
               }}
             >
-              <span style={{ fontSize: "0.875rem", color: "#a0a0a0", fontWeight: "bold" }}>TEAM</span>
+              <span
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#a0a0a0",
+                  fontWeight: "bold",
+                }}
+              >
+                TEAM
+              </span>
             </div>
             <h3
               style={{
@@ -318,13 +327,12 @@ const TeamMembers: React.FC = () => {
                     style={{
                       width: "48px",
                       height: "48px",
-                      background:
-                        "linear-gradient(135deg, #697565 0%, #3C3D37 100%)",
+                      background: theme.colors.brand.redGradient,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "#ECDFCC",
+                      color: theme.colors.text.primary,
                       fontSize: "1.25rem",
                       fontWeight: "700",
                       flexShrink: 0,
@@ -337,7 +345,7 @@ const TeamMembers: React.FC = () => {
                       style={{
                         fontSize: "1.125rem",
                         fontWeight: "700",
-                        color: "#ECDFCC",
+                        color: theme.colors.text.primary,
                         marginBottom: "0.25rem",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
@@ -350,7 +358,7 @@ const TeamMembers: React.FC = () => {
                     <p
                       style={{
                         fontSize: "0.8125rem",
-                        color: "#ECDFCC",
+                        color: theme.colors.text.primary,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -373,10 +381,10 @@ const TeamMembers: React.FC = () => {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: "700",
-                      color: "#ECDFCC",
+                      color: theme.colors.text.primary,
                       textTransform: "uppercase",
                       padding: "0.25rem 0.75rem",
-                      background: "rgba(236, 223, 204, 0.2)",
+                      background: "rgba(220, 38, 38, 0.2)",
                       borderRadius: "var(--radius-sm)",
                     }}
                   >
@@ -388,7 +396,7 @@ const TeamMembers: React.FC = () => {
                   <p
                     style={{
                       fontSize: "0.875rem",
-                      color: "#ECDFCC",
+                      color: theme.colors.text.primary,
                       marginBottom: "0.75rem",
                       lineHeight: "1.5",
                     }}
@@ -400,7 +408,7 @@ const TeamMembers: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.75rem",
-                    color: "#ECDFCC",
+                    color: theme.colors.text.primary,
                     marginBottom: "1rem",
                   }}
                 >
