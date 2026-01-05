@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TaskBoard from "../components/tasks/TaskBoard";
 import { taskService } from "../services/taskService";
 import NotificationBell from "../components/NotificationBell";
@@ -26,6 +26,7 @@ interface Project {
 
 const TaskBoardPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
@@ -60,9 +61,34 @@ const TaskBoardPage: React.FC = () => {
     const fetchProjects = async () => {
       try {
         const fetchedProjects = await taskService.getProjects();
+        console.log("[TaskBoard] Fetched projects:", fetchedProjects);
         setProjects(fetchedProjects);
 
-        if (fetchedProjects.length > 0) {
+        // Check if project ID is in URL params
+        const projectIdFromUrl = searchParams.get("projectId");
+        console.log("[TaskBoard] 🔍 Project ID from URL:", projectIdFromUrl);
+
+        if (
+          projectIdFromUrl &&
+          fetchedProjects.some((p) => p.id === projectIdFromUrl)
+        ) {
+          // Use project from URL if it exists
+          const project = fetchedProjects.find(
+            (p) => p.id === projectIdFromUrl
+          );
+          console.log(
+            "[TaskBoard] ✅ Using project from URL:",
+            project?.name,
+            projectIdFromUrl
+          );
+          setSelectedProjectId(projectIdFromUrl);
+        } else if (fetchedProjects.length > 0) {
+          // Otherwise use first project
+          console.log(
+            "[TaskBoard] No URL project, using first project:",
+            fetchedProjects[0].name,
+            fetchedProjects[0].id
+          );
           setSelectedProjectId(fetchedProjects[0].id);
         } else {
           setError("No projects found. Create a project first!");
@@ -76,21 +102,62 @@ const TaskBoardPage: React.FC = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchTasks = async (isInitialLoad = false) => {
-      if (!selectedProjectId) return;
+      if (!selectedProjectId) {
+        console.log("[TaskBoard] ⚠️ No project selected, skipping fetch");
+        return;
+      }
 
       try {
         if (isInitialLoad) {
           setLoading(true);
         }
+        console.log(
+          `\n[TaskBoard] 📡 Fetching tasks for project: ${selectedProjectId}`
+        );
         const fetchedTasks = await taskService.getTasks(selectedProjectId);
+        console.log(
+          `[TaskBoard] ✅ Received ${fetchedTasks.length} tasks for project ${selectedProjectId}`
+        );
+
+        // Log first 3 tasks with their project IDs
+        if (fetchedTasks.length > 0) {
+          console.log("[TaskBoard] 📋 First 3 tasks:");
+          fetchedTasks.slice(0, 3).forEach((t, i) => {
+            console.log(
+              `  ${i + 1}. "${t.title}" (project_id: ${t.project_id})`
+            );
+          });
+        } else {
+          console.log("[TaskBoard] ⚠️ No tasks returned from API");
+        }
+
+        // Verify all tasks belong to the selected project
+        const wrongProjectTasks = fetchedTasks.filter(
+          (t) => t.project_id !== selectedProjectId
+        );
+        if (wrongProjectTasks.length > 0) {
+          console.error(
+            `[TaskBoard] ❌ ERROR: ${wrongProjectTasks.length} tasks belong to different projects!`
+          );
+          wrongProjectTasks.forEach((t) => {
+            console.error(
+              `  - "${t.title}" has project_id: ${t.project_id} (expected: ${selectedProjectId})`
+            );
+          });
+        } else {
+          console.log(
+            `[TaskBoard] ✅ All ${fetchedTasks.length} tasks belong to project ${selectedProjectId}`
+          );
+        }
+
         setTasks(fetchedTasks);
         setError(null);
       } catch (err) {
-        console.error("Error fetching tasks:", err);
+        console.error("[TaskBoard] ❌ Error fetching tasks:", err);
         setError("Failed to fetch tasks");
       } finally {
         if (isInitialLoad) {
@@ -326,22 +393,7 @@ const TaskBoardPage: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="input-modern"
-                style={{
-                  paddingLeft: "2.5rem",
-                }}
               />
-              <span
-                style={{
-                  position: "absolute",
-                  left: theme.spacing.lg,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: theme.colors.text.muted,
-                  fontSize: theme.typography.fontSize.sm,
-                }}
-              >
-                Search
-              </span>
             </div>
 
             <NotificationBell />
@@ -517,7 +569,12 @@ const TaskBoardPage: React.FC = () => {
             {projects.length > 0 && (
               <select
                 value={selectedProjectId || ""}
-                onChange={(e) => setSelectedProjectId(e.target.value)}
+                onChange={(e) => {
+                  console.log(
+                    `[TaskBoard] Project changed from ${selectedProjectId} to ${e.target.value}`
+                  );
+                  setSelectedProjectId(e.target.value);
+                }}
                 style={{
                   padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
                   fontSize: theme.typography.fontSize.sm,
@@ -542,7 +599,11 @@ const TaskBoardPage: React.FC = () => {
             minHeight: "500px",
           }}
         >
-          <TaskBoard tasks={filteredTasks} onTaskUpdate={handleTaskUpdate} />
+          <TaskBoard
+            key={selectedProjectId}
+            tasks={filteredTasks}
+            onTaskUpdate={handleTaskUpdate}
+          />
         </div>
       </main>
     </div>

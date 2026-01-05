@@ -261,7 +261,7 @@ const ProjectDashboard: React.FC = () => {
             </button>
             <button
               id="btn-task-board"
-              onClick={() => navigate("/task-board")}
+              onClick={() => navigate(`/task-board?projectId=${projectId}`)}
               className="btn-secondary"
             >
               View Task Board

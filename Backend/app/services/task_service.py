@@ -12,13 +12,24 @@ class TaskService:
             try:
                 project_id_str = str(project_id)
                 
+                print(f"\n[BACKEND] Getting tasks for project: {project_id_str}")
+                print(f"[BACKEND] User ID: {user_id}")
+                
                 result = await session.execute(
                     select(Task).where(Task.project_id == project_id_str)
                 )
                 tasks = result.scalars().all()
                 
+                print(f"[BACKEND] Found {len(tasks)} tasks for project {project_id_str}")
+                
+                # Show first 3 tasks for verification
+                if tasks:
+                    print(f"[BACKEND] First 3 tasks:")
+                    for i, task in enumerate(tasks[:3]):
+                        print(f"  {i+1}. {task.title} (project_id: {task.project_id})")
+                
                 # Convert to dict for JSON serialization
-                return [
+                task_list = [
                     {
                         "id": str(task.id),
                         "title": task.title,
@@ -34,8 +45,12 @@ class TaskService:
                     }
                     for task in tasks
                 ]
+                
+                print(f"[BACKEND] Returning {len(task_list)} tasks\n")
+                return task_list
+                
             except Exception as e:
-                print(f"Error getting tasks: {e}")
+                print(f"[BACKEND] Error getting tasks: {e}")
                 return []
 
     async def complete_task(self, task_id: str, user_id: str) -> dict:

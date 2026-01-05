@@ -5,6 +5,8 @@ import theme from "../styles/theme";
 interface Message {
   id: number;
   sender_id: number;
+  sender_username?: string;
+  sender_avatar?: string;
   content: string;
   created_at: string;
 }
@@ -20,6 +22,7 @@ interface Channel {
   name: string;
   description: string;
   channel_type: string;
+  is_member?: boolean;
 }
 
 interface Conversation {
@@ -118,7 +121,7 @@ const EnhancedChatPanel: React.FC = () => {
     try {
       const token = localStorage.getItem("jwt");
       const response = await fetch(
-        "http://localhost:8000/api/v1/chat/channels",
+        "http://localhost:8000/api/v1/chat/channels/available",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -369,8 +372,10 @@ const EnhancedChatPanel: React.FC = () => {
                 <div
                   key={channel.id}
                   onClick={() => {
-                    setSelectedChannel(channel.id);
-                    setSelectedUser(null);
+                    if (channel.is_member) {
+                      setSelectedChannel(channel.id);
+                      setSelectedUser(null);
+                    }
                   }}
                   onMouseEnter={(e) => {
                     if (selectedChannel !== channel.id) {
@@ -397,30 +402,75 @@ const EnhancedChatPanel: React.FC = () => {
                         ? `1px solid ${theme.colors.border.light}`
                         : `1px solid ${theme.colors.border.default}`,
                     borderRadius: theme.borderRadius.md,
-                    cursor: "pointer",
+                    cursor: channel.is_member ? "pointer" : "default",
                     transition: theme.effects.transition.normal,
+                    opacity: channel.is_member ? 1 : 0.7,
                   }}
                 >
                   <div
                     style={{
-                      fontSize: theme.typography.fontSize.sm,
-                      fontWeight: theme.typography.fontWeight.semibold,
-                      color: theme.colors.text.primary,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    # {channel.name}
-                  </div>
-                  {channel.description && (
-                    <div
-                      style={{
-                        fontSize: theme.typography.fontSize.xs,
-                        color: theme.colors.text.secondary,
-                        marginTop: theme.spacing.xs,
-                      }}
-                    >
-                      {channel.description}
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontSize: theme.typography.fontSize.sm,
+                          fontWeight: theme.typography.fontWeight.semibold,
+                          color: theme.colors.text.primary,
+                        }}
+                      >
+                        # {channel.name}
+                      </div>
+                      {channel.description && (
+                        <div
+                          style={{
+                            fontSize: theme.typography.fontSize.xs,
+                            color: theme.colors.text.secondary,
+                            marginTop: theme.spacing.xs,
+                          }}
+                        >
+                          {channel.description}
+                        </div>
+                      )}
                     </div>
-                  )}
+                    {!channel.is_member && (
+                      <button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          try {
+                            const token = localStorage.getItem("jwt");
+                            const response = await fetch(
+                              `http://localhost:8000/api/v1/chat/channels/${channel.id}/join`,
+                              {
+                                method: "POST",
+                                headers: { Authorization: `Bearer ${token}` },
+                              }
+                            );
+                            if (response.ok) {
+                              fetchChannels();
+                            }
+                          } catch (error) {
+                            console.error("Error joining channel:", error);
+                          }
+                        }}
+                        style={{
+                          padding: "0.25rem 0.75rem",
+                          fontSize: theme.typography.fontSize.xs,
+                          background: theme.colors.brand.redGradient,
+                          color: theme.colors.text.white,
+                          border: "none",
+                          borderRadius: theme.borderRadius.sm,
+                          cursor: "pointer",
+                          fontWeight: theme.typography.fontWeight.semibold,
+                        }}
+                      >
+                        Join
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </>
@@ -656,7 +706,7 @@ const EnhancedChatPanel: React.FC = () => {
                       fontWeight: theme.typography.fontWeight.semibold,
                     }}
                   >
-                    User #{msg.sender_id}
+                    {msg.sender_username || `User #${msg.sender_id}`}
                   </span>
                   <span
                     style={{

@@ -25,6 +25,33 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
   const { showToast } = useToast();
 
+  // Log when TaskBoard receives tasks
+  React.useEffect(() => {
+    console.log(
+      `\n[TaskBoard Component] 🎨 Rendering with ${tasks.length} tasks`
+    );
+    if (tasks.length > 0) {
+      const projectIds = [...new Set(tasks.map((t) => t.project_id))];
+      console.log(
+        `[TaskBoard Component] 📊 Unique project IDs: ${projectIds.join(", ")}`
+      );
+
+      if (projectIds.length > 1) {
+        console.error(
+          `[TaskBoard Component] ❌ ERROR: Tasks from ${projectIds.length} different projects!`
+        );
+        projectIds.forEach((pid) => {
+          const count = tasks.filter((t) => t.project_id === pid).length;
+          console.error(`  - Project ${pid}: ${count} tasks`);
+        });
+      } else {
+        console.log(
+          `[TaskBoard Component] ✅ All tasks from project: ${projectIds[0]}`
+        );
+      }
+    }
+  }, [tasks]);
+
   const handleStartTask = async (taskId: string) => {
     try {
       setUpdatingTaskId(taskId);
@@ -183,7 +210,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ tasks, onTaskUpdate }) => {
                   }}
                 >
                   {/* Risk Indicator */}
-                  {task.risk_level && task.risk_level !== "low" && (
+                  {task.risk_level && (
                     <div
                       style={{
                         position: "absolute",

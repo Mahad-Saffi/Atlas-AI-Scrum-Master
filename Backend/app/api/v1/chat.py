@@ -42,6 +42,8 @@ async def websocket_endpoint(websocket: WebSocket, token: str = Query(...)):
                 if data['type'] == 'message':
                     # Save message to database
                     async with SessionLocal() as session:
+                        from app.models.user import User
+                        
                         message = Message(
                             sender_id=user_id,
                             channel_id=data.get('channel_id'),
@@ -53,10 +55,18 @@ async def websocket_endpoint(websocket: WebSocket, token: str = Query(...)):
                         await session.refresh(message)
                         
                         # Broadcast to channel or send to recipient
+                        # Get sender info
+                        sender_result = await session.execute(
+                            select(User).where(User.id == user_id)
+                        )
+                        sender = sender_result.scalars().first()
+                        
                         message_data = {
                             'type': 'message',
                             'id': message.id,
                             'sender_id': user_id,
+                            'sender_username': sender.username if sender else f'User #{user_id}',
+                            'sender_avatar': sender.avatar_url if sender else None,
                             'content': message.content,
                             'created_at': message.created_at.isoformat(),
                             'channel_id': message.channel_id,
@@ -109,6 +119,62 @@ async def get_channels(current_user: dict = Depends(get_current_user)):
                 'created_at': ch.created_at.isoformat()
             }
             for ch in channels
+        ]
+
+@router.get("/channels/available")
+async def get_available_channels(current_user: dict = Depends(get_current_user)):
+    """Get all public channels in the user's organizations that user can join"""
+    async with SessionLocal() as session:
+        from app.models.organization import OrganizationMember
+        
+        # Get ALL user's organizations
+        org_result = await session.execute(
+            select(OrganizationMember.organization_id).where(
+                OrganizationMember.user_id == current_user['id']
+            )
+        )
+        org_ids = [row[0] for row in org_result.all()]
+        
+        if not org_ids:
+            return []
+        
+        # Get all members from ALL user's organizations
+        members_result = await session.execute(
+            select(OrganizationMember.user_id).where(
+                OrganizationMember.organization_id.in_(org_ids)
+            )
+        )
+        org_member_ids = list(set([row[0] for row in members_result.all()]))
+        
+        # Get all public channels created by organization members
+        result = await session.execute(
+            select(Channel).where(
+                and_(
+                    Channel.channel_type == 'public',
+                    Channel.created_by.in_(org_member_ids)
+                )
+            )
+        )
+        all_channels = result.scalars().all()
+        
+        # Get channels user is already a member of
+        member_result = await session.execute(
+            select(ChannelMember.channel_id).where(
+                ChannelMember.user_id == current_user['id']
+            )
+        )
+        member_channel_ids = {row[0] for row in member_result.all()}
+        
+        return [
+            {
+                'id': ch.id,
+                'name': ch.name,
+                'description': ch.description,
+                'channel_type': ch.channel_type,
+                'created_at': ch.created_at.isoformat(),
+                'is_member': ch.id in member_channel_ids
+            }
+            for ch in all_channels
         ]
 
 @router.post("/channels/{channel_id}/join")
@@ -194,6 +260,8 @@ async def get_channel_messages(
 ):
     """Get messages from a channel with optional search"""
     async with SessionLocal() as session:
+        from app.models.user import User
+        
         query = select(Message).where(Message.channel_id == channel_id)
         
         # Add search filter if provided
@@ -204,10 +272,21 @@ async def get_channel_messages(
         result = await session.execute(query)
         messages = result.scalars().all()
         
+        # Get unique sender IDs
+        sender_ids = list(set(msg.sender_id for msg in messages))
+        
+        # Fetch user details
+        users_result = await session.execute(
+            select(User).where(User.id.in_(sender_ids))
+        )
+        users = {user.id: user for user in users_result.scalars().all()}
+        
         return [
             {
                 'id': msg.id,
                 'sender_id': msg.sender_id,
+                'sender_username': users.get(msg.sender_id).username if users.get(msg.sender_id) else f'User #{msg.sender_id}',
+                'sender_avatar': users.get(msg.sender_id).avatar_url if users.get(msg.sender_id) else None,
                 'content': msg.content,
                 'created_at': msg.created_at.isoformat(),
                 'is_edited': msg.is_edited
@@ -293,6 +372,8 @@ async def get_direct_messages(
 ):
     """Get direct messages with a specific user"""
     async with SessionLocal() as session:
+        from app.models.user import User
+        
         result = await session.execute(
             select(Message).where(
                 or_(
@@ -309,10 +390,21 @@ async def get_direct_messages(
         )
         messages = result.scalars().all()
         
+        # Get unique sender IDs
+        sender_ids = list(set(msg.sender_id for msg in messages))
+        
+        # Fetch user details
+        users_result = await session.execute(
+            select(User).where(User.id.in_(sender_ids))
+        )
+        users = {user.id: user for user in users_result.scalars().all()}
+        
         return [
             {
                 'id': msg.id,
                 'sender_id': msg.sender_id,
+                'sender_username': users.get(msg.sender_id).username if users.get(msg.sender_id) else f'User #{msg.sender_id}',
+                'sender_avatar': users.get(msg.sender_id).avatar_url if users.get(msg.sender_id) else None,
                 'recipient_id': msg.recipient_id,
                 'content': msg.content,
                 'created_at': msg.created_at.isoformat(),

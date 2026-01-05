@@ -107,20 +107,18 @@ class RiskService:
     async def get_project_risks(self, project_id: str) -> dict:
         """Get risk summary for a project"""
         async with SessionLocal() as session:
-            import uuid
-            
-            # Convert project_id to UUID
+            # Convert project_id to string (SQLite doesn't support UUID type)
             if isinstance(project_id, str):
                 if len(project_id) == 32 and '-' not in project_id:
                     project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
-                project_uuid = uuid.UUID(project_id)
+                project_id_str = project_id
             else:
-                project_uuid = project_id
+                project_id_str = str(project_id)
             
             result = await session.execute(
                 select(Task).where(
                     and_(
-                        Task.project_id == project_uuid,
+                        Task.project_id == project_id_str,
                         Task.status.in_(['To Do', 'In Progress'])
                     )
                 )

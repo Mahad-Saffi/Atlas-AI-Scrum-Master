@@ -10,7 +10,7 @@ app = FastAPI()
 # Add CORS middleware FIRST (before routes)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:8000", "http://localhost:5173"],
+    allow_origins=["http://localhost:8080", "http://localhost:8000", "http://localhost:5173", "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,9 +33,36 @@ async def startup():
     try:
         # Run comprehensive startup checks
         await startup_checks()
+        
+        # Start background scheduler
+        from app.core.scheduler import scheduler
+        from app.services.risk_service import risk_service
+        
+        # Add risk detection task (runs every hour = 3600 seconds)
+        async def run_risk_detection():
+            """Periodic risk detection task"""
+            try:
+                result = await risk_service.detect_delays_and_update_risks()
+                logging.info(f"Risk detection: {result['high_risk']} high, {result['medium_risk']} medium risks found")
+            except Exception as e:
+                logging.error(f"Risk detection failed: {e}")
+        
+        scheduler.add_task(run_risk_detection, 3600, "Risk Detection")  # Every hour
+        await scheduler.start()
+        
+        # Run risk detection immediately on startup
+        logging.info("Running initial risk detection...")
+        await run_risk_detection()
+        
     except Exception as e:
         logging.error(f"❌ Startup failed: {e}")
         raise
+
+@app.on_event("shutdown")
+async def shutdown():
+    """Cleanup on shutdown"""
+    from app.core.scheduler import scheduler
+    await scheduler.stop()
 
 @app.get("/health")
 async def health_check():

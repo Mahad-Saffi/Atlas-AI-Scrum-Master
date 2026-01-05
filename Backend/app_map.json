@@ -201,9 +201,14 @@
               "description": "Click send button"
             },
             {
+              "type": "wait_for_ai_response",
+              "timeout": 30,
+              "description": "Waiting for AI to generate project details..."
+            },
+            {
               "type": "wait",
-              "seconds": 10,
-              "description": "Wait for AI to process and create project"
+              "seconds": 3,
+              "description": "Wait for project creation to complete"
             }
           ],
           "navigates_to": "dashboard",

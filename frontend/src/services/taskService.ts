@@ -5,32 +5,32 @@ const API_URL = `${API_BASE_URL}/api/v1/projects`;
 
 const getTasks = async (projectId: string) => {
   const token = localStorage.getItem("jwt"); // Fixed: use 'jwt' not 'token'
-  const response = await axios.get(`${API_URL}/${projectId}/tasks`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  // Add timestamp to prevent caching
+  const timestamp = new Date().getTime();
+  const response = await axios.get(
+    `${API_URL}/${projectId}/tasks?_t=${timestamp}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      },
+    }
+  );
   return response.data;
 };
 
 const updateTask = async (taskId: string, updates: any) => {
   const token = localStorage.getItem("jwt");
   try {
-    const response = await axios.patch(
-      `${API_URL}/tasks/${taskId}`,
-      updates,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.patch(`${API_URL}/tasks/${taskId}`, updates, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error: any) {
-    console.error(
-      "Update task error:",
-      error.response?.data || error.message
-    );
+    console.error("Update task error:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -57,7 +57,7 @@ const completeTask = async (taskId: string) => {
       statusText: error.response?.statusText,
       data: error.response?.data,
       message: error.message,
-      url: `${API_URL}/tasks/${taskId}/complete`
+      url: `${API_URL}/tasks/${taskId}/complete`,
     });
     throw error;
   }

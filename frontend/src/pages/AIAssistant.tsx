@@ -12,6 +12,7 @@ interface LogEntry {
 const AIAssistant: React.FC = () => {
   const [task, setTask] = useState("");
   const [isRunning, setIsRunning] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -44,6 +45,7 @@ const AIAssistant: React.FC = () => {
 
     ws.onopen = () => {
       setIsRunning(true);
+      setIsCompleted(false);
       setLogs([]);
       setScreenshot(null);
       ws.send(JSON.stringify({ task }));
@@ -63,6 +65,18 @@ const AIAssistant: React.FC = () => {
         ]);
       } else if (data.type === "screenshot") {
         setScreenshot(data.data);
+      } else if (data.type === "complete") {
+        // Automation completed successfully
+        setIsRunning(false);
+        setIsCompleted(true);
+        setLogs((prev) => [
+          ...prev,
+          {
+            message: "✅ Automation completed successfully!",
+            level: "success",
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ]);
       } else if (data.type === "error") {
         setLogs((prev) => [
           ...prev,
@@ -77,7 +91,10 @@ const AIAssistant: React.FC = () => {
     };
 
     ws.onclose = () => {
-      setIsRunning(false);
+      // Only set running to false if not already completed
+      if (!isCompleted) {
+        setIsRunning(false);
+      }
     };
 
     ws.onerror = (error) => {
@@ -101,6 +118,7 @@ const AIAssistant: React.FC = () => {
       wsRef.current.close();
     }
     setIsRunning(false);
+    setIsCompleted(false);
   };
 
   const getLevelColor = (level: string) => {
@@ -190,7 +208,6 @@ const AIAssistant: React.FC = () => {
               className="btn-secondary"
               style={{
                 padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
-                fontSize: theme.typography.fontSize.xl,
               }}
             >
               Back
@@ -239,6 +256,22 @@ const AIAssistant: React.FC = () => {
                 }}
               >
                 Stop
+              </button>
+            )}
+            {isCompleted && !isRunning && (
+              <button
+                onClick={() => {
+                  setIsCompleted(false);
+                  setLogs([]);
+                  setScreenshot(null);
+                  setTask("");
+                }}
+                className="btn-primary"
+                style={{
+                  background: `linear-gradient(135deg, ${theme.colors.brand.red} 0%, ${theme.colors.brand.redDark} 100%)`,
+                }}
+              >
+                New Task
               </button>
             )}
             <NotificationBell />
@@ -296,8 +329,8 @@ Examples:
 - Create a new project named 'Q4 Report'
 - Start the task 'Design UI mockups'
 - Add a team member with email john@example.com`}
-                rows={5}
-                disabled={isRunning}
+                rows={3}
+                disabled={isRunning || isCompleted}
                 style={{
                   width: "100%",
                   marginBottom: theme.spacing.md,
@@ -315,7 +348,7 @@ Examples:
 
               <button
                 onClick={startAutomation}
-                disabled={isRunning || !task.trim()}
+                disabled={isRunning || isCompleted || !task.trim()}
                 className="btn-primary"
                 style={{
                   width: "100%",
@@ -339,6 +372,8 @@ Examples:
                     />
                     <span>AI is working...</span>
                   </>
+                ) : isCompleted ? (
+                  <span>Task Completed ✓</span>
                 ) : (
                   <span>Start Automation</span>
                 )}
@@ -507,6 +542,27 @@ Examples:
                         }}
                       />
                       <span>LIVE</span>
+                    </div>
+                  )}
+                  {isCompleted && !isRunning && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: theme.spacing.md,
+                        right: theme.spacing.md,
+                        padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                        background: theme.colors.brand.red,
+                        color: "#ffffff",
+                        borderRadius: theme.borderRadius.md,
+                        fontSize: theme.typography.fontSize.xs,
+                        fontWeight: theme.typography.fontWeight.semibold,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: theme.spacing.xs,
+                      }}
+                    >
+                      <span>✓</span>
+                      <span>COMPLETED</span>
                     </div>
                   )}
                 </div>

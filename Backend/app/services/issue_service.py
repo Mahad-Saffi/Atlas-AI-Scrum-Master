@@ -20,25 +20,27 @@ class IssueService:
     ) -> dict:
         """Create a new issue"""
         async with SessionLocal() as session:
-            # Convert project_id to UUID
+            # Convert project_id to string (SQLite doesn't support UUID type)
             if isinstance(project_id, str):
                 if len(project_id) == 32 and '-' not in project_id:
                     project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
-                project_uuid = uuid.UUID(project_id)
+                project_id_str = project_id
             else:
-                project_uuid = project_id
+                project_id_str = str(project_id)
             
             # Convert task_id if provided
-            task_uuid = None
+            task_id_str = None
             if task_id:
                 if isinstance(task_id, str):
                     if len(task_id) == 32 and '-' not in task_id:
                         task_id = f"{task_id[:8]}-{task_id[8:12]}-{task_id[12:16]}-{task_id[16:20]}-{task_id[20:]}"
-                    task_uuid = uuid.UUID(task_id)
+                    task_id_str = task_id
+                else:
+                    task_id_str = str(task_id)
             
             issue = Issue(
-                project_id=project_uuid,
-                task_id=task_uuid,
+                project_id=project_id_str,
+                task_id=task_id_str,
                 reporter_id=reporter_id,
                 title=title,
                 description=description,
@@ -53,7 +55,7 @@ class IssueService:
             # Notify project lead (get project owner)
             from app.models.project import Project
             result = await session.execute(
-                select(Project).where(Project.id == project_uuid)
+                select(Project).where(Project.id == project_id_str)
             )
             project = result.scalars().first()
             
@@ -79,15 +81,15 @@ class IssueService:
     async def get_project_issues(self, project_id: str, status: str = None) -> list:
         """Get all issues for a project"""
         async with SessionLocal() as session:
-            # Convert project_id to UUID
+            # Convert project_id to string (SQLite doesn't support UUID type)
             if isinstance(project_id, str):
                 if len(project_id) == 32 and '-' not in project_id:
                     project_id = f"{project_id[:8]}-{project_id[8:12]}-{project_id[12:16]}-{project_id[16:20]}-{project_id[20:]}"
-                project_uuid = uuid.UUID(project_id)
+                project_id_str = project_id
             else:
-                project_uuid = project_id
+                project_id_str = str(project_id)
             
-            query = select(Issue).where(Issue.project_id == project_uuid)
+            query = select(Issue).where(Issue.project_id == project_id_str)
             
             if status:
                 query = query.where(Issue.status == status)

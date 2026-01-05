@@ -120,9 +120,71 @@ class ProjectService:
                             )
                             session.add(task)
                             print(f"      Created task: {task_title}")
+                
+                # Add some high-risk tasks for demonstration
+                await self._seed_risk_tasks(session, str(project.id), owner_id)
 
                 await session.commit()
                 return project
+    
+    async def _seed_risk_tasks(self, session, project_id: str, owner_id: int):
+        """Seed some high-risk tasks to demonstrate risk detection"""
+        from datetime import datetime, timedelta
+        
+        # Create tasks with various risk levels
+        risk_tasks = [
+            {
+                "title": "Critical Security Patch Required",
+                "description": "Security vulnerability detected in authentication module. Needs immediate attention.",
+                "status": "To Do",
+                "due_date": datetime.now() - timedelta(days=2),  # Overdue
+                "priority": "High"
+            },
+            {
+                "title": "Database Migration Pending",
+                "description": "Database schema changes need to be applied before next release.",
+                "status": "In Progress",
+                "due_date": datetime.now() + timedelta(days=1),  # Due tomorrow
+                "priority": "High"
+            },
+            {
+                "title": "API Integration Testing",
+                "description": "Third-party API integration needs comprehensive testing.",
+                "status": "To Do",
+                "due_date": datetime.now() + timedelta(days=3),  # Due soon
+                "priority": "Medium"
+            },
+            {
+                "title": "Performance Optimization",
+                "description": "Application response time exceeds acceptable threshold.",
+                "status": "To Do",
+                "due_date": datetime.now() + timedelta(days=5),
+                "priority": "Medium"
+            },
+            {
+                "title": "Documentation Update",
+                "description": "Update technical documentation for recent changes.",
+                "status": "To Do",
+                "due_date": datetime.now() + timedelta(days=14),
+                "priority": "Low"
+            }
+        ]
+        
+        print(f"  Seeding {len(risk_tasks)} risk demonstration tasks...")
+        
+        for idx, task_data in enumerate(risk_tasks):
+            task = Task(
+                project_id=project_id,
+                title=task_data["title"],
+                description=task_data["description"],
+                status=task_data["status"],
+                assignee_id=owner_id,
+                due_date=task_data["due_date"],
+                priority=task_data["priority"],
+                order=1000 + idx  # High order to keep them at the end
+            )
+            session.add(task)
+            print(f"    Seeded risk task: {task_data['title']} (Due: {task_data['due_date'].strftime('%Y-%m-%d')})")
 
     async def get_project_epics(self, project_id: str) -> list:
         """Get all epics with their stories and tasks for a project"""

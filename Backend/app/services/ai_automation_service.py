@@ -40,7 +40,7 @@ class AIAutomationService:
             # Initialize browser in headless mode
             await self._send_update(websocket, "Initializing browser (headless mode)...", "info")
             self._init_browser()
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
             await self._send_screenshot(websocket)
             
             # Check if we need to login
@@ -48,7 +48,7 @@ class AIAutomationService:
             if current_page == "login":
                 await self._send_update(websocket, "Logging in with demo account...", "info")
                 await self._auto_login(websocket)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 await self._send_screenshot(websocket)
             
             # Parse task with GPT
@@ -79,18 +79,34 @@ class AIAutomationService:
                     if not recovered:
                         raise step_error
                 
-                await asyncio.sleep(0.1)
+                # Send screenshot after each step for video-like experience
+                await asyncio.sleep(0.3)
                 await self._send_screenshot(websocket)
             
             await self._send_update(websocket, "Task completed successfully!", "success")
+            
+            # Send final screenshot before closing
+            await asyncio.sleep(1)
+            await self._send_screenshot(websocket)
+            
+            # Send completion message
+            await websocket.send_json({
+                "type": "complete",
+                "message": "Automation completed successfully",
+                "timestamp": datetime.now().isoformat()
+            })
             
         except Exception as e:
             await self._send_update(websocket, f"Error: {str(e)}", "error")
             print(f"Automation error: {e}")
             import traceback
             traceback.print_exc()
+            
+            # Send final screenshot even on error
+            await asyncio.sleep(1)
+            await self._send_screenshot(websocket)
         finally:
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
             self._cleanup()
             self.is_running = False
     
@@ -221,7 +237,8 @@ Examples:
         current_page = self._detect_current_page()
         if current_page != page:
             await self._navigate_to_page(page, websocket)
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
+            await self._send_screenshot(websocket)
         
         # Execute action
         if page not in self.app_map['pages']:
@@ -234,7 +251,7 @@ Examples:
         
         for action_step in action_def['steps']:
             await self._execute_action_step(action_step, params, websocket)
-            await asyncio.sleep(0.3)
+            await asyncio.sleep(0.15)  # Reduced from 0.3 for smoother video
     
     async def _execute_action_step(self, action_step: Dict, params: Dict, websocket):
         """Execute individual action step"""
@@ -250,6 +267,9 @@ Examples:
                 fallback_selectors = action_step.get('fallback_selectors', [])
                 element = self._find_element_with_fallback(selector, fallback_selectors)
                 element.click()
+                # Send screenshot after click
+                await asyncio.sleep(0.2)
+                await self._send_screenshot(websocket)
                 
             elif action_type == 'input':
                 selector = action_step['selector']
@@ -260,6 +280,9 @@ Examples:
                 element = self._find_element_with_fallback(selector, fallback_selectors)
                 element.clear()
                 element.send_keys(value)
+                # Send screenshot after input
+                await asyncio.sleep(0.2)
+                await self._send_screenshot(websocket)
                 
             elif action_type == 'select':
                 selector = action_step['selector']
@@ -271,10 +294,48 @@ Examples:
                 element = self._find_element_with_fallback(selector, fallback_selectors)
                 select = Select(element)
                 select.select_by_visible_text(value)
+                # Send screenshot after select
+                await asyncio.sleep(0.2)
+                await self._send_screenshot(websocket)
                 
             elif action_type == 'wait':
                 seconds = action_step.get('seconds', 1)
-                await asyncio.sleep(seconds)
+                # Send screenshots during wait for smooth video effect
+                intervals = max(1, int(seconds / 0.5))  # Screenshot every 0.5 seconds
+                for i in range(intervals):
+                    await asyncio.sleep(min(0.5, seconds / intervals))
+                    await self._send_screenshot(websocket)
+                
+            elif action_type == 'wait_for_ai_response':
+                # Special wait for AI responses - wait for loading to finish
+                timeout = action_step.get('timeout', 30)
+                description = action_step.get('description', 'Waiting for AI response')
+                await self._send_update(websocket, description, "info")
+                
+                # Wait for any loading indicators to disappear
+                start_time = asyncio.get_event_loop().time()
+                screenshot_counter = 0
+                while asyncio.get_event_loop().time() - start_time < timeout:
+                    try:
+                        # Check if there's a loading spinner
+                        spinners = self.driver.find_elements(By.CSS_SELECTOR, ".spinner, .loading, [class*='spin']")
+                        if not spinners or all(not s.is_displayed() for s in spinners):
+                            # No loading indicators, wait a bit more to ensure response is rendered
+                            await asyncio.sleep(2)
+                            await self._send_screenshot(websocket)
+                            break
+                    except:
+                        pass
+                    
+                    # Send screenshot every 0.5 seconds during wait
+                    screenshot_counter += 1
+                    if screenshot_counter % 1 == 0:  # Every 0.5 seconds
+                        await self._send_screenshot(websocket)
+                    
+                    await asyncio.sleep(0.5)
+                
+                await self._send_update(websocket, "AI response received", "success")
+                await self._send_screenshot(websocket)
                 
             elif action_type == 'wait_for_text':
                 text = action_step['text']
@@ -282,6 +343,7 @@ Examples:
                 WebDriverWait(self.driver, timeout).until(
                     EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{text}')]"))
                 )
+                await self._send_screenshot(websocket)
                 
             elif action_type == 'count_elements':
                 selector = action_step['selector']
@@ -289,6 +351,7 @@ Examples:
                 elements = self._find_elements_with_fallback(selector, fallback_selectors)
                 count = len(elements)
                 await self._send_update(websocket, f"Found {count} elements", "info")
+                await self._send_screenshot(websocket)
                 return count
                 
             elif action_type == 'find_and_click':
@@ -306,6 +369,9 @@ Examples:
                 parent = element.find_element(By.XPATH, "..")
                 button = parent.find_element(By.CSS_SELECTOR, then_click)
                 button.click()
+                # Send screenshot after click
+                await asyncio.sleep(0.2)
+                await self._send_screenshot(websocket)
                 
         except Exception as e:
             await self._send_update(websocket, f"Action failed: {str(e)}", "warning")
@@ -469,7 +535,8 @@ Examples:
         if target_page in self.app_map['pages']:
             target_url = self.app_map['pages'][target_page]['url']
             self.driver.get(target_url)
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
+            await self._send_screenshot(websocket)
     
     async def _attempt_recovery(self, failed_step: Dict, websocket) -> bool:
         """Attempt to recover from a failed step by analyzing current state"""
